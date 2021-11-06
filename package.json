@@ -1,0 +1,21 @@
+{
+    "name": "project",
+    "version": "1.0.0",
+    "description": "Đồ án Thiết kế ứng dụng Web",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon app.js",
+        "node-sass": "node-sass -w public/stylesheets/scss/admin/style.scss -o public/stylesheets/css/admin/"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "cookie-parser": "^1.4.5",
+        "dotenv": "^10.0.0",
+        "ejs": "^3.1.6",
+        "express": "^4.17.1",
+        "node-sass": "^6.0.1",
+        "nodemon": "^2.0.14"
+    }
+}
