@@ -1,0 +1,59 @@
+<div class="wrapper__sidebar" id="sidebar">
+    <div class="wrapper__sidebar__container">
+        <div class="wrapper__sidebar__logo">
+            <span>Admin</span>
+        </div>
+        <ul class="wrapper__sidebar__menu-list">
+            <li class="wrapper__sidebar__menu-item">
+                <a href="" class="wrapper__sidebar__menu-link">
+                    <i class="ti-panel"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == " profile ") { %>
+                wrapper__sidebar__menu-item--active
+            <% } %>">
+                <a href="/admin/profile" class="wrapper__sidebar__menu-link">
+                    <i class="ti-id-badge"></i>
+                    <span>User profile</span>
+                </a>
+            </li>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == " users ") { %>
+                wrapper__sidebar__menu-item--active
+            <% } %>">
+                <a href="/admin/users" class="wrapper__sidebar__menu-link">
+                    <i class="ti-user"></i>
+                    <span>User List</span>
+                </a>
+            </li>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == " category ") { %>
+                wrapper__sidebar__menu-item--active
+            <% } %>">
+                <a href="" class="wrapper__sidebar__menu-link">
+                    <i class="ti-menu-alt"></i>
+                    <span>Category</span>
+                </a>
+            </li>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == " products ") { %>
+                wrapper__sidebar__menu-item--active
+            <% } %>">
+                <a href="/admin/products" class="wrapper__sidebar__menu-link">
+                    <i class="ti-server"></i>
+                    <span>Product List</span>
+                </a>
+            </li>
+            <li class="wrapper__sidebar__menu-item">
+                <a href="" class="wrapper__sidebar__menu-link">
+                    <i class="ti-map"></i>
+                    <span>Maps</span>
+                </a>
+            </li>
+            <li class="wrapper__sidebar__menu-item">
+                <a href="" class="wrapper__sidebar__menu-link">
+                    <i class="ti-bell"></i>
+                    <span>Notifications</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

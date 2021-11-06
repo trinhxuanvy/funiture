@@ -1,0 +1,173 @@
+<%- include ("./share/head.ejs") %>
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <%- include ("./share/sidebar.ejs") %>
+                <div class="wrapper__main" id="main">
+                    <div class="wrapper__main__header">
+                        <span class="wrapper__main__header__title">User List</span>
+                        <div class="wrapper__main__header__function">
+
+                        </div>
+                        <div class="menu-toggle">
+                            <button id="menu-toggle" class="btn btn-secondary"><i class="fa fa-bars" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="wrapper__main__content">
+                        <div class="container-fluid" style="padding: 32px;">
+                            <div class="wrapper__main__content__table">
+                                <div class="wrapper__main__content__table__header">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p style="font-size: 24px;">User List</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="button" class="btn btn-success d-block" style="margin-left: auto;" data-bs-toggle="modal" data-bs-target="#addUserModal"><em class="ti-plus"></em> Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive-xl">
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center; min-width: 150px;"><em class="ti-settings"></em></th>
+                                                <th style="min-width: 150px;">ID</th>
+                                                <th style="min-width: 300px;">Name</th>
+                                                <th style="min-width: 200px;">Email</th>
+                                                <th style="min-width: 150px;">Phone</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td align="center">
+                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
+                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
+                                                </td>
+                                                <td>12345</td>
+                                                <td>John Cena</td>
+                                                <td>john@example.com</td>
+                                                <td>123458651</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
+                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
+                                                </td>
+                                                <td>12345</td>
+                                                <td>John Cena</td>
+                                                <td>john@example.com</td>
+                                                <td>231321351</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
+                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
+                                                </td>
+                                                <td>12345</td>
+                                                <td>John Cena</td>
+                                                <td>john@example.com</td>
+                                                <td>351453112</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
+                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
+                                                </td>
+                                                <td>12346</td>
+                                                <td>Moe Moe</td>
+                                                <td>mary@example.com</td>
+                                                <td>354515123</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
+                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
+                                                </td>
+                                                <td>12347</td>
+                                                <td>Dooley</td>
+                                                <td>july@example.com</td>
+                                                <td>354515151</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="wrapper__main__content__table__footer mt-4">
+                                    <div class="row align-items-center">
+                                        <div class="col-4">
+                                            Page 1 of 5
+                                        </div>
+                                        <div class="col-8">
+                                            <nav aria-label="Page navigation example">
+                                                <ul class="pagination justify-content-end m-auto">
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="#" aria-label="Previous">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="#" aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- The Modal -->
+                                <div class="modal" id="addUserModal">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Add User</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <!-- Modal body -->
+                                            <div class="modal-body">
+                                                <form action="" class="was-validated">
+                                                    <div class="mb-3 mt-3 position-relative">
+                                                        <label for="email">Email</label>
+                                                        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                                                        <div class="invalid-tooltip">Please check your mail.</div>
+                                                    </div>
+                                                    <div class="mb-3 position-relative">
+                                                        <label for="username">Username</label>
+                                                        <input type="text" class="form-control" id="username" placeholder="Enter username" name="username">
+                                                        <div class="invalid-tooltip">Please check your name</div>
+                                                    </div>
+                                                    <div class="mb-3 position-relative">
+                                                        <label for="phone">Phone Number</label>
+                                                        <input type="text" class="form-control" id="phone" placeholder="Enter phone number" name="phone">
+                                                        <div class="invalid-tooltip">Please check your phone</div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary m-auto d-block">Submit</button>
+                                                </form>
+                                            </div>
+
+                                            <!-- Modal footer -->
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <%- include ("./share/scripts.ejs") %>
+    </body>
+
+    </html>
