@@ -2,8 +2,19 @@ const express = require("express");
 
 const router = express.Router();
 
+router.get("/", (req, res, next) => {
+    res.render("index");
+});
+router.get("/login", (req, res, next) => {
+    res.render("login");
+});
+
 router.get("/categories", (req, res, next) => {
     res.render("categories");
+});
+
+router.get("/cart", (req, res, next) => {
+    res.render("cart");
 });
 
 router.get("/single-product", (req, res, next) => {
