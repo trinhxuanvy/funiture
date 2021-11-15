@@ -10,6 +10,10 @@ router.get("/single-product", (req, res, next) => {
     res.render("single-product");
 });
 
+router.get("/checkout", (req, res, next) => {
+    res.render("checkout");
+});
+
 router.get("/admin/profile", (req, res, next) => {
     res.render("admin/profile", { pageName: " profile " });
 });
