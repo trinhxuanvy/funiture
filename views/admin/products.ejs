@@ -37,6 +37,7 @@
                                                 <th style="min-width: 200px;">Name</th>
                                                 <th style="min-width: 200px;">Category</th>
                                                 <th style="min-width: 150px;">Cost</th>
+                                                <th style="min-width: 300px;">Description</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -44,7 +45,7 @@
                                                 <td align="center">
                                                     <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
                                                     <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
-                                                    <a href="" class="btn btn-success"><em class="ti-eye"></em></a>
+                                                    <button value="" class="btn btn-success"><em class="ti-eye"></em></button>
                                                 </td>
                                                 <td><img src="/images/product/product_2.png" alt=""></td>
                                                 <td>
@@ -53,19 +54,15 @@
                                                     <img src="/images/product/product_4.png" alt="">
                                                 </td>
                                                 <td>Plastic chair</td>
-                                                <td>
-                                                    <select class="js-states form-control" name="" id="categories">
-                                                <option value="">Table</option>
-                                                <option value="">Desk</option>
-                                            </select>
-                                                </td>
+                                                <td>Chair</td>
                                                 <td>$100.00</td>
+                                                <td style="font-size: 14px;">First replenish living. Creepeth image image. Creeping can't, won't called. Two fruitful let days signs sea together all land fly subdue </td>
                                             </tr>
                                             <tr>
                                                 <td align="center">
                                                     <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
                                                     <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
-                                                    <a href="" class="btn btn-success"><em class="ti-eye"></em></a>
+                                                    <button value="" class="btn btn-success"><em class="ti-eye"></em></button>
                                                 </td>
                                                 <td><img src="/images/product/product_2.png" alt=""></td>
                                                 <td>
@@ -74,19 +71,15 @@
                                                     <img src="/images/product/product_4.png" alt="">
                                                 </td>
                                                 <td>Plastic chair</td>
-                                                <td>
-                                                    <select class="js-states form-control" name="" id="categories">
-                                                <option value="">Table</option>
-                                                <option value="">Desk</option>
-                                            </select>
-                                                </td>
+                                                <td>Chair</td>
                                                 <td>$100.00</td>
+                                                <td style="font-size: 14px;">First replenish living. Creepeth image image. Creeping can't, won't called. Two fruitful let days signs sea together all land fly subdue </td>
                                             </tr>
                                             <tr>
                                                 <td align="center">
                                                     <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
                                                     <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
-                                                    <a href="" class="btn btn-success"><em class="ti-eye"></em></a>
+                                                    <button value="" class="btn btn-success"><em class="ti-eye"></em></button>
                                                 </td>
                                                 <td><img src="/images/product/product_2.png" alt=""></td>
                                                 <td>
@@ -95,19 +88,15 @@
                                                     <img src="/images/product/product_4.png" alt="">
                                                 </td>
                                                 <td>Plastic chair</td>
-                                                <td>
-                                                    <select class="js-states form-control" name="" id="categories">
-                                                <option value="">Table</option>
-                                                <option value="">Desk</option>
-                                            </select>
-                                                </td>
+                                                <td>Chair</td>
                                                 <td>$100.00</td>
+                                                <td style="font-size: 14px;">First replenish living. Creepeth image image. Creeping can't, won't called. Two fruitful let days signs sea together all land fly subdue </td>
                                             </tr>
                                             <tr>
                                                 <td align="center">
                                                     <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
                                                     <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
-                                                    <a href="" class="btn btn-success"><em class="ti-eye"></em></a>
+                                                    <button value="" class="btn btn-success"><em class="ti-eye"></em></button>
                                                 </td>
                                                 <td><img src="/images/product/product_2.png" alt=""></td>
                                                 <td>
@@ -116,13 +105,9 @@
                                                     <img src="/images/product/product_4.png" alt="">
                                                 </td>
                                                 <td>Plastic chair</td>
-                                                <td>
-                                                    <select class="js-states form-control" name="" id="categories">
-                                                <option value="">Table</option>
-                                                <option value="">Desk</option>
-                                            </select>
-                                                </td>
+                                                <td>Chair</td>
                                                 <td>$100.00</td>
+                                                <td style="font-size: 14px;">First replenish living. Creepeth image image. Creeping can't, won't called. Two fruitful let days signs sea together all land fly subdue </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -197,6 +182,11 @@
                                                         <input type="file" class="form-control" id="secondary-image" placeholder="Choose 1 file" name="secondary-image" multiple>
                                                         <div class="invalid-tooltip">Please check file</div>
                                                     </div>
+                                                    <div class="mb-3 position-relative">
+                                                        <label for="description">Description</label>
+                                                        <textarea class="form-control" id="description" placeholder="Enter description" name="description"></textarea>
+                                                        <div class="invalid-tooltip">Please check description</div>
+                                                    </div>
                                                     <button type="submit" class="btn btn-primary m-auto d-block">Submit</button>
                                                 </form>
                                             </div>
@@ -211,6 +201,62 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <!--================Single Product Area =================-->
+                <div class="product_image_area section_padding" id="product_image_area">
+                    <div class="container">
+                        <div class="row s_product_inner justify-content-between">
+                            <div class="col-lg-7 col-xl-7">
+                                <div class="product_slider_img">
+                                    <div id="vertical">
+                                        <div data-thumb="/images/product/single-product/product_1.png">
+                                            <img src="/images/product/single-product/product_1.png" />
+                                        </div>
+                                        <div data-thumb="/images/product/single-product/product_1.png">
+                                            <img src="/images/product/single-product/product_1.png" />
+                                        </div>
+                                        <div data-thumb="/images/product/single-product/product_1.png">
+                                            <img src="/images/product/single-product/product_1.png" />
+                                        </div>
+                                        <div data-thumb="/images/product/single-product/product_1.png">
+                                            <img src="/images/product/single-product/product_1.png" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-xl-4">
+                                <div class="s_product_text">
+                                    <h5>previous <span>|</span> next</h5>
+                                    <h3>Faded SkyBlu Denim Jeans</h3>
+                                    <h2>$149.99</h2>
+                                    <ul class="list">
+                                        <li>
+                                            <a class="active" href="#">
+                                                <span>Category</span> : Household</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"> <span>Availibility</span> : In Stock</a>
+                                        </li>
+                                    </ul>
+                                    <p>
+                                        First replenish living. Creepeth image image. Creeping can't, won't called. Two fruitful let days signs sea together all land fly subdue
+                                    </p>
+                                    <div class="card_area d-flex justify-content-between align-items-center">
+                                        <div class="product_count">
+                                            <span class="inumber-decrement"> <i class="ti-minus"></i></span>
+                                            <input class="input-number" type="text" value="1" min="0" max="10">
+                                            <span class="number-increment"> <i class="ti-plus"></i></span>
+                                        </div>
+                                        <a href="#" class="btn_3">add to cart</a>
+                                        <a href="#" class="like_us"> <i class="ti-heart"></i> </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-single-close">
+                        <i class="ti-close" id="product-single-close"></i>
                     </div>
                 </div>
         </div>
