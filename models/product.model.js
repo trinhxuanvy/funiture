@@ -8,11 +8,12 @@ const Product = new Schema({
     },
     description: {
         type: String,
-        required: true,
+        required: false,
     },
     amount: {
         type: Number,
-        required: true,
+        default: 0,
+        min: 0
     },
     price: {
         type: Number,
@@ -32,9 +33,13 @@ const Product = new Schema({
             required: true
         }
     }],
-    prodTypeID: {
+    prodTypeId: {
         type: Schema.Types.ObjectId,
         ref: "Category",
+        required: true
+    },
+    prodTypeName: {
+        type: String,
         required: true
     },
     prodName: {
@@ -43,23 +48,23 @@ const Product = new Schema({
     },
     color: {
         type: String,
-        required: true
+        required: false
     },
     witdh: {
         type: Number,
-        required: true
+        required: false
     },
     height: {
         type: Number,
-        required: true
+        required: false
     },
     depth: {
         type: Number,
-        required: true
+        required: false
     },
     weight: {
         type: Number,
-        required: true
+        required: false
     },
     soldQuantity: {
         type: Number,
