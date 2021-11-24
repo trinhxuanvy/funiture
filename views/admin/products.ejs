@@ -36,6 +36,7 @@
                                                 <th style="min-width: 300px;">Secondary Image</th>
                                                 <th style="min-width: 200px;">Name</th>
                                                 <th style="min-width: 200px;">Category</th>
+                                                <th style="min-width: 200px;">Brand</th>
                                                 <th style="min-width: 150px;">Price</th>
                                                 <th style="min-width: 150px;">Amount</th>
                                                 <th style="min-width: 150px;">Sold</th>
@@ -66,6 +67,9 @@
                                                     </td>
                                                     <td>
                                                         <%= item.prodTypeName %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.brandName %>
                                                     </td>
                                                     <td>
                                                         <%= item.price %>
@@ -155,6 +159,15 @@
                                                             <% }) %>
                                                         </select>
                                                         <div class="invalid-tooltip">Please check category</div>
+                                                    </div>
+                                                    <div class="mb-3 position-relative">
+                                                        <label for="brandId">Brand</label>
+                                                        <select class="form-control" name="brandId" id="brandId">
+                                                            <% categories.forEach(item => { %>
+                                                                <option value="<%= item._id %>"><%= item.brandName %></option>
+                                                            <% }) %>
+                                                        </select>
+                                                        <div class="invalid-tooltip">Please check brand</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
                                                         <label for="price">Price</label>

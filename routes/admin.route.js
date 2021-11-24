@@ -7,6 +7,10 @@ router.get("/admin/category", adminController.getCategory);
 
 router.post("/admin/category", adminController.postCategory);
 
+router.get("/admin/brand", adminController.getBrand);
+
+router.post("/admin/brand", adminController.postBrand);
+
 router.get("/admin/products", adminController.getProduct);
 
 router.post("/admin/products", adminController.postProduct);
