@@ -8,14 +8,32 @@ exports.getIndex = async(req, res, next) => {
 };
 
 exports.getProduct = async(req, res, next) => {
-    const products = await Product.find();
-    const categories = await Category.find();
+    const search = req.query.search || "";
+    //const page = req.body.page || 1;
+    //console.log(page)
+    let products = [];
 
-    res.render("admin/products", { pageName: " Product ", products, categories })
-}
+    if (search) {
+        products = await Product.find({ prodName: { $regex: search, $options: "i" } });
+
+        console.log(products);
+    } else {
+        products = await Product.find();
+    }
+
+    const categories = await Category.find();
+    const brands = await Brand.find();
+
+    res.render("admin/products", {
+        pageName: " Product ",
+        products,
+        categories,
+        brands,
+    });
+};
 
 exports.postProduct = async(req, res, next) => {
-    console.log(req.body)
+    console.log(req.body);
     const prodType = await Category.findById(req.body.prodTypeId).exec();
     const brand = await Brand.findById(req.body.brandId).exec();
     const newProduct = {
@@ -31,11 +49,11 @@ exports.postProduct = async(req, res, next) => {
         brandName: brand.brandName,
         prodName: req.body.prodName,
         color: req.body.color,
-        witdh: req.body.witdh,
+        width: req.body.width,
         height: req.body.height,
         depth: req.body.depth,
         weight: req.body.weight,
-        soldQuantity: req.body.soldQuantity
+        soldQuantity: req.body.soldQuantity,
     };
     const product = new Product(newProduct);
     product.save((err, data) => {
@@ -43,17 +61,16 @@ exports.postProduct = async(req, res, next) => {
             console.log(err);
         } else {
             console.log("success");
+            res.redirect("/admin/products");
         }
     });
-
-    res.redirect("/admin/products");
-}
+};
 
 exports.getCategory = async(req, res, next) => {
     const categories = await Category.find();
 
     res.render("admin/category", { pageName: " category ", categories });
-}
+};
 
 exports.postCategory = async(req, res, next) => {
     const category = new Category(req.body);
@@ -66,13 +83,13 @@ exports.postCategory = async(req, res, next) => {
     });
 
     res.redirect("/admin/category");
-}
+};
 
 exports.getBrand = async(req, res, next) => {
     const brands = await Brand.find();
 
     res.render("admin/brand", { pageName: " brand ", brands });
-}
+};
 
 exports.postBrand = async(req, res, next) => {
     const brand = new Brand(req.body);
@@ -85,4 +102,4 @@ exports.postBrand = async(req, res, next) => {
     });
 
     res.redirect("/admin/brand");
-}
+};

@@ -72,10 +72,14 @@
         width: calc(100% - 260px);
         float: right;
         background-color: $c-pampas;
+        height: 100vh;
         &__header {
-            padding: 20px;
+            padding: 10px 20px;
             position: relative;
-            border-bottom: 1px solid rgba($c-flint, 0.3);
+            border-bottom: 1px solid rgba($c-flint, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             &__title {
                 font-weight: bolder;
                 color: $c-flint;
@@ -87,6 +91,34 @@
                 transform: translateY(-50%);
                 @media screen and (min-width: 768px) {
                     display: none;
+                }
+            }
+            &__function {
+                form {
+                    display: flex;
+                    align-items: center;
+                    border: 2px solid $c-white;
+                    padding: 0 8px;
+                    background-color: $c-white;
+                    border-radius: 50px;
+                    input {
+                        width: 250px;
+                        border: none;
+                        outline: none !important;
+                        padding: 8px 16px;
+                    }
+                    button {
+                        width: 30px;
+                        height: 30px;
+                        background-color: $primary_color;
+                        color: $c-white;
+                        border-radius: 50%;
+                        line-height: 30px;
+                        text-align: center;
+                        font-size: 14px;
+                        border: none;
+                        outline: none;
+                    }
                 }
             }
         }

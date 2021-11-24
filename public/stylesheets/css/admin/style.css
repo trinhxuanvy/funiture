@@ -55,14 +55,18 @@
   transition: 0.2s;
   width: calc(100% - 260px);
   float: right;
-  background-color: #f4f3ef; }
+  background-color: #f4f3ef;
+  height: 100vh; }
   @media screen and (max-width: 768px) {
     .wrapper__main {
       width: 100%; } }
   .wrapper__main__header {
-    padding: 20px;
+    padding: 10px 20px;
     position: relative;
-    border-bottom: 1px solid rgba(102, 97, 91, 0.3); }
+    border-bottom: 1px solid rgba(102, 97, 91, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between; }
     .wrapper__main__header__title {
       font-weight: bolder;
       color: #66615b; }
@@ -74,6 +78,29 @@
       @media screen and (min-width: 768px) {
         .wrapper__main__header .menu-toggle {
           display: none; } }
+    .wrapper__main__header__function form {
+      display: flex;
+      align-items: center;
+      border: 2px solid #ffffff;
+      padding: 0 8px;
+      background-color: #ffffff;
+      border-radius: 50px; }
+      .wrapper__main__header__function form input {
+        width: 250px;
+        border: none;
+        outline: none !important;
+        padding: 8px 16px; }
+      .wrapper__main__header__function form button {
+        width: 30px;
+        height: 30px;
+        background-color: #ff3368;
+        color: #ffffff;
+        border-radius: 50%;
+        line-height: 30px;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        outline: none; }
   .wrapper__main__content__card {
     background-color: #ffffff;
     border-radius: 10px;

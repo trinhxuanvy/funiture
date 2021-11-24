@@ -59,7 +59,7 @@ const Product = new Schema({
         type: String,
         required: false
     },
-    witdh: {
+    width: {
         type: Number,
         required: false
     },

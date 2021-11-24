@@ -8,7 +8,12 @@
                     <div class="wrapper__main__header">
                         <span class="wrapper__main__header__title">Product List</span>
                         <div class="wrapper__main__header__function">
-
+                            <form action="/admin/products" method="get">
+                                <input type="text" id="search" name="search" placeholder="Search">
+                                <button type="submit">
+                                    <i class="ti-search"></i>
+                                </button>
+                            </form>
                         </div>
                         <div class="menu-toggle">
                             <button id="menu-toggle" class="btn btn-secondary"><i class="fa fa-bars" aria-hidden="true"></i></button>
@@ -112,21 +117,24 @@
                                         </div>
                                         <div class="col-8">
                                             <nav aria-label="Page navigation example">
-                                                <ul class="pagination justify-content-end m-auto">
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#" aria-label="Previous">
-                                                            <span aria-hidden="true">&laquo;</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#" aria-label="Next">
-                                                            <span aria-hidden="true">&raquo;</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                                <form action="" method="post">
+                                                    <ul class="pagination justify-content-end m-auto">
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="#" aria-label="Previous">
+                                                                <span aria-hidden="true">&laquo;</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="page-item"><input value="1" name="page" class="page-link" type="submit"></li>
+                                                        <li class="page-item"><input value="2" name="page" class="page-link" type="submit"></li>
+                                                        <li class="page-item"><input value="3" name="page" class="page-link" type="submit"></li>
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="#" aria-label="Next">
+                                                                <span aria-hidden="true">&raquo;</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </form>
+
                                             </nav>
                                         </div>
                                     </div>
@@ -163,7 +171,7 @@
                                                     <div class="mb-3 position-relative">
                                                         <label for="brandId">Brand</label>
                                                         <select class="form-control" name="brandId" id="brandId">
-                                                            <% categories.forEach(item => { %>
+                                                            <% brands.forEach(item => { %>
                                                                 <option value="<%= item._id %>"><%= item.brandName %></option>
                                                             <% }) %>
                                                         </select>
