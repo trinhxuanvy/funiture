@@ -6,7 +6,7 @@
             <%- include ("./share/sidebar.ejs") %>
                 <div class="wrapper__main" id="main">
                     <div class="wrapper__main__header">
-                        <span class="wrapper__main__header__title">Category List</span>
+                        <span class="wrapper__main__header__title">Brand List</span>
                         <div class="wrapper__main__header__function">
 
                         </div>
@@ -20,7 +20,7 @@
                                 <div class="wrapper__main__content__table__header">
                                     <div class="row">
                                         <div class="col-6">
-                                            <p style="font-size: 24px;">Category List</p>
+                                            <p style="font-size: 24px;">Brand List</p>
                                         </div>
                                         <div class="col-6">
                                             <button type="button" class="btn btn-success d-block" style="margin-left: auto;" data-bs-toggle="modal" data-bs-target="#addUserModal"><em class="ti-plus"></em> Add</button>
@@ -32,18 +32,18 @@
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center; min-width: 200px; width: 200px;"><em class="ti-settings"></em></th>
-                                                <th style="min-width: 200px;">Category Name</th>
+                                                <th style="min-width: 200px;">Brand Name</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% categories.forEach(item => { %>
+                                            <% brands.forEach(item => { %>
                                                 <tr>
                                                     <td align="center">
                                                         <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
                                                         <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
                                                     </td>
                                                     <td>
-                                                        <%= item.prodTypeName %>
+                                                        <%= item.brandName %>
                                                     </td>
                                                 </tr>
                                                 <% }) %>
@@ -86,17 +86,17 @@
 
                                             <!-- Modal Header -->
                                             <div class="modal-header">
-                                                <h4 class="modal-title">Add Category</h4>
+                                                <h4 class="modal-title">Add Brand</h4>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
 
                                             <!-- Modal body -->
                                             <div class="modal-body">
-                                                <form action="/admin/category" method="post" class="was-validated">
+                                                <form action="/admin/brand" method="post" class="was-validated">
                                                     <div class="mb-3 mt-3 position-relative">
-                                                        <label for="prodTypeName">Category Name</label>
-                                                        <input type="text" class="form-control" id="prodTypeName" placeholder="Enter name" name="prodTypeName">
-                                                        <div class="invalid-tooltip">Please check category name.</div>
+                                                        <label for="brandName">Brand Name</label>
+                                                        <input type="text" class="form-control" id="brandName" placeholder="Enter name" name="brandName">
+                                                        <div class="invalid-tooltip">Please check brand name.</div>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary m-auto d-block">Submit</button>
                                                 </form>

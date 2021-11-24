@@ -42,6 +42,15 @@ const Product = new Schema({
         type: String,
         required: true
     },
+    brandId: {
+        type: Schema.Types.ObjectId,
+        ref: "Brand",
+        required: true
+    },
+    brandName: {
+        type: String,
+        required: true
+    },
     prodName: {
         type: String,
         required: true

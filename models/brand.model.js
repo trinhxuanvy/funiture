@@ -1,8 +1,8 @@
 const mongooes = require("mongoose");
 const Schema = mongooes.Schema;
 
-const Category = new Schema({
-    prodTypeName: {
+const Brand = new Schema({
+    brandName: {
         type: String,
         required: true,
     },
@@ -13,7 +13,7 @@ const Category = new Schema({
 }, {
     timestamps: true,
     versionKey: false,
-    collection: "Category",
+    collection: "Brand",
 });
 
-module.exports = mongooes.model("Category", Category);
+module.exports = mongooes.model("Brand", Brand);
