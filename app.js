@@ -4,6 +4,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const shopRouter = require("./routes/shop.route");
+const adminRouter = require("./routes/admin.route");
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(shopRouter);
+app.use(adminRouter);
 
 const port = process.env.PORT || 3000;
 

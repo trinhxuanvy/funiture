@@ -32,41 +32,26 @@
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center; min-width: 200px; width: 200px;"><em class="ti-settings"></em></th>
-                                                <th style="min-width: 200px;">Name</th>
+                                                <th style="min-width: 200px;">Category Name</th>
+                                                <th style="min-width: 200px;">Amount Product</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td align="center">
-                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
-                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
+                                            <% categories.forEach(item => { %>
+                                                <tr>
+                                                    <td align="center">
+                                                        <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
+                                                        <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.prodTypeName %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.amount %>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
 
-                                                </td>
-                                                <td>Plastic chair</td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center">
-                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
-                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
-
-                                                </td>
-                                                <td>Plastic chair</td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center">
-                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
-                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
-                                                </td>
-                                                <td>Plastic chair</td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center">
-                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
-                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
-
-                                                </td>
-                                                <td>Plastic chair</td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -111,11 +96,15 @@
 
                                             <!-- Modal body -->
                                             <div class="modal-body">
-                                                <form action="" class="was-validated">
+                                                <form action="/admin/category" method="post" class="was-validated">
                                                     <div class="mb-3 mt-3 position-relative">
-                                                        <label for="name">Category Name</label>
-                                                        <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+                                                        <label for="prodTypeName">Category Name</label>
+                                                        <input type="text" class="form-control" id="prodTypeName" placeholder="Enter name" name="prodTypeName">
                                                         <div class="invalid-tooltip">Please check category name.</div>
+                                                    </div>
+                                                    <div class="mb-3 mt-3 position-relative">
+                                                        <label for="amount">Amount Product</label>
+                                                        <input type="number" class="form-control" id="amount" name="amount">
                                                     </div>
                                                     <button type="submit" class="btn btn-primary m-auto d-block">Submit</button>
                                                 </form>

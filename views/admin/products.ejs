@@ -36,79 +36,67 @@
                                                 <th style="min-width: 300px;">Secondary Image</th>
                                                 <th style="min-width: 200px;">Name</th>
                                                 <th style="min-width: 200px;">Category</th>
-                                                <th style="min-width: 150px;">Cost</th>
+                                                <th style="min-width: 150px;">Price</th>
+                                                <th style="min-width: 150px;">Amount</th>
+                                                <th style="min-width: 150px;">Sold</th>
+                                                <th style="min-width: 150px;">Color</th>
+                                                <th style="min-width: 150px;">Width</th>
+                                                <th style="min-width: 150px;">Height</th>
+                                                <th style="min-width: 150px;">Depth</th>
+                                                <th style="min-width: 150px;">Weight</th>
                                                 <th style="min-width: 300px;">Description</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td align="center">
-                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
-                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
-                                                    <button value="" class="btn btn-success"><em class="ti-eye"></em></button>
-                                                </td>
-                                                <td><img src="/images/product/product_2.png" alt=""></td>
-                                                <td>
-                                                    <img src="/images/product/product_2.png" alt="">
-                                                    <img src="/images/product/product_3.png" alt="">
-                                                    <img src="/images/product/product_4.png" alt="">
-                                                </td>
-                                                <td>Plastic chair</td>
-                                                <td>Chair</td>
-                                                <td>$100.00</td>
-                                                <td style="font-size: 14px;">First replenish living. Creepeth image image. Creeping can't, won't called. Two fruitful let days signs sea together all land fly subdue </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center">
-                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
-                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
-                                                    <button value="" class="btn btn-success"><em class="ti-eye"></em></button>
-                                                </td>
-                                                <td><img src="/images/product/product_2.png" alt=""></td>
-                                                <td>
-                                                    <img src="/images/product/product_2.png" alt="">
-                                                    <img src="/images/product/product_3.png" alt="">
-                                                    <img src="/images/product/product_4.png" alt="">
-                                                </td>
-                                                <td>Plastic chair</td>
-                                                <td>Chair</td>
-                                                <td>$100.00</td>
-                                                <td style="font-size: 14px;">First replenish living. Creepeth image image. Creeping can't, won't called. Two fruitful let days signs sea together all land fly subdue </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center">
-                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
-                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
-                                                    <button value="" class="btn btn-success"><em class="ti-eye"></em></button>
-                                                </td>
-                                                <td><img src="/images/product/product_2.png" alt=""></td>
-                                                <td>
-                                                    <img src="/images/product/product_2.png" alt="">
-                                                    <img src="/images/product/product_3.png" alt="">
-                                                    <img src="/images/product/product_4.png" alt="">
-                                                </td>
-                                                <td>Plastic chair</td>
-                                                <td>Chair</td>
-                                                <td>$100.00</td>
-                                                <td style="font-size: 14px;">First replenish living. Creepeth image image. Creeping can't, won't called. Two fruitful let days signs sea together all land fly subdue </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center">
-                                                    <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
-                                                    <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
-                                                    <button value="" class="btn btn-success"><em class="ti-eye"></em></button>
-                                                </td>
-                                                <td><img src="/images/product/product_2.png" alt=""></td>
-                                                <td>
-                                                    <img src="/images/product/product_2.png" alt="">
-                                                    <img src="/images/product/product_3.png" alt="">
-                                                    <img src="/images/product/product_4.png" alt="">
-                                                </td>
-                                                <td>Plastic chair</td>
-                                                <td>Chair</td>
-                                                <td>$100.00</td>
-                                                <td style="font-size: 14px;">First replenish living. Creepeth image image. Creeping can't, won't called. Two fruitful let days signs sea together all land fly subdue </td>
-                                            </tr>
+                                            <% products.forEach(item => { %>
+                                                <tr>
+                                                    <td align="center">
+                                                        <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
+                                                        <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
+                                                        <button value="" class="btn btn-success"><em class="ti-eye"></em></button>
+                                                    </td>
+                                                    <td><img src="/images/product/product_2.png" alt=""></td>
+                                                    <td>
+                                                        <img src="/images/product/product_2.png" alt="">
+                                                        <img src="/images/product/product_3.png" alt="">
+                                                        <img src="/images/product/product_4.png" alt="">
+                                                    </td>
+                                                    <td>
+                                                        <%= item.prodName %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.prodTypeName %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.price %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.amount %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.soldQuantity %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.color %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.width %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.height %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.depth %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.weight %>
+                                                    </td>
+                                                    <td style="font-size: 14px;">
+                                                        <%= item.description %>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -153,39 +141,77 @@
 
                                             <!-- Modal body -->
                                             <div class="modal-body">
-                                                <form action="" class="was-validated">
+                                                <form action="/admin/products" method="post" class="was-validated">
                                                     <div class="mb-3 mt-3 position-relative">
-                                                        <label for="name">Product Name</label>
-                                                        <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+                                                        <label for="prodName">Product Name</label>
+                                                        <input type="text" class="form-control" id="prodName" placeholder="Enter name" name="prodName">
                                                         <div class="invalid-tooltip">Please check product name.</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
-                                                        <label for="category">Category</label>
-                                                        <select class="form-control" name="category" id="category">
-                                                            <option value="">1</option>
-                                                            <option value="">2</option>
+                                                        <label for="prodTypeId">Category</label>
+                                                        <select class="form-control" name="prodTypeId" id="prodTypeId">
+                                                            <% categories.forEach(item => { %>
+                                                                <option value="<%= item._id %>"><%= item.prodTypeName %></option>
+                                                            <% }) %>
                                                         </select>
                                                         <div class="invalid-tooltip">Please check category</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
-                                                        <label for="cost">Cost</label>
-                                                        <input type="text" class="form-control" id="cost" placeholder="Enter cost" name="cost">
-                                                        <div class="invalid-tooltip">Please check cost</div>
+                                                        <label for="price">Price</label>
+                                                        <input type="number" class="form-control" id="price" placeholder="Enter price" name="price">
+                                                        <div class="invalid-tooltip">Please check price</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
-                                                        <label for="primary-image">Primary Image</label>
-                                                        <input type="file" class="form-control" id="primary-image" placeholder="Choose 1 file" name="primary-image">
-                                                        <div class="invalid-tooltip">Please check file</div>
+                                                        <label for="amount">Amount</label>
+                                                        <input type="number" class="form-control" id="amount" placeholder="Enter amount" name="amount">
+                                                        <div class="invalid-tooltip">Please check amount</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
-                                                        <label for="secondary-image">Secondary Image</label>
-                                                        <input type="file" class="form-control" id="secondary-image" placeholder="Choose 1 file" name="secondary-image" multiple>
-                                                        <div class="invalid-tooltip">Please check file</div>
+                                                        <label for="primaryImage">Primary Image</label>
+                                                        <input type="file" class="form-control" id="primaryImage" placeholder="Choose 1 file" name="primaryImage">
+                                                        <div class="invalid-tooltip">Please choose 1 file</div>
+                                                    </div>
+                                                    <div class="mb-3 position-relative">
+                                                        <label for="">Secondary Image</label>
+                                                        <input style="margin-bottom: 8px;" type="file" class="form-control" id="secondaryImage_1" placeholder="Choose 1 file" name="secondaryImage_1">
+                                                        <input style="margin-bottom: 8px;" type="file" class="form-control" id="secondaryImage_2" placeholder="Choose 1 file" name="secondaryImage_2">
+                                                        <input style="margin-bottom: 8px;" type="file" class="form-control" id="secondaryImage_3" placeholder="Choose 1 file" name="secondaryImage_3">
+                                                        <div class="invalid-tooltip">Please choose files</div>
+                                                    </div>
+                                                    <div class="mb-3 position-relative">
+                                                        <label for="color">Color</label>
+                                                        <input type="text" class="form-control" id="color" placeholder="Enter color" name="color">
+                                                        <div class="invalid-tooltip">Please check color</div>
+                                                    </div>
+                                                    <div class="mb-3 position-relative">
+                                                        <label for="width">Width</label>
+                                                        <input type="number" class="form-control" id="width" placeholder="Enter width" name="width">
+                                                        <div class="invalid-tooltip">Please check width</div>
+                                                    </div>
+                                                    <div class="mb-3 position-relative">
+                                                        <label for="height">Height</label>
+                                                        <input type="number" class="form-control" id="height" placeholder="Enter height" name="height">
+                                                        <div class="invalid-tooltip">Please check height</div>
+                                                    </div>
+                                                    <div class="mb-3 position-relative">
+                                                        <label for="depth">Depth</label>
+                                                        <input type="number" class="form-control" id="depth" placeholder="Enter depth" name="depth">
+                                                        <div class="invalid-tooltip">Please check depth</div>
+                                                    </div>
+                                                    <div class="mb-3 position-relative">
+                                                        <label for="weight">Weight</label>
+                                                        <input type="number" class="form-control" id="weight" placeholder="Enter weight" name="weight">
+                                                        <div class="invalid-tooltip">Please check weight</div>
+                                                    </div>
+                                                    <div class="mb-3 position-relative">
+                                                        <label for="soldQuantity">Sold</label>
+                                                        <input type="number" class="form-control" id="soldQuantity" placeholder="Enter Sold Quantity" name="soldQuantity">
+                                                        <div class="invalid-tooltip">Please check Sold Quantity</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
                                                         <label for="description">Description</label>
-                                                        <textarea class="form-control" id="description" placeholder="Enter description" name="description"></textarea>
-                                                        <div class="invalid-tooltip">Please check description</div>
+                                                        <textarea class="form-control" id="description" placeholder="Enter Description" name="description"></textarea>
+                                                        <div class="invalid-tooltip">Please check Description</div>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary m-auto d-block">Submit</button>
                                                 </form>
@@ -204,7 +230,7 @@
                     </div>
                 </div>
                 <!--================Single Product Area =================-->
-                <div class="product_image_area section_padding" id="product_image_area">
+                <div class="product_image_area section_padding" id="product_image_area" style="display: none;">
                     <div class="container">
                         <div class="row s_product_inner justify-content-between">
                             <div class="col-lg-7 col-xl-7">
