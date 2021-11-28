@@ -6,15 +6,20 @@
             <%- include ("./share/sidebar.ejs") %>
                 <div class="wrapper__main" id="main">
                     <div class="wrapper__main__header">
-                        <span class="wrapper__main__header__title">Product List</span>
+                        <a href="/admin/products" class="wrapper__main__header__title">Product List</a>
                         <div class="wrapper__main__header__function">
-
+                            <form action="/admin/products" method="get">
+                                <input type="text" id="search" name="search" placeholder="Search">
+                                <button type="submit">
+                                    <i class="ti-search"></i>
+                                </button>
+                            </form>
                         </div>
                         <div class="menu-toggle">
                             <button id="menu-toggle" class="btn btn-secondary"><i class="fa fa-bars" aria-hidden="true"></i></button>
                         </div>
                     </div>
-                    <div class="wrapper__main__content">
+                    <div class="wrapper__main__content" id="wrapperContent">
                         <div class="container-fluid" style="padding: 32px;">
                             <div class="wrapper__main__content__table">
                                 <div class="wrapper__main__content__table__header">
@@ -23,7 +28,7 @@
                                             <p style="font-size: 24px;">Product List</p>
                                         </div>
                                         <div class="col-6">
-                                            <button type="button" class="btn btn-success d-block" style="margin-left: auto;" data-bs-toggle="modal" data-bs-target="#addUserModal"><em class="ti-plus"></em> Add</button>
+                                            <button type="button" class="btn btn-orange text-white d-block" style="margin-left: auto;" data-bs-toggle="modal" data-bs-target="#addUserModal"><em class="ti-plus"></em> Add</button>
                                         </div>
                                     </div>
                                 </div>
@@ -50,57 +55,112 @@
                                         </thead>
                                         <tbody>
                                             <% products.forEach(item => { %>
-                                                <tr>
-                                                    <td align="center">
-                                                        <a href="" class="btn btn-light"><em class="ti-pencil"></em></a>
-                                                        <a href="" class="btn btn-danger"><em class="ti-trash"></em></a>
-                                                        <button value="" class="btn btn-success"><em class="ti-eye"></em></button>
-                                                    </td>
-                                                    <td><img src="/images/product/product_2.png" alt=""></td>
-                                                    <td>
-                                                        <img src="/images/product/product_2.png" alt="">
-                                                        <img src="/images/product/product_3.png" alt="">
-                                                        <img src="/images/product/product_4.png" alt="">
-                                                    </td>
-                                                    <td>
-                                                        <%= item.prodName %>
-                                                    </td>
-                                                    <td>
-                                                        <%= item.prodTypeName %>
-                                                    </td>
-                                                    <td>
-                                                        <%= item.brandName %>
-                                                    </td>
-                                                    <td>
-                                                        <%= item.price %>
-                                                    </td>
-                                                    <td>
-                                                        <%= item.amount %>
-                                                    </td>
-                                                    <td>
-                                                        <%= item.soldQuantity %>
-                                                    </td>
-                                                    <td>
-                                                        <%= item.color %>
-                                                    </td>
-                                                    <td>
-                                                        <%= item.width %>
-                                                    </td>
-                                                    <td>
-                                                        <%= item.height %>
-                                                    </td>
-                                                    <td>
-                                                        <%= item.depth %>
-                                                    </td>
-                                                    <td>
-                                                        <%= item.weight %>
-                                                    </td>
-                                                    <td style="font-size: 14px;">
-                                                        <%= item.description %>
-                                                    </td>
-                                                </tr>
+                                                <form action="/admin/products/update/<%= item._id %>" method="post" enctype="multipart/form-data">
+                                                    <tr class="tr-prod" <% if (!item.status) { %>
+                                                        style="opacity: 0.5;"
+                                                        <% } %>>
+                                                            <td align="center">
+                                                                <button class="btn btn-light btn-update-prod" type="submit"><em class="ti-pencil"></em></button>
+                                                                <button value="<%= item._id %>" class="btn btn-danger btn-delete-prod"><em class="ti-trash"></em></button>
+                                                                <button value="<%= item._id %>" class="btn btn-success btn-preview-prod"><em class="ti-eye"></em></button>
+                                                            </td>
+                                                            <td>
+                                                                <label for="primaryImage" class="tb-image primary-image">
+                                                                <% item.prodImage.forEach(img => { if (img.type == "1") { %>
+                                                                    <img src="<%= img.imageLink %>" alt="">
+                                                                <%} }) %>
+                                                                <input type="file" name="primaryImage" id="primaryImage" class="primary-image-input">
+                                                            </label>
+                                                            </td>
+                                                            <td>
+                                                                <label class="tb-image secondary-image-1" for="secondaryImage_1">
+                                                                <% item.prodImage.forEach(img => { if (img.type == "2") { %>
+                                                                    <img src="<%= img.imageLink %>" alt="">
+                                                                <%} }) %>
+                                                                <input type="file" class="secondary-image-input-1" name="secondaryImage_1" id="secondaryImage_1">
+                                                            </label>
+                                                                <label class="tb-image secondary-image-2" for="secondaryImage_2">
+                                                                <% item.prodImage.forEach(img => { if (img.type == "3") { %>
+                                                                    <img src="<%= img.imageLink %>" alt="">
+                                                                <%} }) %>
+                                                                <input type="file" class="secondary-image-input-2" name="secondaryImage_2" id="secondaryImage_2">
+                                                            </label>
+                                                                <label class="tb-image secondary-image-3" for="secondaryImage_3">
+                                                                <% item.prodImage.forEach(img => { if (img.type == "4") { %>
+                                                                    <img src="<%= img.imageLink %>" alt="">
+                                                                <%} }) %>
+                                                                <input type="file" class="secondary-image-input-3" name="secondaryImage_3" id="secondaryImage_3">
+                                                            </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="mb-2 mt-2">
+                                                                    <input type="text" class="form-control" id="prodName" value="<%= item.prodName %>" placeholder="Enter name" name="prodName" required>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <select class="mb-2 mt-2 form-control" name="prodTypeId" id="prodTypeId">
+                                                                <option style="visibility: hidden;" value="<%= item.prodTypeId %>"><%= item.prodTypeName %></option>
+                                                                <% categories.forEach(cate => { %>
+                                                                    <option value="<%= cate._id %>"><%= cate.prodTypeName %></option>
+                                                                <% }) %>
+                                                            </select>
+                                                            </td>
+                                                            <td>
+                                                                <select class="mb-2 mt-2 form-control" name="brandId" id="brandId">
+                                                                <option style="visibility: hidden;" value="<%= item.brandId %>"><%= item.brandName %></option>
+                                                                <% brands.forEach(br => { %>
+                                                                    <option value="<%= br._id %>"><%= br.brandName %></option>
+                                                                <% }) %>
+                                                            </select>
+                                                            </td>
+                                                            <td>
+                                                                <div class="mb-2 mt-2">
+                                                                    <input type="number" value="<%= item.price %>" class="form-control" id="price" placeholder="Enter price" name="price">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="mb-2 mt-2">
+                                                                    <input type="number" value="<%= item.amount %>" class="form-control" id="amount" placeholder="Enter amount" name="amount">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="mb-2 mt-2">
+                                                                    <input type="number" value="<%= item.soldQuantity %>" class="form-control" id="soldQuantity" placeholder="Enter sold quantity" name="soldQuantity">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="mb-2 mt-2">
+                                                                    <input type="text" value="<%= item.color %>" class="form-control" id="color" placeholder="Enter color" name="color">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="mb-2 mt-2">
+                                                                    <input type="number" value="<%= item.width %>" class="form-control" id="width" placeholder="Enter width" name="width">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="mb-2 mt-2">
+                                                                    <input type="number" value="<%= item.height %>" class="form-control" id="height" placeholder="Enter height" name="height">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="mb-2 mt-2">
+                                                                    <input type="number" value="<%= item.depth %>" class="form-control" id="depth" placeholder="Enter depth" name="depth">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="mb-2 mt-2">
+                                                                    <input type="number" value="<%= item.weight %>" class="form-control" id="weight" placeholder="Enter weight" name="weight">
+                                                                </div>
+                                                            </td>
+                                                            <td style="font-size: 14px;">
+                                                                <div class="mb-2 mt-2">
+                                                                    <textarea class="form-control" id="description" placeholder="Enter Description" name="description"><%= item.description %></textarea>
+                                                                </div>
+                                                            </td>
+                                                    </tr>
+                                                </form>
                                                 <% }) %>
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -108,23 +168,82 @@
                                 <div class="wrapper__main__content__table__footer mt-4">
                                     <div class="row align-items-center">
                                         <div class="col-4">
-                                            Page 1 of 5
+                                            Page
+                                            <%= numPage %> of
+                                                <%= totalPage %>
                                         </div>
                                         <div class="col-8">
                                             <nav aria-label="Page navigation example">
                                                 <ul class="pagination justify-content-end m-auto">
                                                     <li class="page-item">
-                                                        <a class="page-link" href="#" aria-label="Previous">
-                                                            <span aria-hidden="true">&laquo;</span>
-                                                        </a>
+                                                        <form action="/admin/products<%= search %>" method="post">
+                                                            <% if (page <= 1) { %>
+                                                                <button type="submit" class="page-link text-dark btn disabled" aria-label="Previous">
+                                                                    <span aria-hidden="true">&laquo;</span>
+                                                                </button>
+                                                                <% } else { %>
+                                                                    <input type="text" name="page" id="page" value="<%= prevPage %>" style="display: none;">
+                                                                    <button type="submit" class="page-link btn text-dark" aria-label="Previous">
+                                                                        <span aria-hidden="true">&laquo;</span>
+                                                                    </button>
+                                                                    <% } %>
+                                                        </form>
                                                     </li>
-                                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
                                                     <li class="page-item">
-                                                        <a class="page-link" href="#" aria-label="Next">
-                                                            <span aria-hidden="true">&raquo;</span>
-                                                        </a>
+                                                        <form action="/admin/products<%= search %>" method="post">
+                                                            <% if (page < 1) { %>
+                                                                <button type="submit" class="page-link text-dark btn disabled" aria-label="Previous">
+                                                                    <%= page %>
+                                                                </button>
+                                                                <% } else { %>
+                                                                    <input type="text" name="page" id="page" value="<%= page %>" style="display: none;">
+                                                                    <button type="submit" class="page-link btn btn-orange text-white" aria-label="Previous">
+                                                                        <%= page %>
+                                                                    </button>
+                                                                    <% } %>
+                                                        </form>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <form action="/admin/products<%= search %>" method="post">
+                                                            <% if (parseInt(page) + 1 > totalPage) { %>
+                                                                <button type="submit" class="page-link btn text-dark disabled" aria-label="Previous">
+                                                                    <%= parseInt(page) + 1 %>
+                                                                </button>
+                                                                <% } else { %>
+                                                                    <input type="text" name="page" id="page" value="<%= parseInt(page) + 1 %>" style="display: none;">
+                                                                    <button type="submit" class="page-link btn text-dark" aria-label="Previous">
+                                                                        <%= parseInt(page) + 1 %>
+                                                                    </button>
+                                                                    <% } %>
+                                                        </form>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <form action="/admin/products<%= search %>" method="post">
+                                                            <% if (parseInt(page) + 2 > totalPage) { %>
+                                                                <button type="submit" class="page-link btn text-dark disabled" aria-label="Previous">
+                                                                    <%= parseInt(page) + 2 %>
+                                                                </button>
+                                                                <% } else { %>
+                                                                    <input type="text" name="page" id="page" value="<%= parseInt(page) + 2 %>" style="display: none;">
+                                                                    <button type="submit" class="page-link btn text-dark" aria-label="Previous">
+                                                                        <%= parseInt(page) + 2 %>
+                                                                    </button>
+                                                                    <% } %>
+                                                        </form>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <form action="/admin/products<%= search %>" method="post">
+                                                            <% if (page >= totalPage) { %>
+                                                                <button type="submit" class="page-link btn text-dark disabled" aria-label="Previous">
+                                                                    <span aria-hidden="true">&raquo;</span>
+                                                                </button>
+                                                                <% } else { %>
+                                                                    <input type="text" name="page" id="page" value="<%= nextPage %>" style="display: none;">
+                                                                    <button type="submit" class="page-link btn text-dark" aria-label="Previous">
+                                                                        <span aria-hidden="true">&raquo;</span>
+                                                                    </button>
+                                                                    <% } %>
+                                                        </form>
                                                     </li>
                                                 </ul>
                                             </nav>
@@ -132,7 +251,7 @@
                                     </div>
                                 </div>
 
-                                <!-- The Modal -->
+                                <!-- The Modal Insert -->
                                 <div class="modal" id="addUserModal">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -145,15 +264,15 @@
 
                                             <!-- Modal body -->
                                             <div class="modal-body">
-                                                <form action="/admin/products" method="post" class="was-validated">
+                                                <form action="/admin/products" method="post" class="was-validated" enctype="multipart/form-data">
                                                     <div class="mb-3 mt-3 position-relative">
                                                         <label for="prodName">Product Name</label>
-                                                        <input type="text" class="form-control" id="prodName" placeholder="Enter name" name="prodName">
+                                                        <input type="text" class="form-control" id="prodName" placeholder="Enter name" name="prodName" required>
                                                         <div class="invalid-tooltip">Please check product name.</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
                                                         <label for="prodTypeId">Category</label>
-                                                        <select class="form-control" name="prodTypeId" id="prodTypeId">
+                                                        <select class="form-control" name="prodTypeId" id="prodTypeId" required>
                                                             <% categories.forEach(item => { %>
                                                                 <option value="<%= item._id %>"><%= item.prodTypeName %></option>
                                                             <% }) %>
@@ -162,8 +281,8 @@
                                                     </div>
                                                     <div class="mb-3 position-relative">
                                                         <label for="brandId">Brand</label>
-                                                        <select class="form-control" name="brandId" id="brandId">
-                                                            <% categories.forEach(item => { %>
+                                                        <select class="form-control" name="brandId" id="brandId" required>
+                                                            <% brands.forEach(item => { %>
                                                                 <option value="<%= item._id %>"><%= item.brandName %></option>
                                                             <% }) %>
                                                         </select>
@@ -171,7 +290,7 @@
                                                     </div>
                                                     <div class="mb-3 position-relative">
                                                         <label for="price">Price</label>
-                                                        <input type="number" class="form-control" id="price" placeholder="Enter price" name="price">
+                                                        <input type="number" class="form-control" id="price" placeholder="Enter price" name="price" required>
                                                         <div class="invalid-tooltip">Please check price</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
@@ -181,15 +300,21 @@
                                                     </div>
                                                     <div class="mb-3 position-relative">
                                                         <label for="primaryImage">Primary Image</label>
-                                                        <input type="file" class="form-control" id="primaryImage" placeholder="Choose 1 file" name="primaryImage">
+                                                        <input type="file" class="form-control" id="primaryImage" placeholder="Choose 1 file" name="primaryImage" required>
                                                         <div class="invalid-tooltip">Please choose 1 file</div>
                                                     </div>
-                                                    <div class="mb-3 position-relative">
+                                                    <div class="position-relative">
                                                         <label for="">Secondary Image</label>
-                                                        <input style="margin-bottom: 8px;" type="file" class="form-control" id="secondaryImage_1" placeholder="Choose 1 file" name="secondaryImage_1">
-                                                        <input style="margin-bottom: 8px;" type="file" class="form-control" id="secondaryImage_2" placeholder="Choose 1 file" name="secondaryImage_2">
-                                                        <input style="margin-bottom: 8px;" type="file" class="form-control" id="secondaryImage_3" placeholder="Choose 1 file" name="secondaryImage_3">
-                                                        <div class="invalid-tooltip">Please choose files</div>
+                                                        <input style="margin-bottom: 8px;" type="file" class="form-control" id="secondaryImage_1" placeholder="Choose 1 file" name="secondaryImage_1" required>
+                                                        <div class="invalid-tooltip">Please choose 1 file</div>
+                                                    </div>
+                                                    <div class="position-relative">
+                                                        <input style="margin-bottom: 8px;" type="file" class="form-control" id="secondaryImage_2" placeholder="Choose 1 file" name="secondaryImage_2" required>
+                                                        <div class="invalid-tooltip">Please choose 1 file</div>
+                                                    </div>
+                                                    <div class="position-relative">
+                                                        <input style="margin-bottom: 8px;" type="file" class="form-control" id="secondaryImage_3" placeholder="Choose 1 file" name="secondaryImage_3" required>
+                                                        <div class="invalid-tooltip">Please choose 1 file</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
                                                         <label for="color">Color</label>
@@ -197,22 +322,22 @@
                                                         <div class="invalid-tooltip">Please check color</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
-                                                        <label for="width">Width</label>
+                                                        <label for="width">Width (m)</label>
                                                         <input type="number" class="form-control" id="width" placeholder="Enter width" name="width">
                                                         <div class="invalid-tooltip">Please check width</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
-                                                        <label for="height">Height</label>
+                                                        <label for="height">Height (m)</label>
                                                         <input type="number" class="form-control" id="height" placeholder="Enter height" name="height">
                                                         <div class="invalid-tooltip">Please check height</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
-                                                        <label for="depth">Depth</label>
+                                                        <label for="depth">Depth (m)</label>
                                                         <input type="number" class="form-control" id="depth" placeholder="Enter depth" name="depth">
                                                         <div class="invalid-tooltip">Please check depth</div>
                                                     </div>
                                                     <div class="mb-3 position-relative">
-                                                        <label for="weight">Weight</label>
+                                                        <label for="weight">Weight (kg)</label>
                                                         <input type="number" class="form-control" id="weight" placeholder="Enter weight" name="weight">
                                                         <div class="invalid-tooltip">Please check weight</div>
                                                     </div>

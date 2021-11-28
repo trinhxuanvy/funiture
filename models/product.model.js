@@ -26,7 +26,7 @@ const Product = new Schema({
     prodImage: [{
         imageLink: {
             type: String,
-            required: true
+            required: false
         },
         type: {
             type: String,
@@ -59,7 +59,7 @@ const Product = new Schema({
         type: String,
         required: false
     },
-    witdh: {
+    width: {
         type: Number,
         required: false
     },
