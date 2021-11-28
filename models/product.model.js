@@ -26,7 +26,7 @@ const Product = new Schema({
     prodImage: [{
         imageLink: {
             type: String,
-            required: true
+            required: false
         },
         type: {
             type: String,
