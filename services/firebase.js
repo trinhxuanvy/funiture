@@ -20,7 +20,7 @@ initializeApp(firebaseConfig);
 
 const storage = getStorage();
 const metadata = {
-    contentType: "image/png",
+    contentType: "image/jpg",
 };
 
 exports.uploadImage = (imageFile) => {
@@ -35,7 +35,7 @@ exports.uploadImage = (imageFile) => {
             "state_changed",
             (snapshot) => {
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log("Upload is " + progress + "% done");
+                console.log("Upload" + imageFile.originalname + " is " + progress + "% done");
                 switch (snapshot.state) {
                     case "paused":
                         console.log("Upload is paused");
