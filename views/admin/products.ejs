@@ -103,251 +103,245 @@
                   </thead>
                   <tbody>
                     <% products.forEach(item=> { %>
-                    <form
-                      action="/admin/products/update/<%= item._id %>"
-                      method="post"
-                      enctype="multipart/form-data"
-                    >
-                      <tr class="tr-prod" <% if (!item.status) { %>
-                        style="opacity: 0.5;" <% } %> id="<%= item._id %>">
-                        <td align="center">
-                          <button
-                            value="<%= item._id %>"
-                            class="btn btn-danger btn-delete-prod"
+                    <tr class="tr-prod" <% if (!item.status) { %>
+                      style="opacity: 0.5;" <% } %> id="<%= item._id %>">
+                      <td align="center">
+                        <button
+                          value="<%= item._id %>"
+                          class="btn btn-danger btn-delete-prod"
+                        >
+                          <em class="ti-trash"></em>
+                        </button>
+                        <button
+                          value="<%= item._id %>"
+                          class="btn btn-success btn-preview-prod"
+                        >
+                          <em class="ti-eye"></em>
+                        </button>
+                      </td>
+                      <td>
+                        <label
+                          for="<%= prodModel.primaryImage %>"
+                          class="tb-image primary-image"
+                        >
+                          <% item.prodImage.forEach(img=> { if (img.type == "1")
+                          { %>
+                          <img src="<%= img.imageLink %>" alt="" />
+                          <%} }) %>
+                          <input
+                            type="file"
+                            name="<%= prodModel.primaryImage %>"
+                            id="<%= prodModel.primaryImage %>"
+                            class="primary-image-input"
+                          />
+                        </label>
+                      </td>
+                      <td>
+                        <label
+                          class="tb-image secondary-image-1"
+                          for="<%= prodModel.secondaryImage1 %>"
+                        >
+                          <% item.prodImage.forEach(img=> { if (img.type == "2")
+                          { %>
+                          <img src="<%= img.imageLink %>" alt="" />
+                          <%} }) %>
+                          <input
+                            type="file"
+                            class="secondary-image-input-1"
+                            name="<%= prodModel.secondaryImage1 %>"
+                            id="<%= prodModel.secondaryImage1 %>"
+                          />
+                        </label>
+                        <label
+                          class="tb-image secondary-image-2"
+                          for="<%= prodModel.secondaryImage2 %>"
+                        >
+                          <% item.prodImage.forEach(img=> { if (img.type == "3")
+                          { %>
+                          <img src="<%= img.imageLink %>" alt="" />
+                          <%} }) %>
+                          <input
+                            type="file"
+                            class="secondary-image-input-2"
+                            name="<%= prodModel.secondaryImage2 %>"
+                            id="<%= prodModel.secondaryImage2 %>"
+                          />
+                        </label>
+                        <label
+                          class="tb-image secondary-image-3"
+                          for="<%= prodModel.secondaryImage3 %>"
+                        >
+                          <% item.prodImage.forEach(img=> { if (img.type == "4")
+                          { %>
+                          <img src="<%= img.imageLink %>" alt="" />
+                          <%} }) %>
+                          <input
+                            type="file"
+                            class="secondary-image-input-3"
+                            name="<%= prodModel.secondaryImage3 %>"
+                            id="<%= prodModel.secondaryImage3 %>"
+                          />
+                        </label>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="<%= prodModel.prodName %>"
+                            value="<%= item.prodName %>"
+                            placeholder="Enter name"
+                            name="<%= prodModel.prodName %>"
+                            required
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <select
+                          class="mb-2 mt-2 form-control"
+                          name="<%= prodModel.prodTypeId %>"
+                          id="<%= prodModel.prodTypeId %>"
+                        >
+                          <option
+                            style="visibility: hidden"
+                            value="<%= item.prodTypeId %>"
                           >
-                            <em class="ti-trash"></em>
-                          </button>
-                          <button
-                            value="<%= item._id %>"
-                            class="btn btn-success btn-preview-prod"
+                            <%= item.prodTypeName %>
+                          </option>
+                          <% categories.forEach(cate=> { %>
+                          <option value="<%= cate._id %>">
+                            <%= cate.prodTypeName %>
+                          </option>
+                          <% }) %>
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          class="mb-2 mt-2 form-control"
+                          name="<%= prodModel.brandId %>"
+                          id="<%= prodModel.brandId %>"
+                        >
+                          <option
+                            style="visibility: hidden"
+                            value="<%= item.brandId %>"
                           >
-                            <em class="ti-eye"></em>
-                          </button>
-                        </td>
-                        <td>
-                          <label
-                            for="<%= prodModel.primaryImage %>"
-                            class="tb-image primary-image"
-                          >
-                            <% item.prodImage.forEach(img=> { if (img.type ==
-                            "1") { %>
-                            <img src="<%= img.imageLink %>" alt="" />
-                            <%} }) %>
-                            <input
-                              type="file"
-                              name="<%= prodModel.primaryImage %>"
-                              id="<%= prodModel.primaryImage %>"
-                              class="primary-image-input"
-                            />
-                          </label>
-                        </td>
-                        <td>
-                          <label
-                            class="tb-image secondary-image-1"
-                            for="<%= prodModel.secondaryImage1 %>"
-                          >
-                            <% item.prodImage.forEach(img=> { if (img.type ==
-                            "2") { %>
-                            <img src="<%= img.imageLink %>" alt="" />
-                            <%} }) %>
-                            <input
-                              type="file"
-                              class="secondary-image-input-1"
-                              name="<%= prodModel.secondaryImage1 %>"
-                              id="<%= prodModel.secondaryImage1 %>"
-                            />
-                          </label>
-                          <label
-                            class="tb-image secondary-image-2"
-                            for="<%= prodModel.secondaryImage2 %>"
-                          >
-                            <% item.prodImage.forEach(img=> { if (img.type ==
-                            "3") { %>
-                            <img src="<%= img.imageLink %>" alt="" />
-                            <%} }) %>
-                            <input
-                              type="file"
-                              class="secondary-image-input-2"
-                              name="<%= prodModel.secondaryImage2 %>"
-                              id="<%= prodModel.secondaryImage2 %>"
-                            />
-                          </label>
-                          <label
-                            class="tb-image secondary-image-3"
-                            for="<%= prodModel.secondaryImage3 %>"
-                          >
-                            <% item.prodImage.forEach(img=> { if (img.type ==
-                            "4") { %>
-                            <img src="<%= img.imageLink %>" alt="" />
-                            <%} }) %>
-                            <input
-                              type="file"
-                              class="secondary-image-input-3"
-                              name="<%= prodModel.secondaryImage3 %>"
-                              id="<%= prodModel.secondaryImage3 %>"
-                            />
-                          </label>
-                        </td>
-                        <td>
-                          <div class="mb-2 mt-2">
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="<%= prodModel.prodName %>"
-                              value="<%= item.prodName %>"
-                              placeholder="Enter name"
-                              name="<%= prodModel.prodName %>"
-                              required
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <select
-                            class="mb-2 mt-2 form-control"
-                            name="<%= prodModel.prodTypeId %>"
-                            id="<%= prodModel.prodTypeId %>"
-                          >
-                            <option
-                              style="visibility: hidden"
-                              value="<%= item.prodTypeId %>"
-                            >
-                              <%= item.prodTypeName %>
-                            </option>
-                            <% categories.forEach(cate=> { %>
-                            <option value="<%= cate._id %>">
-                              <%= cate.prodTypeName %>
-                            </option>
-                            <% }) %>
-                          </select>
-                        </td>
-                        <td>
-                          <select
-                            class="mb-2 mt-2 form-control"
-                            name="<%= prodModel.brandId %>"
-                            id="<%= prodModel.brandId %>"
-                          >
-                            <option
-                              style="visibility: hidden"
-                              value="<%= item.brandId %>"
-                            >
-                              <%= item.brandName %>
-                            </option>
-                            <% brands.forEach(br=> { %>
-                            <option value="<%= br._id %>">
-                              <%= br.brandName %>
-                            </option>
-                            <% }) %>
-                          </select>
-                        </td>
-                        <td>
-                          <div class="mb-2 mt-2">
-                            <input
-                              type="number"
-                              value="<%= item.price %>"
-                              class="form-control"
-                              id="<%= prodModel.price %>"
-                              placeholder="Enter price"
-                              name="<%= prodModel.price %>"
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="mb-2 mt-2">
-                            <input
-                              type="number"
-                              value="<%= item.amount %>"
-                              class="form-control"
-                              id="<%= prodModel.amount %>"
-                              placeholder="Enter amount"
-                              name="<%= prodModel.amount %>"
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="mb-2 mt-2">
-                            <input
-                              type="number"
-                              value="<%= item.soldQuantity %>"
-                              class="form-control"
-                              id="<%= prodModel.soldQuantity %>"
-                              placeholder="Enter sold quantity"
-                              name="<%= prodModel.soldQuantity %>"
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="mb-2 mt-2">
-                            <input
-                              type="text"
-                              value="<%= item.color %>"
-                              class="form-control"
-                              id="<%= prodModel.color %>"
-                              placeholder="Enter color"
-                              name="<%= prodModel.color %>"
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="mb-2 mt-2">
-                            <input
-                              type="number"
-                              value="<%= item.width %>"
-                              class="form-control"
-                              id="<%= prodModel.width %>"
-                              placeholder="Enter width"
-                              name="<%= prodModel.width %>"
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="mb-2 mt-2">
-                            <input
-                              type="number"
-                              value="<%= item.height %>"
-                              class="form-control"
-                              id="<%= prodModel.height %>"
-                              placeholder="Enter height"
-                              name="<%= prodModel.height %>"
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="mb-2 mt-2">
-                            <input
-                              type="number"
-                              value="<%= item.depth %>"
-                              class="form-control"
-                              id="<%= prodModel.depth %>"
-                              placeholder="Enter depth"
-                              name="<%= prodModel.depth %>"
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="mb-2 mt-2">
-                            <input
-                              type="number"
-                              value="<%= item.weight %>"
-                              class="form-control"
-                              id="<%= prodModel.weight %>"
-                              placeholder="Enter weight"
-                              name="<%= prodModel.weigth %>"
-                            />
-                          </div>
-                        </td>
-                        <td style="font-size: 14px">
-                          <div class="mb-2 mt-2">
-                            <input
-                              class="form-control"
-                              id="<%= prodModel.description %>"
-                              placeholder="Enter Description"
-                              name="<%= prodModel.description %>"
-                              value="<%= item.description %>"
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    </form>
+                            <%= item.brandName %>
+                          </option>
+                          <% brands.forEach(br=> { %>
+                          <option value="<%= br._id %>">
+                            <%= br.brandName %>
+                          </option>
+                          <% }) %>
+                        </select>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2">
+                          <input
+                            type="number"
+                            value="<%= item.price %>"
+                            class="form-control"
+                            id="<%= prodModel.price %>"
+                            placeholder="Enter price"
+                            name="<%= prodModel.price %>"
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2">
+                          <input
+                            type="number"
+                            value="<%= item.amount %>"
+                            class="form-control"
+                            id="<%= prodModel.amount %>"
+                            placeholder="Enter amount"
+                            name="<%= prodModel.amount %>"
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2">
+                          <input
+                            type="number"
+                            value="<%= item.soldQuantity %>"
+                            class="form-control"
+                            id="<%= prodModel.soldQuantity %>"
+                            placeholder="Enter sold quantity"
+                            name="<%= prodModel.soldQuantity %>"
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2">
+                          <input
+                            type="text"
+                            value="<%= item.color %>"
+                            class="form-control"
+                            id="<%= prodModel.color %>"
+                            placeholder="Enter color"
+                            name="<%= prodModel.color %>"
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2">
+                          <input
+                            type="number"
+                            value="<%= item.width %>"
+                            class="form-control"
+                            id="<%= prodModel.width %>"
+                            placeholder="Enter width"
+                            name="<%= prodModel.width %>"
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2">
+                          <input
+                            type="number"
+                            value="<%= item.height %>"
+                            class="form-control"
+                            id="<%= prodModel.height %>"
+                            placeholder="Enter height"
+                            name="<%= prodModel.height %>"
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2">
+                          <input
+                            type="number"
+                            value="<%= item.depth %>"
+                            class="form-control"
+                            id="<%= prodModel.depth %>"
+                            placeholder="Enter depth"
+                            name="<%= prodModel.depth %>"
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2">
+                          <input
+                            type="number"
+                            value="<%= item.weight %>"
+                            class="form-control"
+                            id="<%= prodModel.weight %>"
+                            placeholder="Enter weight"
+                            name="<%= prodModel.weigth %>"
+                          />
+                        </div>
+                      </td>
+                      <td style="font-size: 14px">
+                        <div class="mb-2 mt-2">
+                          <input
+                            class="form-control"
+                            id="<%= prodModel.description %>"
+                            placeholder="Enter Description"
+                            name="<%= prodModel.description %>"
+                            value="<%= item.description %>"
+                          />
+                        </div>
+                      </td>
+                    </tr>
                     <% }) %>
                   </tbody>
                 </table>
