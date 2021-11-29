@@ -189,7 +189,10 @@
         margin-right: 8px; }
       .wrapper__main__content__table .table-responsive-xxl label {
         position: relative;
-        overflow: hidden; }
+        overflow: hidden;
+        display: block;
+        width: 50px;
+        height: 50px; }
       .wrapper__main__content__table .table-responsive-xxl input[type="file"] {
         position: absolute;
         width: 1000px;
@@ -393,3 +396,15 @@
   background-color: #eb5e28; }
   .btn-orange:hover {
     background-color: #db5824; }
+
+.box-modal {
+  box-shadow: 0px 0px 32px rgba(102, 97, 91, 0.5);
+  padding: 16px 0;
+  width: 150px;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: bolder;
+  position: fixed;
+  right: -100%;
+  bottom: 16px;
+  transition: 0.5s; }
