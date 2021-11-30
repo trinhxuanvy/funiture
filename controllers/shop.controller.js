@@ -58,3 +58,32 @@ exports.singleProduct =(req, res, next) => {
 exports.checkout =(req, res, next) => {
     res.render("checkout");
 }
+
+//render trang chu
+exports.getIndex = async(req, res, next) => {
+    const bestSellers = await Product.find().sort({ hasSold: -1 }).limit(10).exec();
+    const awesomeProducts = await Product.find().sort({ viewCount: -1 }).limit(10).exec();
+    res.render("index", {
+        awesomeProducts: awesomeProducts,
+        bestSellers: bestSellers
+    });
+};
+
+exports.getCategories = async(req, res, next) => {
+    const bestSellers = await Product.find().sort({ hasSold: -1 }).limit(10).exec();
+    const awesomeProducts = await Product.find().sort({ viewCount: -1 }).limit(10).exec();
+    res.render("categories", {
+        awesomeProducts: awesomeProducts,
+        bestSellers: bestSellers
+    });
+};
+
+exports.getProduct = async(req, res, next) => {
+    const prodId = req.params.id;
+    const product = await Product.findById({ _id: prodId });
+    const bestSellers = await Product.find({status: true}).exec();
+    return res.render("products", {
+        product: product,
+        bestSellers: bestSellers,
+    });
+};

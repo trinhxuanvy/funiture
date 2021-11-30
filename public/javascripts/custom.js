@@ -324,37 +324,45 @@ inputNumber($('.input-number'));
   // });
 
  var product_overview = $('#vertical');
- if(product_overview.length){
-  product_overview.lightSlider({
-    gallery:true,
-    item:1,
-    vertical:true,
-    verticalHeight:450,
-    thumbItem:3,
-    slideMargin:0,
-    speed:600,
-    autoplay: true,
-    responsive : [
-      {
-          breakpoint:991,
-          settings: {
-              item:1,
-              
-            }
-      },
-      {
-          breakpoint:576,
-          settings: {
-              item:1,
-              slideMove:1,
-              verticalHeight:350,
-            }
-      }
-  ]
-  });  
+ if (product_overview.length) {
+   product_overview.lightSlider({
+     gallery: true,
+     item: 1,
+     vertical: true,
+     verticalHeight: 450,
+     thumbItem: 3,
+     slideMargin: 0,
+     speed: 600,
+     autoplay: true,
+     responsive: [
+       {
+         breakpoint: 991,
+         settings: {
+           item: 1,
+         },
+       },
+       {
+         breakpoint: 576,
+         settings: {
+           item: 1,
+           slideMove: 1,
+           verticalHeight: 350,
+         },
+       },
+     ],
+   });
  }
-    
 
+ // handle fix money
+ $(function () {
+   const money = $(".money");
 
+   for (let i = 0; i < money.length; i++) {
+     money[i].innerHTML = new Intl.NumberFormat("en-US", {
+       style: "currency",
+       currency: "USD",
+     }).format(money[i].innerHTML);
+   }
+ });
 
 }(jQuery));
