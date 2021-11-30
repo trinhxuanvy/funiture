@@ -38,4 +38,8 @@ router.post("/admin/products/update/:id", adminController.updateProduct);
 
 router.post("/admin/upload", Multer.any(), adminController.uploadFile);
 
+router.get("/admin/profile", adminController.profile);
+
+router.get("/admin/users", adminController.users);
+
 module.exports = router;

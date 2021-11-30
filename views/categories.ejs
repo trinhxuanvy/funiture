@@ -36,81 +36,31 @@
                                     </div>
                                     <div class="widgets_inner">
                                         <ul class="list">
+                                            <% for(let i = 0; i < allCategories.length; i++) { %> 
                                             <li>
-                                                <a href="#">Frozen Fish</a>
-                                                <span>(250)</span>
+                                                <a href="#"><%= allCategories[i].prodTypeName %> </a>
+                                                <span>( <%= allCategories[i].amount %> )</span>
                                             </li>
-                                            <li>
-                                                <a href="#">Dried Fish</a>
-                                                <span>(250)</span>
-                                            </li>
-                                            <li>
-                                                <a href="#">Fresh Fish</a>
-                                                <span>(250)</span>
-                                            </li>
-                                            <li>
-                                                <a href="#">Meat Alternatives</a>
-                                                <span>(250)</span>
-                                            </li>
-                                            <li>
-                                                <a href="#">Fresh Fish</a>
-                                                <span>(250)</span>
-                                            </li>
-                                            <li>
-                                                <a href="#">Meat Alternatives</a>
-                                                <span>(250)</span>
-                                            </li>
-                                            <li>
-                                                <a href="#">Meat</a>
-                                                <span>(250)</span>
-                                            </li>
+                                            <% } %>  
                                         </ul>
                                     </div>
                                 </aside>
 
                                 <aside class="left_widgets p_filter_widgets">
                                     <div class="l_w_title">
-                                        <h3>Product filters</h3>
+                                        <h3>Brand</h3>
                                     </div>
                                     <div class="widgets_inner">
                                         <ul class="list">
+                                            <% for(var i = 0; i < allBrands.length; i++) { %> 
                                             <li>
-                                                <a href="#">Apple</a>
+                                                <a href="#"><%= allBrands[i].brandName %> </a>
                                             </li>
-                                            <li>
-                                                <a href="#">Asus</a>
-                                            </li>
-                                            <li class="active">
-                                                <a href="#">Gionee</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Micromax</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Samsung</a>
-                                            </li>
-                                        </ul>
-                                        <ul class="list">
-                                            <li>
-                                                <a href="#">Apple</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Asus</a>
-                                            </li>
-                                            <li class="active">
-                                                <a href="#">Gionee</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Micromax</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Samsung</a>
-                                            </li>
-                                        </ul>
+                                            <% } %> 
                                     </div>
                                 </aside>
 
-                                <aside class="left_widgets p_filter_widgets">
+                                <!-- <aside class="left_widgets p_filter_widgets">
                                     <div class="l_w_title">
                                         <h3>Color Filter</h3>
                                     </div>
@@ -133,7 +83,7 @@
                                             </li>
                                         </ul>
                                     </div>
-                                </aside>
+                                </aside> -->
 
                                 <aside class="left_widgets p_filter_widgets price_rangs_aside">
                                     <div class="l_w_title">
@@ -197,119 +147,91 @@
                             </div>
 
                             <div class="row align-items-center latest_product_inner">
+                                <% for(var i = 0; i < products.length; i++) { %>
                                 <div class="col-lg-4 col-sm-6">
                                     <div class="single_product_item">
-                                        <img src="images/product/product_1.png" alt="">
+                                        <img src="<%= products[i].prodImage[1].imageLink %> " alt="">
                                         <div class="single_product_text">
-                                            <h4>Quartz Belt Watch</h4>
-                                            <h3>$150.00</h3>
+                                            <h4><%= products[i].prodName %></h4>
+                                            <h3>$<%= products[i].price %></h3>
                                             <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="single_product_item">
-                                        <img src="images/product/product_2.png" alt="">
-                                        <div class="single_product_text">
-                                            <h4>Quartz Belt Watch</h4>
-                                            <h3>$150.00</h3>
-                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="single_product_item">
-                                        <img src="images/product/product_3.png" alt="">
-                                        <div class="single_product_text">
-                                            <h4>Quartz Belt Watch</h4>
-                                            <h3>$150.00</h3>
-                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="single_product_item">
-                                        <img src="images/product/product_4.png" alt="">
-                                        <div class="single_product_text">
-                                            <h4>Quartz Belt Watch</h4>
-                                            <h3>$150.00</h3>
-                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="single_product_item">
-                                        <img src="images/product/product_5.png" alt="">
-                                        <div class="single_product_text">
-                                            <h4>Quartz Belt Watch</h4>
-                                            <h3>$150.00</h3>
-                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="single_product_item">
-                                        <img src="images/product/product_6.png" alt="">
-                                        <div class="single_product_text">
-                                            <h4>Quartz Belt Watch</h4>
-                                            <h3>$150.00</h3>
-                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="single_product_item">
-                                        <img src="images/product/product_7.png" alt="">
-                                        <div class="single_product_text">
-                                            <h4>Quartz Belt Watch</h4>
-                                            <h3>$150.00</h3>
-                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="single_product_item">
-                                        <img src="images/product/product_8.png" alt="">
-                                        <div class="single_product_text">
-                                            <h4>Quartz Belt Watch</h4>
-                                            <h3>$150.00</h3>
-                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="single_product_item">
-                                        <img src="images/product/product_2.png" alt="">
-                                        <div class="single_product_text">
-                                            <h4>Quartz Belt Watch</h4>
-                                            <h3>$150.00</h3>
-                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
+                                <% } %>
+                                
                                 <div class="col-lg-12">
-                                    <div class="pageination">
-                                        <nav aria-label="Page navigation example">
-                                            <ul class="pagination justify-content-center">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous">
-                                                        <i class="ti-angle-double-left"></i>
-                                                    </a>
+                                    
+                                    <!-- hiển thị phân trang nếu có trang -->
+                                    <% if(pages > 0) { %>
+                                        <nav class="mx-auto">
+                                        <ul class="pagination" style="margin-top: 1rem;">
+                                        
+                                            <!-- FIRST ITEM -->  
+                                            <% if(current == 1) { %> 
+                                        <!-- // Nếu thông số http://localhost:3333/categories/1/ là 1 thì First sẽ bị disabled -->
+                                                <li class="page-item disabled">
+                                                <a class="page-link" href="/">First</a>
                                                 </li>
-                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">6</a></li>
+                                            <% } else { %>
+                                            <!-- // Nếu thông số http://localhost:3333/categories/2/ từ 2 trở lên thì First sẽ bỏ disabled -->
                                                 <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Next">
-                                                        <i class="ti-angle-double-right"></i>
-                                                    </a>
+                                                <a class="page-link" href="/">First</a>
                                                 </li>
-                                            </ul>
+                                            <% } %>
+                                            
+                                            <!-- ITEMS  -->
+                                            <% var i = (Number(current) > 3 ? Number(current) - 2 : 1) %> 
+                                        <!-- // Toán tử điều kiện 3 ngôi syntax: < điều_kiện ? giá_trị_1 : giá_trị_2 > -->
+                                        <!-- // Nếu điều_kiện trả về true, toán tử có giá trị giá_trị_1. Ngược lại toán tử có giá trị giá_trị_2. -->
+                                            <% if(i !== 1) { %>
+                                                <li class="page-item disabled">
+                                                <a class="page-link" href="#">...</a>
+                                                </li>
+                                            <% } %>
+                                            <% for(; i <= (Number(current) + 2) && i <= pages; i++) { %>
+                                            <!-- // Sử dụng vòng lặp để lặp qua từng trang và tăng số trang 
+                                            // Trong vòng lặp for có ba biểu thức tùy chọn nên chỉ cần các bạn tách mỗi biểu thức bằng dấu `;` là oke rồi -->
+                                            <% if(i == current) { %>
+                                                <li class="page-item active">
+                                                <a class="page-link" href="/categories/<%= i %>/">
+                                                    <%= i %>
+                                                </a>
+                                                </li>
+                                            <% } else { %>
+                                                <li class="page-item">
+                                                <a class="page-link" href="/categories/<%= i %>/">
+                                                    <%= i %>
+                                                </a>
+                                                </li>
+                                            <% } %>
+                                            <% if (i == Number(current) + 2 && i < pages) { %>
+                                                <li class="page-item disabled">
+                                                <a class="page-link" href="#">...</a>
+                                                </li>
+                                            <% } %>
+                                            <% } %>
+                                            
+                                            <!-- LAST ITEM -->
+                                            <% if(current == pages) { %> 
+                                        <!-- // Nếu số current( chỉ số phân trang ) là 6 và tổng số page là 6 thì Last bị disabled -->
+                                                <li class="page-item disabled">
+                                                <a class="page-link" href="#">
+                                                    Last
+                                                </a>
+                                                </li>
+                                            <% } else { %>
+                                            <!-- // Ngược lại, thì Last là trang cuối cùng pages ở đây là 6 đồng nghĩa với Last là trang số 6 -->
+                                                <li class="page-item">
+                                                <a class="page-link" href="/categories/<%= pages %>/">
+                                                    Last
+                                                </a>
+                                                </li>
+                                            <% } %>
+                                        </ul>
                                         </nav>
-                                    </div>
+                                    <% } %>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -332,35 +254,35 @@
                         <div class="col-lg-12">
                             <div class="best_product_slider owl-carousel">
                                 <div class="single_product_item">
-                                    <img src="images/product/product_1.png" alt="">
+                                    <img src="/images/product/product_1.png" alt="">
                                     <div class="single_product_text">
                                         <h4>Quartz Belt Watch</h4>
                                         <h3>$150.00</h3>
                                     </div>
                                 </div>
                                 <div class="single_product_item">
-                                    <img src="images/product/product_2.png" alt="">
+                                    <img src="/images/product/product_2.png" alt="">
                                     <div class="single_product_text">
                                         <h4>Quartz Belt Watch</h4>
                                         <h3>$150.00</h3>
                                     </div>
                                 </div>
                                 <div class="single_product_item">
-                                    <img src="images/product/product_3.png" alt="">
+                                    <img src="/images/product/product_3.png" alt="">
                                     <div class="single_product_text">
                                         <h4>Quartz Belt Watch</h4>
                                         <h3>$150.00</h3>
                                     </div>
                                 </div>
                                 <div class="single_product_item">
-                                    <img src="images/product/product_4.png" alt="">
+                                    <img src="/images/product/product_4.png" alt="">
                                     <div class="single_product_text">
                                         <h4>Quartz Belt Watch</h4>
                                         <h3>$150.00</h3>
                                     </div>
                                 </div>
                                 <div class="single_product_item">
-                                    <img src="images/product/product_5.png" alt="">
+                                    <img src="/images/product/product_5.png" alt="">
                                     <div class="single_product_text">
                                         <h4>Quartz Belt Watch</h4>
                                         <h3>$150.00</h3>

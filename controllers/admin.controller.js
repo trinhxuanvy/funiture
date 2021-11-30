@@ -4,6 +4,7 @@ const Product = require("../models/product.model");
 const Brand = require("../models/brand.model");
 const firebase = require("../services/firebase");
 const { PRODUCT_MODEL } = require("../constants/modal");
+const { render } = require("ejs");
 
 const ITEM_PAGE = 4;
 
@@ -469,3 +470,11 @@ exports.postBrand = async (req, res, next) => {
 
   res.redirect("/admin/brand");
 };
+
+exports.profile = (req, res, next) => {
+  res.render("admin/profile", { pageName: " profile " });
+}
+
+exports.users = (req, res, next) => {
+  res.render("admin/users", { pageName: " users " });
+}
