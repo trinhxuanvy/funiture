@@ -6,6 +6,10 @@ const Category = new Schema({
         type: String,
         required: true,
     },
+    amount: {
+        type: Number,
+        required: true,
+    },
     status: {
         type: Boolean,
         default: true
