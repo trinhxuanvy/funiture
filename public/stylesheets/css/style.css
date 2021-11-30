@@ -3204,19 +3204,25 @@ ul {
 .radion_btn input[type="radio"]:checked ~ label {
   color: #000; }
 
-.login_part .login_part_text, .login_part .login_part_form {
+.login_part .login_part_text,
+.login_part .login_part_form {
   padding: 80px 70px;
   height: 600px;
   display: table; }
   @media (max-width: 991px) {
-    .login_part .login_part_text, .login_part .login_part_form {
+    .login_part .login_part_text,
+    .login_part .login_part_form {
       padding: 30px;
       height: 400px; } }
   @media only screen and (min-width: 992px) and (max-width: 1200px) {
-    .login_part .login_part_text, .login_part .login_part_form {
+    .login_part .login_part_text,
+    .login_part .login_part_form {
       padding: 20px;
       height: 400px; } }
-  .login_part .login_part_text .login_part_text_iner, .login_part .login_part_text .login_part_form_iner, .login_part .login_part_form .login_part_text_iner, .login_part .login_part_form .login_part_form_iner {
+  .login_part .login_part_text .login_part_text_iner,
+  .login_part .login_part_text .login_part_form_iner,
+  .login_part .login_part_form .login_part_text_iner,
+  .login_part .login_part_form .login_part_form_iner {
     display: table-cell;
     vertical-align: middle; }
 

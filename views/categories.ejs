@@ -150,12 +150,14 @@
                                 <% for(var i = 0; i < products.length; i++) { %>
                                 <div class="col-lg-4 col-sm-6">
                                     <div class="single_product_item">
-                                        <img src="<%= products[i].prodImage[1].imageLink %> " alt="">
-                                        <div class="single_product_text">
-                                            <h4><%= products[i].prodName %></h4>
-                                            <h3>$<%= products[i].price %></h3>
-                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                        </div>
+                                        <a href="products/<%= products[i]._id %> ">
+                                            <img src="<%= products[i].prodImage[1].imageLink %> " alt="">
+                                            <div class="single_product_text">
+                                                <h4><%= products[i].prodName %></h4>
+                                                <h3>$<%= products[i].price %></h3>
+                                                <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                            </div>
+                                        </a>
                                     </div>
                                 </div>
                                 <% } %>
