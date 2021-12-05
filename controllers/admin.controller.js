@@ -8,7 +8,7 @@ const { PRODUCT_MODEL } = require("../constants/modal");
 const ITEM_PAGE = 4;
 
 exports.uploadFile = async (req, res, next) => {
-  const upload = await firebase.uploadImage(req?.files?.[0]);
+  const upload = await firebase.uploadImage(req?.files?.[0], res);
 
   if (upload.length) {
     res.send({ url: upload, success: true });
