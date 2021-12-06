@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $(function () {
-    $("#datetimepicker1").datepicker();
+    $(".datetimepicker").datepicker();
   });
 
   // Xử lý toggle menu
@@ -124,6 +124,7 @@ $(document).ready(function () {
             url.search,
           dataType: "json",
           success: function (response) {
+            console.log(response);
             if (response.success) {
               if (!response.status) {
                 $(trProd[i]).css("opacity", "0.5");
@@ -230,6 +231,13 @@ $(document).ready(function () {
         });
       }
     }
+  });
+
+  // Xử lý hiển thị message box
+  $(function () {
+    $(".close").click(function () {
+      $(this).parent(".alert").fadeOut();
+    });
   });
 });
 

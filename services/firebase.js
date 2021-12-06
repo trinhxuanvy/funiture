@@ -23,7 +23,7 @@ const metadata = {
   contentType: "image/jpg",
 };
 
-exports.uploadImage = (imageFile, res) => {
+exports.uploadImage = (imageFile) => {
   return new Promise((resolve, reject) => {
     const storageRef = ref(
       storage,
@@ -39,7 +39,6 @@ exports.uploadImage = (imageFile, res) => {
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        res.send({ progress: progress });
         console.log(
           "Upload" + imageFile.originalname + " is " + progress + "% done"
         );

@@ -1,0 +1,18 @@
+<div class="message-box">
+  <% if (message?.type == "success") { %>
+  <div class="alert success-alert animation">
+    <h6><%= message?.message %></h6>
+    <a class="close">&times;</a>
+  </div>
+  <% } else if (message?.type == "error") { %>
+  <div class="alert danger-alert animation">
+    <h6><%= message?.message %></h6>
+    <a class="close">&times;</a>
+  </div>
+  <% } else if (message?.type == "warning") { %>
+  <div class="alert warning-alert animation">
+    <h6><%= message?.message %></h6>
+    <a class="close">&times;</a>
+  </div>
+  <% } %>
+</div>
