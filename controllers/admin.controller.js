@@ -3,13 +3,15 @@ const Category = require("../models/category.model");
 const Product = require("../models/product.model");
 const Brand = require("../models/brand.model");
 const firebase = require("../services/firebase");
-const { PRODUCT_MODEL } = require("../constants/modal");
-const { render } = require("ejs");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+const { PRODUCT_MODEL, ADMIN_MODEL } = require("../constants/modal");
 
+dotenv.config();
 const ITEM_PAGE = 4;
 
 exports.uploadFile = async (req, res, next) => {
-  const upload = await firebase.uploadImage(req?.files?.[0], res);
+  const upload = await firebase.uploadImage(req?.files?.[0]);
 
   if (upload.length) {
     res.send({ url: upload, success: true });
@@ -19,7 +21,7 @@ exports.uploadFile = async (req, res, next) => {
 };
 
 exports.getIndex = async (req, res, next) => {
-  res.render("admin/products", { pageName: " products " });
+  res.render("admin/products", { pageName: "products" });
 };
 
 exports.getProduct = async (req, res, next) => {
@@ -48,7 +50,7 @@ exports.getProduct = async (req, res, next) => {
   products = products.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
 
   res.render("admin/products", {
-    pageName: " products ",
+    pageName: "products",
     products,
     categories,
     brands,
@@ -436,7 +438,7 @@ exports.getProductById = async (req, res, next) => {
 exports.getCategory = async (req, res, next) => {
   const categories = await Category.find();
 
-  res.render("admin/category", { pageName: " category ", categories });
+  res.render("admin/category", { pageName: "category", categories });
 };
 
 exports.postCategory = async (req, res, next) => {
@@ -455,7 +457,7 @@ exports.postCategory = async (req, res, next) => {
 exports.getBrand = async (req, res, next) => {
   const brands = await Brand.find();
 
-  res.render("admin/brand", { pageName: " brand ", brands });
+  res.render("admin/brand", { pageName: "brand", brands });
 };
 
 exports.postBrand = async (req, res, next) => {
@@ -471,10 +473,170 @@ exports.postBrand = async (req, res, next) => {
   res.redirect("/admin/brand");
 };
 
-exports.profile = (req, res, next) => {
-  res.render("admin/profile", { pageName: " profile " });
-}
+exports.profile = async (req, res, next) => {
+  const user = jwt.verify(
+    req.cookies?.token,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return {};
+      } else {
+        return data;
+      }
+    }
+  );
 
-exports.users = (req, res, next) => {
-  res.render("admin/users", { pageName: " users " });
-}
+  const date = new Date(user?.dateOfBirth);
+  user.dateOfBirth =
+    date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
+
+  res.render("admin/profile", {
+    pageName: "profile",
+    user,
+    adminModel: ADMIN_MODEL,
+  });
+};
+
+exports.users = async (req, res, next) => {
+  res.render("admin/users", { pageName: "users" });
+};
+
+exports.getAdmin = async (req, res, next) => {
+  let page = req.body.page || 1;
+  let search = req.query.search || "";
+  let admin = [];
+
+  if (search) {
+    admin = await Admin.find({
+      adminName: { $regex: search, $options: "i" },
+    });
+
+    search = "?search=" + search;
+  } else {
+    admin = await Admin.find();
+  }
+
+  const getPage = Math.floor(admin.length / ITEM_PAGE);
+  const totalPage = admin.length % ITEM_PAGE != 0 ? getPage + 1 : getPage;
+  const nextPage = parseInt(page) + 1;
+  const prevPage = parseInt(page) - 1;
+  const numPage = admin.length ? page : 0;
+  admin = admin.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
+
+  res.render("admin/admins", {
+    pageName: "admins",
+    admin,
+    adminModel: ADMIN_MODEL,
+    page,
+    totalPage,
+    nextPage,
+    prevPage,
+    numPage,
+    search,
+  });
+};
+
+exports.postAdmin = async (req, res, next) => {
+  let page = req.body.page || 1;
+  let search = req.query.search || "";
+  let admin = [];
+
+  if (!req.body.page) {
+    const urlAvatar = await firebase.uploadImage(req.files[0]);
+
+    admin = {
+      adminName: req.body.adminName,
+      identityCard: req.body.identityCard,
+      phone: req.body.phone,
+      email: req.body.email,
+      address: req.body.address,
+      username: req.body.username,
+      password: req.body.password,
+      dateOfBirth: req.body.dateOfBirth,
+      avatarLink: urlAvatar,
+      aboutMe: req.body.aboutMe,
+      password: req.body.identityCard,
+    };
+
+    const newAdmin = new Admin(admin);
+    await newAdmin.save();
+  }
+
+  if (search) {
+    admin = await Admin.find({
+      adminName: { $regex: search, $options: "i" },
+    });
+
+    search = "?search=" + search;
+  } else {
+    admin = await Admin.find();
+  }
+
+  const getPage = Math.floor(admin.length / ITEM_PAGE);
+  const totalPage = admin.length % ITEM_PAGE != 0 ? getPage + 1 : getPage;
+  const nextPage = parseInt(page) + 1;
+  const prevPage = parseInt(page) - 1;
+  const numPage = admin.length ? page : 0;
+  admin = admin.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
+
+  res.render("admin/admins", {
+    pageName: "admins",
+    admin,
+    adminModel: ADMIN_MODEL,
+    page,
+    totalPage,
+    nextPage,
+    prevPage,
+    numPage,
+    search,
+  });
+};
+
+exports.updateAdmin = async (req, res, next) => {
+  const admin = jwt.verify(
+    req.cookies.token,
+    process.env.KEY_JWT,
+    (err, data) => {
+      if (!err) {
+        return data;
+      }
+    }
+  );
+  const aboutMe = req.body.aboutMe ? req.body.aboutMe : admin.aboutMe;
+  const password = req.body.password ? req.body.password : admin.password;
+
+  const newAdmin = {
+    email: req.body.email,
+    password: password,
+    adminName: req.body.adminName,
+    phone: req.body.phone,
+    dateOfBirth: req.body.dateOfBirth,
+    identityCard: req.body.identityCard,
+    address: req.body.address,
+    aboutMe: aboutMe,
+  };
+
+  console.log(newAdmin);
+
+  await Admin.updateOne({ _id: admin._id }, newAdmin);
+
+  res.cookie("message", { message: "Please login again", type: "warning" });
+  res.clearCookie("token");
+  res.redirect("/admin/login");
+};
+
+exports.resetPassword = async (req, res, next) => {
+  // const token = req.cookies?.token || "";
+  // jwt.verify(token, process.env.KEY_JWT, async (err, data) => {
+  //   if (!err) {
+  //     await Admin.updateOne({ _id: data._id }, { password: data.identityCard });
+  //   }
+  // });
+
+  // res.clearCookie("token");
+  // res.redirect("/admin/login");
+  const id = req.params.id;
+  const admin = await Admin.findById({ _id: id });
+  await Admin.updateOne({ _id: id }, { password: admin.identityCard });
+  res.redirect("/admin/admins");
+};

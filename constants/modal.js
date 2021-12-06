@@ -20,6 +20,21 @@ const PRODUCT_MODEL = {
   secondaryImage3: "secondaryImage3",
 };
 
+const ADMIN_MODEL = {
+  adminName: "adminName",
+  identityCard: "identityCard",
+  phone: "phone",
+  email: "email",
+  address: "address",
+  username: "username",
+  password: "password",
+  dateOfBirth: "dateOfBirth",
+  avatarLink: "avatarLink",
+  roleLevel: "roleLevel",
+  aboutMe: "aboutMe",
+};
+
 module.exports = {
   PRODUCT_MODEL,
+  ADMIN_MODEL,
 };

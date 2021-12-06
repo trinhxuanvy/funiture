@@ -10,7 +10,7 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="wrapper__sidebar__menu-item <% if (pageName == " profile ") { %>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == "profile") { %>
                 wrapper__sidebar__menu-item--active
             <% } %>">
                 <a href="/admin/profile" class="wrapper__sidebar__menu-link">
@@ -18,7 +18,15 @@
                     <span>User profile</span>
                 </a>
             </li>
-            <li class="wrapper__sidebar__menu-item <% if (pageName == " users ") { %>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == "admins") { %>
+                wrapper__sidebar__menu-item--active
+            <% } %>">
+                <a href="/admin/admins" class="wrapper__sidebar__menu-link">
+                    <i class="fas fa-users-cog"></i>
+                    <span>Admin List</span>
+                </a>
+            </li>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == "users") { %>
                 wrapper__sidebar__menu-item--active
             <% } %>">
                 <a href="/admin/users" class="wrapper__sidebar__menu-link">
@@ -26,7 +34,7 @@
                     <span>User List</span>
                 </a>
             </li>
-            <li class="wrapper__sidebar__menu-item <% if (pageName == " category ") { %>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == "category") { %>
                 wrapper__sidebar__menu-item--active
             <% } %>">
                 <a href="/admin/category" class="wrapper__sidebar__menu-link">
@@ -34,7 +42,7 @@
                     <span>Category</span>
                 </a>
             </li>
-            <li class="wrapper__sidebar__menu-item <% if (pageName == " brand ") { %>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == "brand") { %>
                 wrapper__sidebar__menu-item--active
             <% } %>">
                 <a href="/admin/brand" class="wrapper__sidebar__menu-link">
@@ -42,7 +50,7 @@
                     <span>Brand</span>
                 </a>
             </li>
-            <li class="wrapper__sidebar__menu-item <% if (pageName == " products ") { %>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == "products") { %>
                 wrapper__sidebar__menu-item--active
             <% } %>">
                 <a href="/admin/products" class="wrapper__sidebar__menu-link">
@@ -50,7 +58,7 @@
                     <span>Product List</span>
                 </a>
             </li>
-            <li class="wrapper__sidebar__menu-item">
+            <!-- <li class="wrapper__sidebar__menu-item">
                 <a href="" class="wrapper__sidebar__menu-link">
                     <i class="ti-map"></i>
                     <span>Maps</span>
@@ -61,7 +69,8 @@
                     <i class="ti-bell"></i>
                     <span>Notifications</span>
                 </a>
-            </li>
+            </li> -->
+            <a href="/admin/logout" class="link-logout">LOGOUT</a>
         </ul>
     </div>
 </div>

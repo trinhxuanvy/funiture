@@ -1,169 +1,246 @@
-<%- include ("./share/head.ejs") %>
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
 
-    <body>
-        <div class="wrapper">
-            <%- include ("./share/sidebar.ejs") %>
-                <div class="wrapper__main" id="main">
-                    <div class="wrapper__main__header">
-                        <span class="wrapper__main__header__title">User Profile</span>
-                        <div class="wrapper__main__header__function"></div>
-                        <div class="menu-toggle">
-                            <button id="menu-toggle" class="btn btn-secondary"><i class="fa fa-bars" aria-hidden="true"></i></button>
-                        </div>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- flaticon CSS -->
+    <link rel="stylesheet" href="/stylesheets/css/flaticon.css" />
+    <link rel="stylesheet" href="/stylesheets/css/themify-icons.css" />
+    <link rel="stylesheet" href="/stylesheets/css/admin/custom.css" />
+    <link rel="stylesheet" href="/stylesheets/css/admin/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <%- include ("./share/sidebar.ejs") %>
+      <div class="wrapper__main" id="main">
+        <div class="wrapper__main__header">
+          <span class="wrapper__main__header__title">User Profile</span>
+          <div class="wrapper__main__header__function"></div>
+          <div class="menu-toggle">
+            <button id="menu-toggle" class="btn btn-secondary">
+              <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <div class="wrapper__main__content">
+          <div class="container-fluid" style="padding: 32px">
+            <div class="row">
+              <div class="col-xl-4">
+                <div class="wrapper__main__content__card">
+                  <div class="wrapper__main__content__card__banner">
+                    <img src="/images/admin/background.jpg" alt="" />
+                  </div>
+                  <div class="wrapper__main__content__card__content">
+                    <div class="wrapper__main__content__card__content__author">
+                      <img src="<%= user.avatarLink %>" alt="" />
+                      <h4><%= user.adminName %></h4>
+                      <a href=""><small><%= user.email %></small></a>
                     </div>
-                    <div class="wrapper__main__content">
-                        <div class="container-fluid" style="padding: 32px">
-                            <div class="row">
-                                <div class="col-xl-4">
-                                    <div class="wrapper__main__content__card">
-                                        <div class="wrapper__main__content__card__banner">
-                                            <img src="/images/admin/background.jpg" alt="" />
-                                        </div>
-                                        <div class="wrapper__main__content__card__content">
-                                            <div class="wrapper__main__content__card__content__author">
-                                                <img src="/images/admin/face-2.jpg" alt="" />
-                                                <h4>Chet Faker</h4>
-                                                <a href=""><small>@chetfaker</small></a>
-                                            </div>
-                                            <div class="wrapper__main__content__card__content__description">
-                                                "I like the way you work it <br /> No diggity <br /> I wanna bag it up"
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="wrapper__main__content__member">
-                                        <p class="wrapper__main__content__member__title">
-                                            Team Members
-                                        </p>
-                                        <div class="wrapper__main__content__member__list">
-                                            <div class="wrapper__main__content__member__list__item">
-                                                <img src="/images/admin/face-0.jpg" alt="" />
-                                                <div class="wrapper__main__content__member__list__item__info">
-                                                    <span>Trinh Xuan Vy</span>
-                                                    <span><i
-                        class="fa fa-circle text-secondary"
-                        aria-hidden="true"
-                        ></i>
-                        Offline</span
-                    >
-                    </div>
-                </div>
-                <div class="wrapper__main__content__member__list__item">
-                    <img src="/images/admin/face-3.jpg" alt="" />
                     <div
-                    class="wrapper__main__content__member__list__item__info"
+                      class="wrapper__main__content__card__content__description"
                     >
-                    <span>Trinh Xuan Vy</span>
-                                                    <span><i
-                        class="fa fa-circle text-success"
-                        aria-hidden="true"
-                        ></i>
-                        Online</span
-                    >
+                      <%= user.aboutMe %>
                     </div>
+                  </div>
                 </div>
-                </div>
-            </div>
-            </div>
-            <div class="col-xl-8">
-            <div class="wrapper__main__content__form">
-                <p class="wrapper__main__content__form__title">
-                Edit Profile
-                </p>
-                <form class="row g-3">
-                <div class="col-md-6">
-                    <label for="inputEmail4" class="form-label">Email</label>
-                    <input
-                    type="email"
-                    class="form-control"
-                    id="inputEmail4"
-                    disabled
-                    />
-                </div>
-                <div class="col-md-6">
-                    <label for="inputPassword4" class="form-label"
-                    >Password</label
-                    >
-                    <input
-                    type="password"
-                    class="form-control"
-                    id="inputPassword4"
-                    placeholder="Abc@1234"
-                    />
-                </div>
-                <div class="col-md-4">
-                    <label for="inputFirstName" class="form-label"
-                    >First Name</label
-                    >
-                    <input
-                    type="text"
-                    class="form-control"
-                    id="inputFirstName"
-                    placeholder="1234 Main St"
-                    />
-                </div>
-                <div class="col-md-4">
-                    <label for="inputLastName" class="form-label"
-                    >Last Name</label
-                    >
-                    <input
-                    type="text"
-                    class="form-control"
-                    id="inputLastName"
-                    placeholder="Apartment, studio, or floor"
-                    />
-                </div>
-                <div class="col-md-4 form-group">
-                    <label for="" class="form-label">Date of Birth</label>
-                    <div class="input-group date" id="datetimepicker1">
-                    <input
+                <!-- <div class="wrapper__main__content__member">
+                  <p class="wrapper__main__content__member__title">
+                    Team Members
+                  </p>
+                  <div class="wrapper__main__content__member__list">
+                    <div class="wrapper__main__content__member__list__item">
+                      <img src="/images/admin/face-0.jpg" alt="" />
+                      <div
+                        class="wrapper__main__content__member__list__item__info"
+                      >
+                        <span>Trinh Xuan Vy</span>
+                        <span
+                          ><i
+                            class="fa fa-circle text-secondary"
+                            aria-hidden="true"
+                          ></i>
+                          Offline</span
+                        >
+                      </div>
+                    </div>
+                    <div class="wrapper__main__content__member__list__item">
+                      <img src="/images/admin/face-3.jpg" alt="" />
+                      <div
+                        class="wrapper__main__content__member__list__item__info"
+                      >
+                        <span>Trinh Xuan Vy</span>
+                        <span
+                          ><i
+                            class="fa fa-circle text-success"
+                            aria-hidden="true"
+                          ></i>
+                          Online</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+              <div class="col-xl-8">
+                <div class="wrapper__main__content__form">
+                  <p class="wrapper__main__content__form__title">Profile</p>
+                  <form action="/admin/profile" method="post" class="row g-3">
+                    <div class="col-md-6">
+                      <label for="<%= adminModel.email %>" class="form-label"
+                        >Email</label
+                      >
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="<%= adminModel.email %>"
+                        name="<%= adminModel.email %>"
+                        value="<%= user.email %>"
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label for="<%= adminModel.password %>" class="form-label"
+                        >Password</label
+                      >
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="<%= adminModel.password %>"
+                        placeholder="Abc@1234"
+                        name="<%= adminModel.password %>"
+                        value=""
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label
+                        for="<%= adminModel.adminName %>"
+                        class="form-label"
+                        >Name</label
+                      >
+                      <input
                         type="text"
                         class="form-control"
-                        placeholder="mm/dd/yyyy"
-                    />
-                    <span class="input-group-addon">
-                        <span class="input-group-text d-block">
-                        <i class="fa fa-calendar"></i>
-                        </span>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="inputCity" class="form-label">City</label>
-                                                <input type="text" class="form-control" id="inputCity" />
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="inputState" class="form-label">State</label>
-                                                <select id="inputState" class="form-select">
-                    <option selected>Choose...</option>
-                    <option>...</option>
-                    </select>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="inputZip" class="form-label">Zip</label>
-                                                <input type="text" class="form-control" id="inputZip" />
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="form-label">About Me</label>
-                                                    <textarea rows="5" class="form-control border-input" placeholder="Here can be your description" value="Mike"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <button type="submit" class="m-auto d-block btn btn-primary">
-                    Update Profile
-                    </button>
-                                            </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        id="<%= adminModel.adminName %>"
+                        placeholder=""
+                        name="<%= adminModel.adminName %>"
+                        value="<%= user.adminName %>"
+                      />
                     </div>
+                    <div class="col-md-6">
+                      <label for="<%= adminModel.phone %>" class="form-label"
+                        >Phone</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="<%= adminModel.phone %>"
+                        placeholder="0907461369"
+                        value="<%= user.phone %>"
+                        name="<%= adminModel.phone %>"
+                      />
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <label
+                        for="<%= adminModel.dateOfBirth %>"
+                        class="form-label"
+                        >Date of Birth</label
+                      >
+                      <div class="input-group date datetimepicker" id="">
+                        <input type="text" class="form-control"
+                        placeholder="mm/dd/yyyy" name="<%=
+                        adminModel.dateOfBirth %>" id="<%=
+                        adminModel.dateOfBirth %>" value="<%= (new
+                        Date(user.dateOfBirth)).toLocaleString("en-US", { year:
+                        "numeric", month: "numeric", day: "numeric" }) %>" />
+                        <span class="input-group-addon">
+                          <span class="input-group-text d-block">
+                            <i class="fa fa-calendar"></i>
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <label
+                        for="<%= adminModel.identityCard %>"
+                        class="form-label"
+                        >Identity Card</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="<%= adminModel.identityCard %>"
+                        name="<%= adminModel.identityCard %>"
+                        value="<%= user.identityCard %>"
+                      />
+                    </div>
+                    <div class="col-md-12">
+                      <label for="<%= adminModel.address %>" class="form-label"
+                        >Address</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="<%= adminModel.address %>"
+                        name="<%= adminModel.address %>"
+                        value="<%= user.address %>"
+                      />
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label
+                          for="<%= adminModel.aboutMe %>"
+                          class="form-label"
+                          >About Me</label
+                        >
+                        <textarea
+                          rows="5"
+                          id="<%= adminModel.aboutMe %>"
+                          name="<%= adminModel.aboutMe %>"
+                          class="form-control border-input"
+                          placeholder="Here can be your description"
+                        >
+<%= user.aboutMe %></textarea
+                        >
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <button
+                        type="submit"
+                        class="m-auto d-block btn text-white btn-orange"
+                      >
+                        Update Profile
+                      </button>
+                    </div>
+                  </form>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                <%- include ("./share/scripts.ejs") %>
-    </body>
-
-    </html>
+    <%- include ("./share/scripts.ejs") %>
+  </body>
+</html>

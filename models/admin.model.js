@@ -1,39 +1,67 @@
 const mongooes = require("mongoose");
 const Schema = mongooes.Schema;
 
-const Admin = new Schema({
+const Admin = new Schema(
+  {
     adminName: {
-        type: String,
-        required: true,
+      type: String,
+      required: false,
+    },
+    identityCard: {
+      type: String,
+      required: false,
     },
     phone: {
-        type: String,
-        required: true,
+      type: String,
+      required: false,
     },
     email: {
-        type: String,
-        required: true,
+      type: String,
+      required: false,
+    },
+    address: {
+      type: String,
+      required: false,
     },
     username: {
-        type: String,
-        required: true,
+      type: String,
+      required: false,
     },
     password: {
-        type: String,
-        required: true,
+      type: String,
+      required: false,
     },
     dateOfBirth: {
-        type: Date,
-        required: true,
+      type: Date,
+      required: false,
     },
     avatarLink: {
-        type: String,
-        required: false,
+      type: String,
+      required: false,
     },
-}, {
-    timestamps: true,
+    roleLevel: {
+      type: String,
+      required: false,
+      enum: ["1", "2", "3"], // 1: quản lý cấp cao nhất
+    },
+    aboutMe: {
+      type: String,
+      required: false,
+    },
+    status: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  {
+    timestamps: false,
     versionKey: false,
     collection: "Admin",
-});
+  }
+);
+
+Admin.methods.validPassword = function (password) {
+  return password == this.password;
+};
 
 module.exports = mongooes.model("Admin", Admin);
