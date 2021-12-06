@@ -1,4 +1,5 @@
 const mongooes = require("mongoose");
+const bcrypt = require("bcrypt");
 const Schema = mongooes.Schema;
 
 const Admin = new Schema(
@@ -61,7 +62,7 @@ const Admin = new Schema(
 );
 
 Admin.methods.validPassword = function (password) {
-  return password == this.password;
+  return bcrypt.compareSync(password, this.password);
 };
 
 module.exports = mongooes.model("Admin", Admin);

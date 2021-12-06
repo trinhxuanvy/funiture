@@ -5,6 +5,7 @@ const Brand = require("../models/brand.model");
 const firebase = require("../services/firebase");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const bcrypt = require("bcrypt");
 const { PRODUCT_MODEL, ADMIN_MODEL } = require("../constants/modal");
 
 dotenv.config();
@@ -543,6 +544,7 @@ exports.postAdmin = async (req, res, next) => {
 
   if (!req.body.page) {
     const urlAvatar = await firebase.uploadImage(req.files[0]);
+    const newPassword = await bcrypt.hash("Admin@" + req.body.identityCard, 12);
 
     admin = {
       adminName: req.body.adminName,
@@ -551,11 +553,10 @@ exports.postAdmin = async (req, res, next) => {
       email: req.body.email,
       address: req.body.address,
       username: req.body.username,
-      password: req.body.password,
+      password: newPassword,
       dateOfBirth: req.body.dateOfBirth,
       avatarLink: urlAvatar,
       aboutMe: req.body.aboutMe,
-      password: req.body.identityCard,
     };
 
     const newAdmin = new Admin(admin);
@@ -603,11 +604,15 @@ exports.updateAdmin = async (req, res, next) => {
     }
   );
   const aboutMe = req.body.aboutMe ? req.body.aboutMe : admin.aboutMe;
-  const password = req.body.password ? req.body.password : admin.password;
+  let newPassword = admin.password;
+
+  if (req.body?.password) {
+    newPassword = await bcrypt.hash(req.body?.password, 12);
+  }
 
   const newAdmin = {
     email: req.body.email,
-    password: password,
+    password: newPassword,
     adminName: req.body.adminName,
     phone: req.body.phone,
     dateOfBirth: req.body.dateOfBirth,
@@ -615,8 +620,6 @@ exports.updateAdmin = async (req, res, next) => {
     address: req.body.address,
     aboutMe: aboutMe,
   };
-
-  console.log(newAdmin);
 
   await Admin.updateOne({ _id: admin._id }, newAdmin);
 
@@ -637,6 +640,8 @@ exports.resetPassword = async (req, res, next) => {
   // res.redirect("/admin/login");
   const id = req.params.id;
   const admin = await Admin.findById({ _id: id });
-  await Admin.updateOne({ _id: id }, { password: admin.identityCard });
+  const newPassword = await bcrypt.hash(admin.identityCard, 12);
+
+  await Admin.updateOne({ _id: id }, { password: newPassword });
   res.redirect("/admin/admins");
 };
