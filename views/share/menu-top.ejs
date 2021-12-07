@@ -65,6 +65,18 @@
                         </div> -->
 
                         </div>
+
+                        <% if (user != null) { %>
+                            <div class="dropdown user">
+                                <a class="dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-user"></i>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="/profile"> Profile</a>
+                                    <a class="dropdown-item" href="/logout"> Logout</a>
+                                </div>
+                            </div>
+                        <% } %>
                     </div>
                 </nav>
             </div>

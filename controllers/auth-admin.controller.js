@@ -76,6 +76,7 @@ exports.checkExpired = (req, res, next) => {
       next();
     }
   });
+
 };
 
 exports.getLogout = async (req, res, next) => {

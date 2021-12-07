@@ -10,6 +10,7 @@ const passport = require("passport");
 const shopRouter = require("./routes/shop.route");
 const adminRouter = require("./routes/admin.route");
 const authAdminRouter = require("./routes/auth-admin.route");
+const authUserRouter = require("./routes/auth-user.route");
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use(passport.session());
 app.use(shopRouter);
 app.use(adminRouter);
 app.use(authAdminRouter);
+app.use(authUserRouter);
 
 const port = process.env.PORT || 3000;
 

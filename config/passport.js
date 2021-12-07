@@ -57,3 +57,44 @@ passport.use(
     }
   )
 );
+
+passport.use(
+  "local.customer.login",
+  new LocalStrategy(
+    {
+      usernameField: "username",
+      passwordField: "password",
+      passReqToCallback: true,
+    },
+    function (req, username, password, done) {
+      Customer.findOne({ username: username }, function (err, user) {
+        if (err) {
+          return done(err);
+        }
+
+        if (!user) {
+          return done(null, false, {
+            message: "User Not Found",
+            type: "error",
+          });
+        }
+
+        if (!user.validPassword(password)) {
+          return done(null, false, {
+            message: "Incorrect Password",
+            type: "error",
+          });
+        }
+
+        if (user.status == false) {
+          return done(null, false, {
+            message: "This account has been locked",
+            type: "warning",
+          });
+        }
+
+        return done(null, user);
+      });
+    }
+  )
+);
