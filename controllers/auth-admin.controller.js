@@ -22,44 +22,36 @@ exports.postLogin = async (req, res, next) => {
     if (info) {
       res.render("admin/login", { message: info, username, password });
     } else {
-      req.logIn(user, function (err) {
-        if (err) {
-          return next(err);
-        }
+      const userToken = {
+        _id: user._id,
+        adminName: user.adminName,
+        phone: user.phone,
+        email: user.email,
+        address: user.address,
+        dateOfBirth: user.dateOfBirth,
+        avatarLink: user.avatarLink,
+        username: user.username,
+        password: user.password,
+        aboutMe: user.aboutMe,
+        roleLevel: user.roleLevel,
+        avatarLink: user.avatarLink,
+        identityCard: user.identityCard,
+      };
 
-        return req.session.save((err) => {
-          const userToken = {
-            _id: user._id,
-            adminName: user.adminName,
-            phone: user.phone,
-            email: user.email,
-            address: user.address,
-            dateOfBirth: user.dateOfBirth,
-            avatarLink: user.avatarLink,
-            username: user.username,
-            password: user.password,
-            aboutMe: user.aboutMe,
-            roleLevel: user.roleLevel,
-            avatarLink: user.avatarLink,
-            identityCard: user.identityCard,
-          };
-
-          const token = jwt.sign(userToken, process.env.KEY_JWT, {
-            algorithm: "HS256",
-            expiresIn: "1h",
-          });
-
-          res.cookie("token", token);
-
-          if (req.cookies?.oldUrl) {
-            let oldUrl = req.cookies?.oldUrl;
-            res.cookie("oldUrl", oldUrl);
-            res.redirect(oldUrl);
-          } else {
-            res.redirect("/admin/profile");
-          }
-        });
+      const token = jwt.sign(userToken, process.env.KEY_JWT, {
+        algorithm: "HS256",
+        expiresIn: "1h",
       });
+
+      res.cookie("token", token);
+
+      if (req.cookies?.oldUrl) {
+        let oldUrl = req.cookies?.oldUrl;
+        res.cookie("oldUrl", oldUrl);
+        res.redirect(oldUrl);
+      } else {
+        res.redirect("/admin/profile");
+      }
     }
   })(req, res, next);
 };
@@ -77,6 +69,10 @@ exports.checkExpired = (req, res, next) => {
       res.cookie("message", message);
       res.redirect("/admin/login");
     } else {
+      if (!data.roleLevel) {
+        res.redirect("/admin/login");
+        return;
+      }
       next();
     }
   });
