@@ -1,5 +1,6 @@
 const mongooes = require("mongoose");
 const Schema = mongooes.Schema;
+const bcrypt = require("bcrypt");
 
 const Customer = new Schema({
     cusName: {
@@ -24,7 +25,7 @@ const Customer = new Schema({
     },
     dateOfBirth: {
         type: Date,
-        required: true,
+        required: false,
     },
     avatarLink: {
         type: String,
@@ -55,11 +56,11 @@ const Customer = new Schema({
         }, ],
         totalQuantity: {
             type: Number,
-            required: true,
+            required: false,
         },
         totalPrice: {
             type: Number,
-            required: true,
+            required: false,
         },
     },
 }, {
@@ -67,5 +68,10 @@ const Customer = new Schema({
     versionKey: false,
     collection: "Customer",
 });
+
+Customer.methods.validPassword = function (password) {
+    console.log(bcrypt.compareSync(password, this.password));
+    return bcrypt.compareSync(password, this.password);
+  };
 
 module.exports = mongooes.model("Customer", Customer);

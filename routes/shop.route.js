@@ -7,9 +7,16 @@ router.get("/", shopController.getIndex);
 
 router.get("/index", shopController.getIndex);
 
-router.get("/login", (req, res, next) => {
-  res.render("login");
-});
+router.get("/signup", shopController.signup);
+
+router.get("/profile", shopController.profile);
+
+router.post(
+    "/signup",
+    shopController.postCustomer
+  );
+
+//router.get("/categories/:page?", shopController.categories);
 
 router.get("/categories/:page?", shopController.categories);
 
@@ -17,14 +24,8 @@ router.get("/cart", (req, res, next) => {
   res.render("cart");
 });
 
-// router.get("/single-product", (req, res, next) => {
-//     res.render("single-product");
-// });
-
 router.get("/products/:id", shopController.getProduct);
 
-router.get("/checkout", (req, res, next) => {
-  res.render("checkout");
-});
+router.get("/checkout", shopController.checkout);
 
 module.exports = router;

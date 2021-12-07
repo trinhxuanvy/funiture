@@ -1,6 +1,10 @@
 (function ($) {
   "use strict";
 
+  $(function () {
+    $(".datetimepicker").datepicker();
+  });
+
   $('.popup-youtube, .popup-vimeo').magnificPopup({
     // disableOn: 700,
     type: 'iframe',

@@ -34,7 +34,21 @@ const ADMIN_MODEL = {
   aboutMe: "aboutMe",
 };
 
+const CUSTOMER_MODEL = {
+  cusName: "cusName",
+  phone: "phone",
+  email: "email",
+  username: "username",
+  password: "password",
+  dateOfBirth: "dateOfBirth",
+  avatarLink: "avatarLink",
+  cart: "cart",
+  totalQuantity: "totalQuantity",
+  totalPrice: "totalPrice",
+};
+
 module.exports = {
   PRODUCT_MODEL,
   ADMIN_MODEL,
+  CUSTOMER_MODEL
 };
