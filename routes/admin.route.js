@@ -85,7 +85,7 @@ router.get(
 
 router.get(
   "/admin/users",
-  authAdminController.checkExpired,
+  //authAdminController.checkExpired,
   adminController.users
 );
 
