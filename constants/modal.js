@@ -47,8 +47,19 @@ const CUSTOMER_MODEL = {
   totalPrice: "totalPrice",
 };
 
+const BRAND_MODEL = {
+  brandName: "brandName",
+};
+
+const CATEGORY_MODEL = {
+  prodTypeName: "prodTypeName",
+  amount: "amount",
+};
+
 module.exports = {
   PRODUCT_MODEL,
   ADMIN_MODEL,
-  CUSTOMER_MODEL
+  CUSTOMER_MODEL,
+  BRAND_MODEL,
+  CATEGORY_MODEL,
 };

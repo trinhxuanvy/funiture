@@ -39,9 +39,6 @@ exports.uploadImage = (imageFile) => {
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log(
-          "Upload" + imageFile.originalname + " is " + progress + "% done"
-        );
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");

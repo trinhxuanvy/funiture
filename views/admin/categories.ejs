@@ -30,17 +30,16 @@
     <link rel="stylesheet" href="/stylesheets/css/admin/custom.css" />
     <link rel="stylesheet" href="/stylesheets/css/admin/style.css" />
   </head>
-
   <body>
     <div class="wrapper">
       <%- include ("./share/sidebar.ejs") %>
       <div class="wrapper__main" id="main">
         <div class="wrapper__main__header">
-          <a href="/admin/admins"
-            ><span class="wrapper__main__header__title">Admin</span></a
+          <a href="/admin/categories" class="wrapper__main__header__title"
+            >Category</a
           >
           <div class="wrapper__main__header__function">
-            <form action="/admin/admins" method="get">
+            <form action="/admin/categories" method="get">
               <input
                 type="text"
                 id="search"
@@ -64,12 +63,12 @@
               <div class="wrapper__main__content__table__header">
                 <div class="row">
                   <div class="col-6">
-                    <p style="font-size: 24px">Admin List</p>
+                    <p style="font-size: 24px">Category List</p>
                   </div>
                   <div class="col-6">
                     <button
                       type="button"
-                      class="btn btn-orange text-white d-block"
+                      class="btn btn-orange d-block"
                       style="margin-left: auto"
                       data-bs-toggle="modal"
                       data-bs-target="#addUserModal"
@@ -86,166 +85,43 @@
                 >
                   <thead>
                     <tr>
-                      <th style="text-align: center; min-width: 150px">
+                      <th
+                        style="
+                          text-align: center;
+                          min-width: 200px;
+                          width: 200px;
+                        "
+                      >
                         <em class="ti-settings"></em>
                       </th>
-                      <th style="min-width: 150px">Avatar</th>
-                      <th style="min-width: 300px">Name</th>
-                      <th style="min-width: 200px">Identity Card</th>
-                      <th style="min-width: 200px">Username</th>
-                      <th style="min-width: 200px">Email</th>
-                      <th style="min-width: 150px">Phone</th>
-                      <th style="min-width: 300px">Address</th>
-                      <th style="min-width: 250px">Date Of Birth</th>
-                      <!-- <th style="min-width: 150px">Level</th> -->
+                      <th style="min-width: 200px">Category Name</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <% admin.forEach(item => { %>
+                    <% categories.forEach(item => { %>
                     <tr class="tr-prod" <% if (!item.status) { %>
                       style="opacity: 0.5;" <% } %> id="<%= item._id %>">
                       <td align="center">
-                        <div class="mt-2 mb-2">
-                          <a
-                            href="/admin/admins/<%= item._id %>/reset"
-                            class="btn btn-light"
-                            ><em class="ti-reload"></em
-                          ></a>
-                          <button
-                            value="<%= item._id %>"
-                            class="btn btn-danger btn-delete-prod is-status"
-                          >
-                            <em class="ti-trash"></em>
-                          </button>
-                        </div>
-                      </td>
-                      <td>
-                        <label
-                          for="<%= adminModel.avatarLink %>"
-                          class="tb-image primary-image is-status"
+                        <button
+                          value="<%= item._id %>"
+                          class="btn btn-danger btn-delete-prod is-status"
                         >
-                          <img src="<%= item.avatarLink %>" alt="" />
-                          <input
-                            type="file"
-                            name="<%= adminModel.avatarLink %>"
-                            id="<%= adminModel.avatarLink %>"
-                            class="primary-image-input"
-                          />
-                        </label>
+                          <em class="ti-trash"></em>
+                        </button>
                       </td>
                       <td>
                         <div class="mb-2 mt-2 is-status">
                           <input
                             type="text"
                             class="form-control"
-                            id="<%= adminModel.adminName %>"
-                            value="<%= item.adminName %>"
-                            placeholder="Enter name"
-                            name="<%= adminModel.adminName %>"
+                            id="<%= categoryModel.prodTypeName %>"
+                            value="<%= item.prodTypeName %>"
+                            placeholder="Enter brand name"
+                            name="<%= categoryModel.prodTypeName %>"
                             required
                           />
                         </div>
                       </td>
-                      <td>
-                        <div class="mb-2 mt-2 is-status">
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="<%= adminModel.identityCard %>"
-                            value="<%= item.identityCard %>"
-                            placeholder="Enter identity card"
-                            name="<%= adminModel.identityCard %>"
-                            required
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="mb-2 mt-2 is-status">
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="<%= adminModel.username %>"
-                            value="<%= item.username %>"
-                            placeholder="Enter identity card"
-                            name="<%= adminModel.username %>"
-                            required
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="mb-2 mt-2 is-status">
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="<%= adminModel.email %>"
-                            value="<%= item.email %>"
-                            placeholder="Enter email"
-                            name="<%= adminModel.email %>"
-                            required
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="mb-2 mt-2 is-status">
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="<%= adminModel.phone %>"
-                            value="<%= item.phone %>"
-                            placeholder="Enter email"
-                            name="<%= adminModel.phone %>"
-                            required
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="mb-2 mt-2 is-status">
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="<%= adminModel.address %>"
-                            value="<%= item.address %>"
-                            placeholder="Enter email"
-                            name="<%= adminModel.address %>"
-                            required
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div
-                          class="
-                            mb-2
-                            mt-2
-                            input-group
-                            date
-                            datetimepicker
-                            is-status
-                          "
-                          id=""
-                        >
-                          <input type="text" class="form-control"
-                          placeholder="mm/dd/yyyy" name="<%=
-                          adminModel.dateOfBirth %>" id="<%=
-                          adminModel.dateOfBirth %>" value="<%= (new
-                          Date(item.dateOfBirth)).toLocaleString("en-US", {
-                          year: "numeric", month: "numeric", day: "numeric" })
-                          %>" />
-                          <span class="input-group-addon"> </span>
-                        </div>
-                      </td>
-                      <!-- <td>
-                        <div class="mb-2 mt-2">
-                          <input
-                            type="text"
-                            class="form-control"
-                            id=""
-                            value=""
-                            placeholder="Enter email"
-                            name=""
-                            required
-                          />
-                        </div>
-                      </td> -->
                     </tr>
                     <% }) %>
                   </tbody>
@@ -262,9 +138,8 @@
                       <ul class="pagination justify-content-end m-auto">
                         <li class="page-item">
                           <form
-                            action="/admin/admins<%= search %>"
+                            action="/admin/categories<%= search %>"
                             method="post"
-                            id="submitForm"
                           >
                             <% if (page <=1) { %>
                             <button
@@ -294,7 +169,7 @@
                         </li>
                         <li class="page-item">
                           <form
-                            action="/admin/admins<%= search %>"
+                            action="/admin/categories<%= search %>"
                             method="post"
                           >
                             <% if (page < 1) { %>
@@ -325,7 +200,7 @@
                         </li>
                         <li class="page-item">
                           <form
-                            action="/admin/admins<%= search %>"
+                            action="/admin/categories<%= search %>"
                             method="post"
                           >
                             <% if (parseInt(page) + 1> totalPage) { %>
@@ -356,7 +231,7 @@
                         </li>
                         <li class="page-item">
                           <form
-                            action="/admin/admins<%= search %>"
+                            action="/admin/categories<%= search %>"
                             method="post"
                           >
                             <% if (parseInt(page) + 2> totalPage) { %>
@@ -387,7 +262,7 @@
                         </li>
                         <li class="page-item">
                           <form
-                            action="/admin/admins<%= search %>"
+                            action="/admin/categories<%= search %>"
                             method="post"
                           >
                             <% if (page>= totalPage) { %>
@@ -428,7 +303,7 @@
                   <div class="modal-content">
                     <!-- Modal Header -->
                     <div class="modal-header">
-                      <h4 class="modal-title">Admin</h4>
+                      <h4 class="modal-title">Category</h4>
                       <button
                         type="button"
                         class="btn-close"
@@ -439,122 +314,18 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                       <form
-                        action="/admin/admins"
+                        action="/admin/categories"
                         method="post"
                         id="formSubmit"
-                        enctype="multipart/form-data"
                       >
-                        <div class="mb-3 mt-4 position-relative">
-                          <label for="<%= adminModel.adminName %>">Name</label>
+                        <div class="mb-3 mt-3 position-relative is-status">
+                          <label for="prodTypeName">Category Name</label>
                           <input
                             type="text"
                             class="form-control"
-                            id="<%= adminModel.adminName %>"
+                            id="<%= categoryModel.prodTypeName %>"
                             placeholder="Enter name"
-                            name="<%= adminModel.adminName %>"
-                            required
-                          />
-                        </div>
-                        <div class="mb-3 mt-4 position-relative">
-                          <label for="<%= adminModel.identityCard %>"
-                            >Identity Card</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="<%= adminModel.identityCard %>"
-                            placeholder="Enter identity card"
-                            name="<%= adminModel.identityCard %>"
-                            required
-                          />
-                        </div>
-                        <div class="mb-3 mt-4 position-relative">
-                          <label for="<%= adminModel.email %>">Email</label>
-                          <input
-                            type="email"
-                            class="form-control"
-                            id="<%= adminModel.email %>"
-                            placeholder="Enter email"
-                            name="<%= adminModel.email %>"
-                            required
-                          />
-                        </div>
-                        <div class="mb-3 mt-4 position-relative">
-                          <label for="<%= adminModel.username %>"
-                            >Username</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="<%= adminModel.username %>"
-                            placeholder="Enter email"
-                            name="<%= adminModel.username %>"
-                            required
-                          />
-                        </div>
-                        <div class="mb-3 mt-4 position-relative">
-                          <label for="<%= adminModel.phone %>">Phone</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="<%= adminModel.phone %>"
-                            placeholder="Enter phone"
-                            name="<%= adminModel.phone %>"
-                            required
-                          />
-                        </div>
-                        <div class="mb-3 mt-4 position-relative">
-                          <label for="<%= adminModel.address %>">Address</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="<%= adminModel.address %>"
-                            placeholder="Enter address"
-                            name="<%= adminModel.address %>"
-                            required
-                          />
-                        </div>
-                        <div class="mb-3 mt-4">
-                          <label for="<%= adminModel.dateOfBirth %>"
-                            >Date Of Birth</label
-                          >
-                          <div
-                            class="
-                              input-group
-                              position-relative
-                              date
-                              datetimepicker
-                            "
-                            id=""
-                          >
-                            <input
-                              type="text"
-                              class="form-control"
-                              placeholder="mm/dd/yyyy"
-                              name="<%=
-                            adminModel.dateOfBirth %>"
-                              id="<%=
-                            adminModel.dateOfBirth %>"
-                              required
-                            />
-                            <span class="input-group-addon">
-                              <span class="input-group-text d-block">
-                                <i class="fa fa-calendar"></i>
-                              </span>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="mt-4 mb-3 position-relative">
-                          <label for="<%= adminModel.avatarLink %>"
-                            >Avatar</label
-                          >
-                          <input
-                            style="margin-bottom: 8px"
-                            type="file"
-                            class="form-control"
-                            id="<%= adminModel.avatarLink %>"
-                            placeholder="Choose 1 file"
-                            name="<%= adminModel.avatarLink %>"
+                            name="<%= categoryModel.prodTypeName %>"
                             required
                           />
                         </div>

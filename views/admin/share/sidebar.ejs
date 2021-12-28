@@ -15,29 +15,29 @@
             <% } %>">
                 <a href="/admin/profile" class="wrapper__sidebar__menu-link">
                     <i class="ti-id-badge"></i>
-                    <span>User profile</span>
+                    <span>Profile</span>
                 </a>
             </li>
-            <li class="wrapper__sidebar__menu-item <% if (pageName == "admins") { %>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == "admin") { %>
                 wrapper__sidebar__menu-item--active
             <% } %>">
                 <a href="/admin/admins" class="wrapper__sidebar__menu-link">
                     <i class="fas fa-users-cog"></i>
-                    <span>Admin List</span>
+                    <span>Admin</span>
                 </a>
             </li>
-            <li class="wrapper__sidebar__menu-item <% if (pageName == "users") { %>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == "customer") { %>
                 wrapper__sidebar__menu-item--active
             <% } %>">
                 <a href="/admin/users" class="wrapper__sidebar__menu-link">
                     <i class="ti-user"></i>
-                    <span>User List</span>
+                    <span>Customer</span>
                 </a>
             </li>
             <li class="wrapper__sidebar__menu-item <% if (pageName == "category") { %>
                 wrapper__sidebar__menu-item--active
             <% } %>">
-                <a href="/admin/category" class="wrapper__sidebar__menu-link">
+                <a href="/admin/categories" class="wrapper__sidebar__menu-link">
                     <i class="ti-menu-alt"></i>
                     <span>Category</span>
                 </a>
@@ -45,17 +45,17 @@
             <li class="wrapper__sidebar__menu-item <% if (pageName == "brand") { %>
                 wrapper__sidebar__menu-item--active
             <% } %>">
-                <a href="/admin/brand" class="wrapper__sidebar__menu-link">
+                <a href="/admin/brands" class="wrapper__sidebar__menu-link">
                     <i class="ti-medall"></i>
                     <span>Brand</span>
                 </a>
             </li>
-            <li class="wrapper__sidebar__menu-item <% if (pageName == "products") { %>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == "product") { %>
                 wrapper__sidebar__menu-item--active
             <% } %>">
                 <a href="/admin/products" class="wrapper__sidebar__menu-link">
                     <i class="ti-server"></i>
-                    <span>Product List</span>
+                    <span>Product</span>
                 </a>
             </li>
             <!-- <li class="wrapper__sidebar__menu-item">

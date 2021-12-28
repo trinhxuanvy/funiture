@@ -23,36 +23,66 @@ $(document).ready(function () {
 
   // Xử lý validate form
   $(function () {
-    $("#addUserForm").validate({
-      rules: {
-        email: {
-          required: true,
-          email: true,
-        },
-        username: {
-          required: true,
-          minlength: 8,
-          maxlength: 56,
-        },
-        phone: {
-          required: true,
-        },
-      },
-      messages: {
-        email: {
-          required: "Please enter your email.",
-          email: "Please check your email.",
-        },
-        username: {
-          required: "Please enter your name",
-          minlength: "Your username must be at least 8 characters long.",
-          maxlength: "Your username must be at most 52 characters long.",
-        },
-        phone: {
-          required: "Please enter your phone number.",
-        },
-      },
-    });
+    // $("#addModal").validate({
+    //   rules: {
+    //     prodName: {
+    //       required: true,
+    //     },
+    //     prodTypeId: {
+    //       required: true,
+    //     },
+    //     brandId: {
+    //       required: true,
+    //     },
+    //     price: {
+    //       required: true,
+    //     },
+    //     amount: {
+    //       required: true,
+    //     },
+    //     primaryImage: {
+    //       required: true,
+    //     },
+    //     secondaryImage_1: {
+    //       required: true,
+    //     },
+    //     secondaryImage_2: {
+    //       required: true,
+    //     },
+    //     secondaryImage_3: {
+    //       required: true,
+    //     },
+    //   },
+    //   messages: {
+    //     prodName: {
+    //       required: "This field can't be empty",
+    //     },
+    //     prodTypeId: {
+    //       required: "This field can't be empty",
+    //     },
+    //     brandId: {
+    //       required: "This field can't be empty",
+    //     },
+    //     price: {
+    //       required: "This field can't be empty",
+    //     },
+    //     amount: {
+    //       required: "This field can't be empty",
+    //     },
+    //     primaryImage: {
+    //       required: "This field can't be empty",
+    //     },
+    //     secondaryImage_1: {
+    //       required: "This field can't be empty",
+    //     },
+    //     secondaryImage_2: {
+    //       required: "This field can't be empty",
+    //     },
+    //     secondaryImage_3: {
+    //       required: "This field can't be empty",
+    //     },
+    //   },
+    // });
   });
 
   // $(function() {
@@ -102,7 +132,7 @@ $(document).ready(function () {
     }
   });
 
-  // Xử lý chức năng xóa sản phẩm
+  // Xử lý chức năng xóa sản phẩm/admins/...
   $(function () {
     const btnDeleteProd = $(".btn-delete-prod");
     const trProd = $(".tr-prod");
@@ -112,6 +142,11 @@ $(document).ready(function () {
         e.preventDefault();
 
         const url = new URL(window.location.href);
+        statusLoading({
+          posLoading: this,
+          isCompleted: false,
+          isSuccess: false,
+        });
 
         $.ajax({
           method: "get",
@@ -124,7 +159,11 @@ $(document).ready(function () {
             url.search,
           dataType: "json",
           success: function (response) {
-            console.log(response);
+            statusLoading({
+              posLoading: btnDeleteProd[i],
+              isCompleted: true,
+              isSuccess: true,
+            });
             if (response.success) {
               if (!response.status) {
                 $(trProd[i]).css("opacity", "0.5");
@@ -138,20 +177,107 @@ $(document).ready(function () {
     }
   });
 
+  // Xử lý chức năng preview sản phẩm
   $(function () {
-    const input = $("#table-product input");
-    const select = $("#table-product select");
+    const btnPreviewProd = $(".btn-preview-prod");
+    const trProd = $(".tr-prod");
+    const previewModel = $("#product_image_area");
+    const prodName = $(".product-name");
+    const prodCategory = $(".product-category");
+    const prodPrice = $(".product-price");
+    const prodDescription = $(".product-description");
+
+    for (let i = 0; i < btnPreviewProd.length; i++) {
+      $(btnPreviewProd[i]).click(function (e) {
+        e.preventDefault();
+
+        const url = new URL(window.location.href);
+        statusLoading({
+          posLoading: this,
+          isCompleted: false,
+          isSuccess: false,
+        });
+
+        $.ajax({
+          method: "get",
+          contentType: "application/json",
+          url:
+            url.origin +
+            url.pathname +
+            "/" +
+            $(btnPreviewProd[i]).val() +
+            url.search,
+          dataType: "json",
+          success: function (response) {
+            console.log(response);
+            statusLoading({
+              posLoading: btnPreviewProd[i],
+              isCompleted: true,
+              isSuccess: true,
+            });
+            if (response.success) {
+              if (!response.status) {
+                $(previewModel[0]).css("display", "block");
+                $(prodName[0]).html(response?.data?.prodName);
+                $(prodCategory[0]).html(response?.data?.prodTypeName);
+                $(prodPrice[0]).html(
+                  convertMoney(response?.data?.price).toString()
+                );
+                $(prodDescription[0]).html(response?.data?.description);
+
+                const image = $(".lSGallery img");
+                const dataThumb = $(".data-thumb-image img");
+
+                response?.data?.prodImage.forEach((item) => {
+                  switch (item.type) {
+                    case "1":
+                      $(image[0]).attr("src", item.imageLink);
+                      $(dataThumb[0]).attr("src", item.imageLink);
+                      break;
+                    case "2":
+                      $(image[1]).attr("src", item.imageLink);
+                      $(dataThumb[1]).attr("src", item.imageLink);
+                      break;
+                    case "3":
+                      $(image[2]).attr("src", item.imageLink);
+                      $(dataThumb[2]).attr("src", item.imageLink);
+                      break;
+                    case "4":
+                      $(image[3]).attr("src", item.imageLink);
+                      $(dataThumb[3]).attr("src", item.imageLink);
+                      break;
+                    default:
+                      break;
+                  }
+                });
+              }
+            }
+          },
+        });
+      });
+    }
+  });
+
+  // Xử lý chức năng cập nhật sản phẩm/admins/...
+  $(function () {
+    const input = $("#table-model input");
+    const select = $("#table-model select");
 
     for (let i = 0; i < select.length; i++) {
       $(select[i]).change(function (e) {
         e.preventDefault();
 
-        const id = $(select[i].parentNode.parentNode).attr("id");
+        const id = $(select[i].parentNode.parentNode.parentNode).attr("id");
         const url = new URL(window.location.href);
         const name = $(select[i]).attr("name");
         var postData = {};
         postData[name] = $(select[i]).val();
-        console.log(postData);
+        statusUpdate({
+          posStatus: select[i],
+          posLoading: select[i].parentNode,
+          isCompleted: false,
+          isSuccess: false,
+        });
 
         $.ajax({
           method: "post",
@@ -160,8 +286,12 @@ $(document).ready(function () {
           data: JSON.stringify(postData),
           dataType: "json",
           success: function (response) {
-            console.log(response);
-            showBoxModal();
+            statusUpdate({
+              posStatus: select[i],
+              posLoading: select[i].parentNode,
+              isCompleted: true,
+              isSuccess: response?.success,
+            });
           },
         });
       });
@@ -177,6 +307,14 @@ $(document).ready(function () {
           const name = $(input[i]).attr("name");
           var postData = {};
           postData[name] = $(input[i]).val();
+          statusUpdate({
+            posStatus: input[i],
+            posLoading: input[i].parentNode,
+            isCompleted: false,
+            isSuccess: false,
+          });
+
+          console.log(url.origin + url.pathname, id);
 
           $.ajax({
             method: "post",
@@ -186,7 +324,12 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
               console.log(response);
-              showBoxModal();
+              statusUpdate({
+                posStatus: input[i],
+                posLoading: input[i].parentNode,
+                isCompleted: true,
+                isSuccess: response?.success,
+              });
             },
           });
         });
@@ -199,6 +342,11 @@ $(document).ready(function () {
           const name = $(input[i]).attr("name");
           var formData = new FormData();
           formData.append(name, $(input[i])[0].files[0]);
+          statusLoading({
+            posLoading: input[i].parentNode,
+            isCompleted: false,
+            isSuccess: false,
+          });
 
           $.ajax({
             method: "post",
@@ -220,9 +368,12 @@ $(document).ready(function () {
                   data: JSON.stringify(postData),
                   dataType: "json",
                   success: function (response) {
+                    statusLoading({
+                      posLoading: input[i].parentNode,
+                      isCompleted: true,
+                      isSuccess: true,
+                    });
                     input[i].parentNode.childNodes[1].src = link;
-                    console.log(response);
-                    showBoxModal();
                   },
                 });
               }
@@ -233,6 +384,108 @@ $(document).ready(function () {
     }
   });
 
+  // Xử lý thêm sản phẩm/admins
+  $(function () {
+    const btnSubmit = $("#btnSubmit");
+    $(btnSubmit[0]).click(function (e) {
+      e.preventDefault();
+      console.log("oke");
+      $("#formSubmit").validate({
+        rules: {
+          price: {
+            required: true,
+            min: 0,
+          },
+          amount: {
+            required: true,
+            min: 0,
+          },
+          email: {
+            required: true,
+            email: true,
+          },
+          dateOfBirth: {
+            required: true,
+            date: true,
+          },
+          avatarLink: {
+            required: true,
+          },
+        },
+        messages: {
+          prodName: {
+            required: "Please enter product name",
+          },
+          prodTypeId: {
+            required: "Please choose 1 product type",
+          },
+          brandId: {
+            required: "Please choose 1 brand",
+          },
+          price: {
+            required: "Please enter price",
+            min: "Min: 0",
+          },
+          amount: {
+            required: "Please enter amount",
+            min: "Min: 0",
+          },
+          primaryImage: {
+            required: "Please choose 1 file",
+          },
+          secondaryImage_1: {
+            required: "Please choose 1 image",
+          },
+          secondaryImage_2: {
+            required: "Please choose 1 image",
+          },
+          secondaryImage_3: {
+            required: "Please choose 1 image",
+          },
+          adminName: {
+            required: "Please enter admin name",
+          },
+          identityCard: {
+            required: "Please enter identity card",
+          },
+          email: {
+            required: "Please enter email",
+          },
+          username: {
+            required: "Please enter username",
+          },
+          phone: {
+            required: "Please enter phone",
+          },
+          address: {
+            required: "Please enter address",
+          },
+          dateOfBirth: {
+            required: "Please enter date of birth",
+          },
+          avatarLink: {
+            required: "Please choose 1 image",
+          },
+          // brand
+          brandName: {
+            required: "Please enter brand name",
+          },
+          // category
+          prodTypeName: {
+            required: "Please enter category",
+          },
+        },
+      });
+      if ($("#formSubmit").valid()) {
+        $(this).find("div").remove();
+        $(this).append(
+          `<div class="form-status" style="margin-left: 8px;"><div class="spinner-border spinner-border-sm"></div></div>`
+        );
+        $("#formSubmit").submit();
+      }
+    });
+  });
+
   // Xử lý hiển thị message box
   $(function () {
     $(".close").click(function () {
@@ -241,14 +494,79 @@ $(document).ready(function () {
   });
 });
 
-function showBoxModal() {
-  const modal = $("#boxModal");
-  $(modal[0]).css("right", "-100%");
-  setTimeout(() => {
-    $(modal[0]).css("right", "32px");
-  }, 400);
+// function showBoxModal() {
+//   const modal = $("#boxModal");
+//   $(modal[0]).css("right", "-100%");
+//   setTimeout(() => {
+//     $(modal[0]).css("right", "32px");
+//   }, 400);
 
-  setTimeout(() => {
-    $(modal[0]).css("right", "-100%");
-  }, 2000);
+//   setTimeout(() => {
+//     $(modal[0]).css("right", "-100%");
+//   }, 2000);
+// }
+
+function statusUpdate({
+  posStatus = null,
+  posLoading = null,
+  isCompleted = false,
+  isSuccess = false,
+}) {
+  if (isCompleted) {
+    $(posLoading).find("div").remove();
+
+    if (isSuccess) {
+      $(posStatus).addClass("is-valid");
+    } else {
+      $(posStatus).addClass("is-invalid");
+    }
+
+    setTimeout(() => {
+      $(posStatus).removeClass("is-valid");
+      $(posStatus).removeClass("is-invalid");
+    }, 1000);
+  } else {
+    $(posLoading).append(
+      `<div class="form-status"><div class="spinner-border spinner-border-sm"></div></div>`
+    );
+  }
+}
+
+function statusLoading({
+  posLoading = null,
+  isCompleted = false,
+  isSuccess = false,
+}) {
+  if (isCompleted) {
+    $(posLoading).find("div").remove();
+    $(posLoading).find("span").remove();
+  } else {
+    $(posLoading).append(`<span style="
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: #958c8c73;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    "></span>`);
+    $(posLoading).append(
+      `<div style="
+      z-index: 2; 
+      position: absolute; 
+      top: 50%; 
+      left: 50%; 
+      transform: 
+      translate(-50%, -50%);
+      "><div class="spinner-border spinner-border-sm text-light"></div></div>`
+    );
+  }
+}
+
+function convertMoney(money) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(money);
 }

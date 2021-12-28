@@ -37,7 +37,7 @@
       <div class="wrapper__main" id="main">
         <div class="wrapper__main__header">
           <a href="/admin/products" class="wrapper__main__header__title"
-            >Product List</a
+            >Product</a
           >
           <div class="wrapper__main__header__function">
             <form action="/admin/products" method="get">
@@ -72,7 +72,7 @@
                       class="btn btn-orange text-white d-block"
                       style="margin-left: auto"
                       data-bs-toggle="modal"
-                      data-bs-target="#addUserModal"
+                      data-bs-target="#addModal"
                     >
                       <em class="ti-plus"></em> Add
                     </button>
@@ -82,7 +82,7 @@
               <div class="table-responsive-xxl">
                 <table
                   class="table table-striped table-bordered"
-                  id="table-product"
+                  id="table-model"
                 >
                   <thead>
                     <tr>
@@ -110,23 +110,25 @@
                     <tr class="tr-prod" <% if (!item.status) { %>
                       style="opacity: 0.5;" <% } %> id="<%= item._id %>">
                       <td align="center">
-                        <button
-                          value="<%= item._id %>"
-                          class="btn btn-danger btn-delete-prod"
-                        >
-                          <em class="ti-trash"></em>
-                        </button>
-                        <button
-                          value="<%= item._id %>"
-                          class="btn btn-success btn-preview-prod"
-                        >
-                          <em class="ti-eye"></em>
-                        </button>
+                        <div class="mt-2 mb-2">
+                          <button
+                            value="<%= item._id %>"
+                            class="btn btn-danger btn-delete-prod is-status"
+                          >
+                            <em class="ti-trash"></em>
+                          </button>
+                          <button
+                            value="<%= item._id %>"
+                            class="btn btn-success btn-preview-prod is-status"
+                          >
+                            <em class="ti-eye"></em>
+                          </button>
+                        </div>
                       </td>
                       <td>
                         <label
                           for="<%= prodModel.primaryImage %>"
-                          class="tb-image primary-image"
+                          class="tb-image primary-image is-status"
                         >
                           <% item.prodImage.forEach(img=> { if (img.type == "1")
                           { %>
@@ -142,7 +144,7 @@
                       </td>
                       <td>
                         <label
-                          class="tb-image secondary-image-1"
+                          class="tb-image secondary-image-1 is-status"
                           for="<%= prodModel.secondaryImage1 %>"
                         >
                           <% item.prodImage.forEach(img=> { if (img.type == "2")
@@ -157,7 +159,7 @@
                           />
                         </label>
                         <label
-                          class="tb-image secondary-image-2"
+                          class="tb-image secondary-image-2 is-status"
                           for="<%= prodModel.secondaryImage2 %>"
                         >
                           <% item.prodImage.forEach(img=> { if (img.type == "3")
@@ -172,7 +174,7 @@
                           />
                         </label>
                         <label
-                          class="tb-image secondary-image-3"
+                          class="tb-image secondary-image-3 is-status"
                           for="<%= prodModel.secondaryImage3 %>"
                         >
                           <% item.prodImage.forEach(img=> { if (img.type == "4")
@@ -188,7 +190,7 @@
                         </label>
                       </td>
                       <td>
-                        <div class="mb-2 mt-2">
+                        <div class="mb-2 mt-2 form-group is-status">
                           <input
                             type="text"
                             class="form-control"
@@ -201,45 +203,49 @@
                         </div>
                       </td>
                       <td>
-                        <select
-                          class="mb-2 mt-2 form-control"
-                          name="<%= prodModel.prodTypeId %>"
-                          id="<%= prodModel.prodTypeId %>"
-                        >
-                          <option
-                            style="visibility: hidden"
-                            value="<%= item.prodTypeId %>"
+                        <div class="is-status">
+                          <select
+                            class="mb-2 mt-2 form-control"
+                            name="<%= prodModel.prodTypeId %>"
+                            id="<%= prodModel.prodTypeId %>"
                           >
-                            <%= item.prodTypeName %>
-                          </option>
-                          <% categories.forEach(cate=> { %>
-                          <option value="<%= cate._id %>">
-                            <%= cate.prodTypeName %>
-                          </option>
-                          <% }) %>
-                        </select>
+                            <option
+                              style="visibility: hidden"
+                              value="<%= item.prodTypeId %>"
+                            >
+                              <%= item.prodTypeName %>
+                            </option>
+                            <% categories.forEach(cate=> { %>
+                            <option value="<%= cate._id %>">
+                              <%= cate.prodTypeName %>
+                            </option>
+                            <% }) %>
+                          </select>
+                        </div>
                       </td>
                       <td>
-                        <select
-                          class="mb-2 mt-2 form-control"
-                          name="<%= prodModel.brandId %>"
-                          id="<%= prodModel.brandId %>"
-                        >
-                          <option
-                            style="visibility: hidden"
-                            value="<%= item.brandId %>"
+                        <div class="is-status">
+                          <select
+                            class="mb-2 mt-2 form-control"
+                            name="<%= prodModel.brandId %>"
+                            id="<%= prodModel.brandId %>"
                           >
-                            <%= item.brandName %>
-                          </option>
-                          <% brands.forEach(br=> { %>
-                          <option value="<%= br._id %>">
-                            <%= br.brandName %>
-                          </option>
-                          <% }) %>
-                        </select>
+                            <option
+                              style="visibility: hidden"
+                              value="<%= item.brandId %>"
+                            >
+                              <%= item.brandName %>
+                            </option>
+                            <% brands.forEach(br=> { %>
+                            <option value="<%= br._id %>">
+                              <%= br.brandName %>
+                            </option>
+                            <% }) %>
+                          </select>
+                        </div>
                       </td>
                       <td>
-                        <div class="mb-2 mt-2">
+                        <div class="mb-2 mt-2 is-status">
                           <input
                             type="number"
                             value="<%= item.price %>"
@@ -247,11 +253,12 @@
                             id="<%= prodModel.price %>"
                             placeholder="Enter price"
                             name="<%= prodModel.price %>"
+                            min="0"
                           />
                         </div>
                       </td>
                       <td>
-                        <div class="mb-2 mt-2">
+                        <div class="mb-2 mt-2 is-status">
                           <input
                             type="number"
                             value="<%= item.amount %>"
@@ -259,11 +266,12 @@
                             id="<%= prodModel.amount %>"
                             placeholder="Enter amount"
                             name="<%= prodModel.amount %>"
+                            min="0"
                           />
                         </div>
                       </td>
                       <td>
-                        <div class="mb-2 mt-2">
+                        <div class="mb-2 mt-2 is-status">
                           <input
                             type="number"
                             value="<%= item.soldQuantity %>"
@@ -271,11 +279,12 @@
                             id="<%= prodModel.soldQuantity %>"
                             placeholder="Enter sold quantity"
                             name="<%= prodModel.soldQuantity %>"
+                            min="0"
                           />
                         </div>
                       </td>
                       <td>
-                        <div class="mb-2 mt-2">
+                        <div class="mb-2 mt-2 is-status">
                           <input
                             type="text"
                             value="<%= item.color %>"
@@ -287,7 +296,7 @@
                         </div>
                       </td>
                       <td>
-                        <div class="mb-2 mt-2">
+                        <div class="mb-2 mt-2 is-status">
                           <input
                             type="number"
                             value="<%= item.width %>"
@@ -295,11 +304,12 @@
                             id="<%= prodModel.width %>"
                             placeholder="Enter width"
                             name="<%= prodModel.width %>"
+                            min="0"
                           />
                         </div>
                       </td>
                       <td>
-                        <div class="mb-2 mt-2">
+                        <div class="mb-2 mt-2 is-status">
                           <input
                             type="number"
                             value="<%= item.height %>"
@@ -307,11 +317,12 @@
                             id="<%= prodModel.height %>"
                             placeholder="Enter height"
                             name="<%= prodModel.height %>"
+                            min="0"
                           />
                         </div>
                       </td>
                       <td>
-                        <div class="mb-2 mt-2">
+                        <div class="mb-2 mt-2 is-status">
                           <input
                             type="number"
                             value="<%= item.depth %>"
@@ -319,23 +330,25 @@
                             id="<%= prodModel.depth %>"
                             placeholder="Enter depth"
                             name="<%= prodModel.depth %>"
+                            min="0"
                           />
                         </div>
                       </td>
                       <td>
-                        <div class="mb-2 mt-2">
+                        <div class="mb-2 mt-2 is-status">
                           <input
                             type="number"
                             value="<%= item.weight %>"
                             class="form-control"
                             id="<%= prodModel.weight %>"
                             placeholder="Enter weight"
-                            name="<%= prodModel.weigth %>"
+                            name="<%= prodModel.weight %>"
+                            min="0"
                           />
                         </div>
                       </td>
                       <td style="font-size: 14px">
-                        <div class="mb-2 mt-2">
+                        <div class="mb-2 mt-2 is-status">
                           <input
                             class="form-control"
                             id="<%= prodModel.description %>"
@@ -521,12 +534,12 @@
               </div>
 
               <!-- The Modal Insert -->
-              <div class="modal" id="addUserModal">
+              <div class="modal" id="addModal">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <!-- Modal Header -->
                     <div class="modal-header">
-                      <h4 class="modal-title">Add Product</h4>
+                      <h4 class="modal-title">Product</h4>
                       <button
                         type="button"
                         class="btn-close"
@@ -538,224 +551,208 @@
                     <div class="modal-body">
                       <form
                         action="/admin/products"
+                        id="formSubmit"
                         method="post"
-                        class="was-validated"
                         enctype="multipart/form-data"
                       >
-                        <div class="mb-3 mt-3 position-relative">
-                          <label for="prodName">Product Name</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="prodName"
-                            placeholder="Enter name"
-                            name="prodName"
-                            required
-                          />
-                          <div class="invalid-tooltip">
-                            Please check product name.
+                        <fieldset>
+                          <div class="mb-3 mt-3 position-relative">
+                            <label for="prodName">Product Name</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="prodName"
+                              placeholder="Enter name"
+                              name="prodName"
+                              required
+                            />
                           </div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                          <label for="prodTypeId">Category</label>
-                          <select
-                            class="form-control"
-                            name="prodTypeId"
-                            id="prodTypeId"
-                            required
+                          <div class="mb-3 position-relative">
+                            <label for="prodTypeId">Category</label>
+                            <select
+                              class="form-control"
+                              name="prodTypeId"
+                              id="prodTypeId"
+                              required
+                            >
+                              <% categories.forEach(item=> { %>
+                              <option value="<%= item._id %>">
+                                <%= item.prodTypeName %>
+                              </option>
+                              <% }) %>
+                            </select>
+                          </div>
+                          <div class="mb-3 position-relative">
+                            <label for="brandId">Brand</label>
+                            <select
+                              class="form-control"
+                              name="brandId"
+                              id="brandId"
+                              required
+                            >
+                              <% brands.forEach(item=> { %>
+                              <option value="<%= item._id %>">
+                                <%= item.brandName %>
+                              </option>
+                              <% }) %>
+                            </select>
+                          </div>
+                          <div class="mb-3 position-relative">
+                            <label for="price">Price</label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="price"
+                              placeholder="Enter price"
+                              name="price"
+                              required
+                            />
+                          </div>
+                          <div class="mb-3 position-relative">
+                            <label for="amount">Amount</label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="amount"
+                              placeholder="Enter amount"
+                              name="amount"
+                              required
+                            />
+                          </div>
+                          <div class="mb-3 position-relative">
+                            <label for="primaryImage">Primary Image</label>
+                            <input
+                              type="file"
+                              class="form-control"
+                              id="primaryImage"
+                              placeholder="Choose 1 file"
+                              name="primaryImage"
+                              required
+                            />
+                          </div>
+                          <div class="mb-3 position-relative">
+                            <label for="">Secondary Image</label>
+                            <input
+                              type="file"
+                              class="form-control"
+                              id="secondaryImage_1"
+                              placeholder="Choose 1 file"
+                              name="secondaryImage_1"
+                              required
+                            />
+                          </div>
+                          <div
+                            class="mb-3 position-relative"
+                            style="margin-top: 39px !important"
                           >
-                            <% categories.forEach(item=> { %>
-                            <option value="<%= item._id %>">
-                              <%= item.prodTypeName %>
-                            </option>
-                            <% }) %>
-                          </select>
-                          <div class="invalid-tooltip">
-                            Please check category
+                            <input
+                              type="file"
+                              class="form-control"
+                              id="secondaryImage_2"
+                              placeholder="Choose 1 file"
+                              name="secondaryImage_2"
+                              required
+                            />
                           </div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                          <label for="brandId">Brand</label>
-                          <select
-                            class="form-control"
-                            name="brandId"
-                            id="brandId"
-                            required
+                          <div
+                            class="mb-3 position-relative"
+                            style="margin-top: 39px !important"
                           >
-                            <% brands.forEach(item=> { %>
-                            <option value="<%= item._id %>">
-                              <%= item.brandName %>
-                            </option>
-                            <% }) %>
-                          </select>
-                          <div class="invalid-tooltip">Please check brand</div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                          <label for="price">Price</label>
-                          <input
-                            type="number"
-                            class="form-control"
-                            id="price"
-                            placeholder="Enter price"
-                            name="price"
-                            required
-                          />
-                          <div class="invalid-tooltip">Please check price</div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                          <label for="amount">Amount</label>
-                          <input
-                            type="number"
-                            class="form-control"
-                            id="amount"
-                            placeholder="Enter amount"
-                            name="amount"
-                          />
-                          <div class="invalid-tooltip">Please check amount</div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                          <label for="primaryImage">Primary Image</label>
-                          <input
-                            type="file"
-                            class="form-control"
-                            id="primaryImage"
-                            placeholder="Choose 1 file"
-                            name="primaryImage"
-                            required
-                          />
-                          <div class="invalid-tooltip">
-                            Please choose 1 file
+                            <input
+                              type="file"
+                              class="form-control"
+                              id="secondaryImage_3"
+                              placeholder="Choose 1 file"
+                              name="secondaryImage_3"
+                              required
+                            />
                           </div>
-                        </div>
-                        <div class="position-relative">
-                          <label for="">Secondary Image</label>
-                          <input
-                            style="margin-bottom: 8px"
-                            type="file"
-                            class="form-control"
-                            id="secondaryImage_1"
-                            placeholder="Choose 1 file"
-                            name="secondaryImage_1"
-                            required
-                          />
-                          <div class="invalid-tooltip">
-                            Please choose 1 file
+                          <div class="mb-3 position-relative">
+                            <label for="color">Color</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="color"
+                              placeholder="Enter color"
+                              name="color"
+                            />
                           </div>
-                        </div>
-                        <div class="position-relative">
-                          <input
-                            style="margin-bottom: 8px"
-                            type="file"
-                            class="form-control"
-                            id="secondaryImage_2"
-                            placeholder="Choose 1 file"
-                            name="secondaryImage_2"
-                            required
-                          />
-                          <div class="invalid-tooltip">
-                            Please choose 1 file
+                          <div class="mb-3 position-relative">
+                            <label for="width">Width (m)</label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="width"
+                              placeholder="Enter width"
+                              name="width"
+                            />
                           </div>
-                        </div>
-                        <div class="position-relative">
-                          <input
-                            style="margin-bottom: 8px"
-                            type="file"
-                            class="form-control"
-                            id="secondaryImage_3"
-                            placeholder="Choose 1 file"
-                            name="secondaryImage_3"
-                            required
-                          />
-                          <div class="invalid-tooltip">
-                            Please choose 1 file
+                          <div class="mb-3 position-relative">
+                            <label for="height">Height (m)</label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="height"
+                              placeholder="Enter height"
+                              name="height"
+                            />
                           </div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                          <label for="color">Color</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="color"
-                            placeholder="Enter color"
-                            name="color"
-                          />
-                          <div class="invalid-tooltip">Please check color</div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                          <label for="width">Width (m)</label>
-                          <input
-                            type="number"
-                            class="form-control"
-                            id="width"
-                            placeholder="Enter width"
-                            name="width"
-                          />
-                          <div class="invalid-tooltip">Please check width</div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                          <label for="height">Height (m)</label>
-                          <input
-                            type="number"
-                            class="form-control"
-                            id="height"
-                            placeholder="Enter height"
-                            name="height"
-                          />
-                          <div class="invalid-tooltip">Please check height</div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                          <label for="depth">Depth (m)</label>
-                          <input
-                            type="number"
-                            class="form-control"
-                            id="depth"
-                            placeholder="Enter depth"
-                            name="depth"
-                          />
-                          <div class="invalid-tooltip">Please check depth</div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                          <label for="weight">Weight (kg)</label>
-                          <input
-                            type="number"
-                            class="form-control"
-                            id="weight"
-                            placeholder="Enter weight"
-                            name="weight"
-                          />
-                          <div class="invalid-tooltip">Please check weight</div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                          <label for="soldQuantity">Sold</label>
-                          <input
-                            type="number"
-                            class="form-control"
-                            id="soldQuantity"
-                            placeholder="Enter Sold Quantity"
-                            name="soldQuantity"
-                          />
-                          <div class="invalid-tooltip">
-                            Please check Sold Quantity
+                          <div class="mb-3 position-relative">
+                            <label for="depth">Depth (m)</label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="depth"
+                              placeholder="Enter depth"
+                              name="depth"
+                            />
                           </div>
-                        </div>
-                        <div class="mb-3 position-relative">
-                          <label for="description">Description</label>
-                          <textarea
-                            class="form-control"
-                            id="description"
-                            placeholder="Enter Description"
-                            name="description"
-                          ></textarea>
-                          <div class="invalid-tooltip">
-                            Please check Description
+                          <div class="mb-3 position-relative">
+                            <label for="weight">Weight (kg)</label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="weight"
+                              placeholder="Enter weight"
+                              name="weight"
+                            />
                           </div>
-                        </div>
-                        <button
-                          type="submit"
-                          class="btn btn-primary m-auto d-block"
-                        >
-                          Submit
-                        </button>
+                          <div class="mb-3 position-relative">
+                            <label for="soldQuantity">Sold</label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="soldQuantity"
+                              placeholder="Enter Sold Quantity"
+                              name="soldQuantity"
+                            />
+                          </div>
+                          <div class="mb-3 position-relative">
+                            <label for="description">Description</label>
+                            <textarea
+                              class="form-control"
+                              id="description"
+                              placeholder="Enter Description"
+                              name="description"
+                            ></textarea>
+                          </div>
+                          <button
+                            type="submit"
+                            class="
+                              btn btn-orange
+                              text-white
+                              m-auto
+                              d-block
+                              is-status
+                              d-flex
+                              justify-content-between
+                              align-items-center
+                            "
+                            id="btnSubmit"
+                          >
+                            Save
+                          </button>
+                        </fieldset>
                       </form>
                     </div>
 
@@ -788,21 +785,25 @@
               <div class="product_slider_img">
                 <div id="vertical">
                   <div
+                    class="data-thumb-image"
                     data-thumb="/images/product/single-product/product_1.png"
                   >
                     <img src="/images/product/single-product/product_1.png" />
                   </div>
                   <div
+                    class="data-thumb-image"
                     data-thumb="/images/product/single-product/product_1.png"
                   >
                     <img src="/images/product/single-product/product_1.png" />
                   </div>
                   <div
+                    class="data-thumb-image"
                     data-thumb="/images/product/single-product/product_1.png"
                   >
                     <img src="/images/product/single-product/product_1.png" />
                   </div>
                   <div
+                    class="data-thumb-image"
                     data-thumb="/images/product/single-product/product_1.png"
                   >
                     <img src="/images/product/single-product/product_1.png" />
@@ -813,19 +814,20 @@
             <div class="col-lg-5 col-xl-4">
               <div class="s_product_text">
                 <h5>previous <span>|</span> next</h5>
-                <h3>Faded SkyBlu Denim Jeans</h3>
-                <h2>$149.99</h2>
+                <h3 class="product-name">Faded SkyBlu Denim Jeans</h3>
+                <h2 class="product-price money">149</h2>
                 <ul class="list">
                   <li>
                     <a class="active" href="#">
-                      <span>Category</span> : Household</a
-                    >
+                      <span>Category</span> :
+                      <span class="product-category"></span
+                    ></a>
                   </li>
                   <li>
                     <a href="#"> <span>Availibility</span> : In Stock</a>
                   </li>
                 </ul>
-                <p>
+                <p class="product-description">
                   First replenish living. Creepeth image image. Creeping can't,
                   won't called. Two fruitful let days signs sea together all
                   land fly subdue
