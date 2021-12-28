@@ -11,27 +11,51 @@ const Multer = multer({
 });
 
 router.get(
-  "/admin/category",
+  "/admin/categories",
   authAdminController.checkExpired,
   adminController.getCategory
 );
 
 router.post(
-  "/admin/category",
+  "/admin/categories",
   authAdminController.checkExpired,
   adminController.postCategory
 );
 
+router.post(
+  "/admin/categories/update/:id",
+  authAdminController.checkExpired,
+  adminController.updateCategory
+);
+
 router.get(
-  "/admin/brand",
+  "/admin/categories/delete/:id",
+  authAdminController.checkExpired,
+  adminController.deleteCategory
+);
+
+router.get(
+  "/admin/brands",
   authAdminController.checkExpired,
   adminController.getBrand
 );
 
 router.post(
-  "/admin/brand",
+  "/admin/brands",
   authAdminController.checkExpired,
   adminController.postBrand
+);
+
+router.post(
+  "/admin/brands/update/:id",
+  authAdminController.checkExpired,
+  adminController.updateBrand
+);
+
+router.get(
+  "/admin/brands/delete/:id",
+  authAdminController.checkExpired,
+  adminController.deleteBrand
 );
 
 router.get(
@@ -91,7 +115,7 @@ router.get(
 
 router.get(
   "/admin/admins",
-  //authAdminController.checkExpired,
+  authAdminController.checkExpired,
   adminController.getAdmin
 );
 
@@ -102,12 +126,24 @@ router.post(
   adminController.postAdmin
 );
 
+router.post(
+  "/admin/admins/update/:id",
+  authAdminController.checkExpired,
+  adminController.updateAdmin
+);
+
+router.get(
+  "/admin/admins/delete/:id",
+  authAdminController.checkExpired,
+  adminController.deleteAdmin
+);
+
 router.get("/admin/admins/:id/reset", adminController.resetPassword);
 
 router.post(
   "/admin/profile",
   authAdminController.checkExpired,
-  adminController.updateAdmin
+  adminController.updateProfile
 );
 
 module.exports = router;

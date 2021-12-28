@@ -1,23 +1,26 @@
 const mongooes = require("mongoose");
 const Schema = mongooes.Schema;
 
-const Category = new Schema({
+const Category = new Schema(
+  {
     prodTypeName: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     amount: {
-        type: Number,
-        required: true,
+      type: Number,
+      required: false,
     },
     status: {
-        type: Boolean,
-        default: true
-    }
-}, {
+      type: Boolean,
+      default: true,
+    },
+  },
+  {
     timestamps: true,
     versionKey: false,
     collection: "Category",
-});
+  }
+);
 
 module.exports = mongooes.model("Category", Category);

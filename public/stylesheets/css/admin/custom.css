@@ -1,15 +1,26 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 li {
-    list-style: none;
+  list-style: none;
 }
 
 img {
-    width: 100%;
+  width: 100%;
+}
+
+label.error {
+  background-color: rgba(220, 53, 69, 0.9);
+  color: #fff;
+  font-size: 12px;
+  border-radius: 0.25rem !important;
+  padding: 0.25rem 0.5rem;
+  position: absolute;
+  top: 100%;
+  right: 0;
 }

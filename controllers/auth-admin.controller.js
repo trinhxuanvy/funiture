@@ -24,18 +24,7 @@ exports.postLogin = async (req, res, next) => {
     } else {
       const userToken = {
         _id: user._id,
-        adminName: user.adminName,
-        phone: user.phone,
-        email: user.email,
-        address: user.address,
-        dateOfBirth: user.dateOfBirth,
-        avatarLink: user.avatarLink,
-        username: user.username,
-        password: user.password,
-        aboutMe: user.aboutMe,
         roleLevel: user.roleLevel,
-        avatarLink: user.avatarLink,
-        identityCard: user.identityCard,
       };
 
       const token = jwt.sign(userToken, process.env.KEY_JWT, {
@@ -76,7 +65,6 @@ exports.checkExpired = (req, res, next) => {
       next();
     }
   });
-
 };
 
 exports.getLogout = async (req, res, next) => {

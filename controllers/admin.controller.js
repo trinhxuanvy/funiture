@@ -6,13 +6,21 @@ const firebase = require("../services/firebase");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const bcrypt = require("bcrypt");
-const { PRODUCT_MODEL, ADMIN_MODEL } = require("../constants/modal");
+const {
+  PRODUCT_MODEL,
+  ADMIN_MODEL,
+  BRAND_MODEL,
+  CATEGORY_MODEL,
+} = require("../constants/modal");
 
 dotenv.config();
 const ITEM_PAGE = 4;
 
 exports.uploadFile = async (req, res, next) => {
-  const upload = await firebase.uploadImage(req?.files?.[0]);
+  let upload = [];
+  if (req?.files) {
+    upload = await firebase.uploadImage(req?.files?.[0]);
+  }
 
   if (upload.length) {
     res.send({ url: upload, success: true });
@@ -22,7 +30,7 @@ exports.uploadFile = async (req, res, next) => {
 };
 
 exports.getIndex = async (req, res, next) => {
-  res.render("admin/products", { pageName: "products" });
+  res.render("admin/products", { pageName: "product" });
 };
 
 exports.getProduct = async (req, res, next) => {
@@ -34,24 +42,26 @@ exports.getProduct = async (req, res, next) => {
   if (search) {
     products = await Product.find({
       prodName: { $regex: search, $options: "i" },
-    });
+    })
+      .sort({ createdAt: -1 })
+      .exec();
 
     search = "?search=" + search;
   } else {
-    products = await Product.find();
+    products = await Product.find().sort({ createdAt: -1 }).exec();
   }
 
   const getPage = Math.floor(products.length / ITEM_PAGE);
   const totalPage = products.length % ITEM_PAGE != 0 ? getPage + 1 : getPage;
   const nextPage = parseInt(page) + 1;
   const prevPage = parseInt(page) - 1;
-  const categories = await Category.find();
-  const brands = await Brand.find();
+  const categories = await Category.find({ status: true });
+  const brands = await Brand.find({ status: true });
   const numPage = products.length ? page : 0;
   products = products.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
 
   res.render("admin/products", {
-    pageName: "products",
+    pageName: "product",
     products,
     categories,
     brands,
@@ -69,8 +79,8 @@ exports.postProduct = async (req, res, next) => {
   req.session.url = req.url;
   let page = req.body.page || 1;
   let search = req.query.search || "";
-  let products = [];
-
+  let products = [],
+    productSave;
   if (!req.body.page) {
     const prodType = await Category.findById(req.body.prodTypeId);
     const brand = await Brand.findById(req.body.brandId);
@@ -123,32 +133,33 @@ exports.postProduct = async (req, res, next) => {
       soldQuantity: req.body.soldQuantity,
     };
     const product = new Product(newProduct);
-    await product.save((err, data) => {
-      if (!err) console.log(err);
-    });
+    productSave = await product.save();
   }
 
   if (search) {
     products = await Product.find({
       prodName: { $regex: search, $options: "i" },
-    });
+    })
+      .sort({ createdAt: -1 })
+      .exec();
 
     search = "?search=" + search;
   } else {
-    products = await Product.find();
+    products = await Product.find().sort({ createdAt: -1 }).exec();
+    //console.log(productSave);
   }
 
   const getPage = Math.floor(products.length / ITEM_PAGE);
   const totalPage = products.length % ITEM_PAGE != 0 ? getPage + 1 : getPage;
   const nextPage = parseInt(page) + 1;
   const prevPage = parseInt(page) - 1;
-  const categories = await Category.find();
-  const brands = await Brand.find();
+  const categories = await Category.find({ status: true });
+  const brands = await Brand.find({ status: true });
   const numPage = products.length ? page : 0; // Page Number sẽ hiển thị
   products = products.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
 
   res.render("admin/products", {
-    pageName: " products ",
+    pageName: "product",
     products,
     categories,
     brands,
@@ -179,17 +190,11 @@ exports.deleteProduct = async (req, res, next) => {
 };
 
 exports.updateProduct = async (req, res, next) => {
+  let url = "";
   const prodId = req.params.id || "";
   const prodOld = await Product.findById({ _id: prodId });
-  let url = "";
 
   switch (Object.keys(req.body)[0]) {
-    case PRODUCT_MODEL.prodName:
-      await Product.updateOne(
-        { _id: prodId },
-        { $set: { prodName: req.body.prodName } }
-      );
-      break;
     case PRODUCT_MODEL.prodTypeId:
       const prodType = await Category.findById(req.body.prodTypeId);
       await Product.updateOne(
@@ -210,96 +215,6 @@ exports.updateProduct = async (req, res, next) => {
           $set: {
             brandId: req.body.brandId,
             brandName: brand.brandName,
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.price:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            price: req.body.price,
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.soldQuantity:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            soldQuantity: req.body.soldQuantity,
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.amount:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            amount: req.body.amount,
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.color:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            color: req.body.color,
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.width:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            width: req.body.width,
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.height:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            height: req.body.height,
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.depth:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            depth: req.body.depth,
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.weight:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            weight: req.body.weight,
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.description:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            description: req.body.description,
           },
         }
       );
@@ -413,6 +328,11 @@ exports.updateProduct = async (req, res, next) => {
       );
       break;
     default:
+      let prodProperty = { $set: {} };
+      prodProperty["$set"][Object.keys(req.body)[0]] =
+        req.body[Object.keys(req.body)[0]] || "";
+
+      await Product.updateOne({ _id: prodId }, prodProperty);
       break;
   }
 
@@ -437,45 +357,276 @@ exports.getProductById = async (req, res, next) => {
 };
 
 exports.getCategory = async (req, res, next) => {
-  const categories = await Category.find();
+  let page = req.body.page || 1;
+  let search = req.query.search || "";
+  let categories = [];
 
-  res.render("admin/category", { pageName: "category", categories });
+  if (search) {
+    categories = await Category.find({
+      prodTypeName: { $regex: search, $options: "i" },
+    })
+      .sort({ createdAt: -1 })
+      .exec();
+
+    search = "?search=" + search;
+  } else {
+    categories = await Category.find().sort({ createdAt: -1 }).exec();
+  }
+
+  const getPage = Math.floor(categories.length / ITEM_PAGE);
+  const totalPage = categories.length % ITEM_PAGE != 0 ? getPage + 1 : getPage;
+  const nextPage = parseInt(page) + 1;
+  const prevPage = parseInt(page) - 1;
+  const numPage = categories.length ? page : 0;
+  categories = categories.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
+
+  res.render("admin/categories", {
+    pageName: "category",
+    categories,
+    categoryModel: CATEGORY_MODEL,
+    page,
+    totalPage,
+    nextPage,
+    prevPage,
+    numPage,
+    search,
+  });
 };
 
 exports.postCategory = async (req, res, next) => {
-  const category = new Category(req.body);
-  category.save((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("success");
-    }
-  });
+  let page = req.body.page || 1;
+  let search = req.query.search || "";
+  let categories = [];
 
-  res.redirect("/admin/category");
+  if (!req.body.page) {
+    const category = {
+      prodTypeName: req.body.prodTypeName,
+    };
+
+    const newCategory = new Category(category);
+    await newCategory.save();
+  }
+
+  if (search) {
+    categories = await Category.find({
+      prodTypeName: { $regex: search, $options: "i" },
+    })
+      .sort({ createdAt: -1 })
+      .exec();
+
+    search = "?search=" + search;
+  } else {
+    categories = await Category.find().sort({ createdAt: -1 }).exec();
+  }
+
+  const getPage = Math.floor(categories.length / ITEM_PAGE);
+  const totalPage = categories.length % ITEM_PAGE != 0 ? getPage + 1 : getPage;
+  const nextPage = parseInt(page) + 1;
+  const prevPage = parseInt(page) - 1;
+  const numPage = categories.length ? page : 0;
+  categories = categories.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
+
+  res.render("admin/categories", {
+    pageName: "category",
+    categories,
+    categoryModel: CATEGORY_MODEL,
+    page,
+    totalPage,
+    nextPage,
+    prevPage,
+    numPage,
+    search,
+  });
+};
+
+exports.updateCategory = async (req, res, next) => {
+  let url = "";
+  const prodTypeId = req.params.id || "";
+
+  switch (Object.keys(req.body)[0]) {
+    case CATEGORY_MODEL.prodTypeName:
+      await Category.updateOne(
+        { _id: prodTypeId },
+        {
+          $set: {
+            prodTypeName: req.body.prodTypeName,
+          },
+        }
+      );
+      break;
+    case CATEGORY_MODEL.amount:
+      await Category.updateOne(
+        { _id: prodTypeId },
+        {
+          $set: {
+            amount: req.body.amount,
+          },
+        }
+      );
+      break;
+    default:
+      break;
+  }
+
+  const prodTypeNew = await Category.findById({ _id: prodTypeId });
+
+  if (prodTypeNew) {
+    res.send({ prodTypeNew, success: true });
+  } else {
+    res.send({ success: false });
+  }
+};
+
+exports.deleteCategory = async (req, res, next) => {
+  const prodTypeId = req.params.id;
+  const prodTypeOld = await Category.findById({ _id: prodTypeId });
+  const update = await Category.updateOne(
+    { _id: prodTypeId },
+    { $set: { status: !prodTypeOld.status } }
+  );
+  const prodTypeNew = await Category.findById({ _id: prodTypeId });
+
+  if (prodTypeNew) {
+    res.send({ status: prodTypeNew.status, success: true });
+  } else {
+    res.send({ success: false });
+  }
 };
 
 exports.getBrand = async (req, res, next) => {
-  const brands = await Brand.find();
+  let page = req.body.page || 1;
+  let search = req.query.search || "";
+  let brands = [];
 
-  res.render("admin/brand", { pageName: "brand", brands });
+  if (search) {
+    brands = await Brand.find({
+      brandName: { $regex: search, $options: "i" },
+    })
+      .sort({ createdAt: -1 })
+      .exec();
+
+    search = "?search=" + search;
+  } else {
+    brands = await Brand.find().sort({ createdAt: -1 }).exec();
+  }
+
+  const getPage = Math.floor(brands.length / ITEM_PAGE);
+  const totalPage = brands.length % ITEM_PAGE != 0 ? getPage + 1 : getPage;
+  const nextPage = parseInt(page) + 1;
+  const prevPage = parseInt(page) - 1;
+  const numPage = brands.length ? page : 0;
+  brands = brands.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
+
+  res.render("admin/brands", {
+    pageName: "brand",
+    brands,
+    brandModel: BRAND_MODEL,
+    page,
+    totalPage,
+    nextPage,
+    prevPage,
+    numPage,
+    search,
+  });
 };
 
 exports.postBrand = async (req, res, next) => {
-  const brand = new Brand(req.body);
-  brand.save((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("success");
-    }
-  });
+  let page = req.body.page || 1;
+  let search = req.query.search || "";
+  let brands = [];
 
-  res.redirect("/admin/brand");
+  if (!req.body.page) {
+    const brand = {
+      brandName: req.body.brandName,
+    };
+
+    const newBrand = new Brand(brand);
+    await newBrand.save();
+  }
+
+  if (search) {
+    brands = await Brand.find({
+      brandName: { $regex: search, $options: "i" },
+    })
+      .sort({ createdAt: -1 })
+      .exec();
+
+    search = "?search=" + search;
+  } else {
+    brands = await Brand.find().sort({ createdAt: -1 }).exec();
+  }
+
+  const getPage = Math.floor(brands.length / ITEM_PAGE);
+  const totalPage = brands.length % ITEM_PAGE != 0 ? getPage + 1 : getPage;
+  const nextPage = parseInt(page) + 1;
+  const prevPage = parseInt(page) - 1;
+  const numPage = brands.length ? page : 0;
+  brands = brands.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
+
+  res.render("admin/brands", {
+    pageName: "brand",
+    brands,
+    brandModel: BRAND_MODEL,
+    page,
+    totalPage,
+    nextPage,
+    prevPage,
+    numPage,
+    search,
+  });
+};
+
+exports.updateBrand = async (req, res, next) => {
+  let url = "";
+  const brandId = req.params.id || "";
+
+  switch (Object.keys(req.body)[0]) {
+    case BRAND_MODEL.brandName:
+      await Brand.updateOne(
+        { _id: brandId },
+        {
+          $set: {
+            brandName: req.body.brandName,
+          },
+        }
+      );
+      break;
+    default:
+      // let brandProperty = { $set: {} };
+      // brandProperty["$set"][Object.keys(req.body)[0]] =
+      //   req.body[Object.keys(req.body)[0]] || "";
+
+      // await Brand.updateOne({ _id: brandId }, brandProperty);
+      break;
+  }
+
+  const brandNew = await Brand.findById({ _id: brandId });
+
+  if (brandNew) {
+    res.send({ brandNew, success: true });
+  } else {
+    res.send({ success: false });
+  }
+};
+
+exports.deleteBrand = async (req, res, next) => {
+  const brandId = req.params.id;
+  const brandOld = await Brand.findById({ _id: brandId });
+  const update = await Brand.updateOne(
+    { _id: brandId },
+    { $set: { status: !brandOld.status } }
+  );
+  const brandNew = await Brand.findById({ _id: brandId });
+
+  if (brandNew) {
+    res.send({ status: brandNew.status, success: true });
+  } else {
+    res.send({ success: false });
+  }
 };
 
 exports.profile = async (req, res, next) => {
-  const user = jwt.verify(
+  const getUser = jwt.verify(
     req.cookies?.token,
     process.env.KEY_JWT,
     function (err, data) {
@@ -486,6 +637,8 @@ exports.profile = async (req, res, next) => {
       }
     }
   );
+
+  let user = await Admin.findById({ _id: getUser?._id });
 
   const date = new Date(user?.dateOfBirth);
   user.dateOfBirth =
@@ -499,7 +652,7 @@ exports.profile = async (req, res, next) => {
 };
 
 exports.users = async (req, res, next) => {
-  res.render("admin/users", { pageName: "users" });
+  res.render("admin/users", { pageName: "customer" });
 };
 
 exports.getAdmin = async (req, res, next) => {
@@ -510,11 +663,13 @@ exports.getAdmin = async (req, res, next) => {
   if (search) {
     admin = await Admin.find({
       adminName: { $regex: search, $options: "i" },
-    });
+    })
+      .sort({ createdAt: -1 })
+      .exec();
 
     search = "?search=" + search;
   } else {
-    admin = await Admin.find();
+    admin = await Admin.find().sort({ createdAt: -1 }).exec();
   }
 
   const getPage = Math.floor(admin.length / ITEM_PAGE);
@@ -525,7 +680,7 @@ exports.getAdmin = async (req, res, next) => {
   admin = admin.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
 
   res.render("admin/admins", {
-    pageName: "admins",
+    pageName: "admin",
     admin,
     adminModel: ADMIN_MODEL,
     page,
@@ -544,7 +699,6 @@ exports.postAdmin = async (req, res, next) => {
 
   if (!req.body.page) {
     const urlAvatar = await firebase.uploadImage(req.files[0]);
-    const newPassword = await bcrypt.hash("Admin@" + req.body.identityCard, 12);
 
     admin = {
       adminName: req.body.adminName,
@@ -553,7 +707,7 @@ exports.postAdmin = async (req, res, next) => {
       email: req.body.email,
       address: req.body.address,
       username: req.body.username,
-      password: newPassword,
+      password: "Admin@" + req.body.identityCard,
       dateOfBirth: req.body.dateOfBirth,
       avatarLink: urlAvatar,
       aboutMe: req.body.aboutMe,
@@ -566,11 +720,13 @@ exports.postAdmin = async (req, res, next) => {
   if (search) {
     admin = await Admin.find({
       adminName: { $regex: search, $options: "i" },
-    });
+    })
+      .sort({ createdAt: -1 })
+      .exec();
 
     search = "?search=" + search;
   } else {
-    admin = await Admin.find();
+    admin = await Admin.find().sort({ createdAt: -1 }).exec();
   }
 
   const getPage = Math.floor(admin.length / ITEM_PAGE);
@@ -581,7 +737,7 @@ exports.postAdmin = async (req, res, next) => {
   admin = admin.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
 
   res.render("admin/admins", {
-    pageName: "admins",
+    pageName: "admin",
     admin,
     adminModel: ADMIN_MODEL,
     page,
@@ -593,7 +749,7 @@ exports.postAdmin = async (req, res, next) => {
   });
 };
 
-exports.updateAdmin = async (req, res, next) => {
+exports.updateProfile = async (req, res, next) => {
   const admin = jwt.verify(
     req.cookies.token,
     process.env.KEY_JWT,
@@ -640,8 +796,68 @@ exports.resetPassword = async (req, res, next) => {
   // res.redirect("/admin/login");
   const id = req.params.id;
   const admin = await Admin.findById({ _id: id });
-  const newPassword = await bcrypt.hash(admin.identityCard, 12);
+  const newPassword = await bcrypt.hash("Admin@" + admin.identityCard, 12);
 
   await Admin.updateOne({ _id: id }, { password: newPassword });
   res.redirect("/admin/admins");
+};
+
+exports.updateAdmin = async (req, res, next) => {
+  let url = "";
+  const adminId = req.params.id || "";
+
+  switch (Object.keys(req.body)[0]) {
+    case ADMIN_MODEL.avatarLink:
+      await Admin.updateOne(
+        { _id: adminId },
+        {
+          $set: {
+            avatarLink: req.body.avatarLink,
+          },
+        }
+      );
+      break;
+    default:
+      let adminProperty = { $set: {} };
+      adminProperty["$set"][Object.keys(req.body)[0]] =
+        req.body[Object.keys(req.body)[0]] || "";
+
+      await Admin.updateOne({ _id: adminId }, adminProperty);
+      break;
+  }
+
+  const adminNew = await Admin.findById({ _id: adminId });
+
+  if (adminNew) {
+    res.send({ adminNew, success: true });
+  } else {
+    res.send({ success: false });
+  }
+};
+
+exports.deleteAdmin = async (req, res, next) => {
+  const adminId = req.params.id;
+  const adminOld = await Admin.findById({ _id: adminId });
+  const isMe = jwt.verify(
+    req.cookies?.token,
+    process.env.KEY_JWT,
+    (err, data) => {
+      if (err) return [];
+      return data;
+    }
+  );
+  if (isMe._id != adminId) {
+    const update = await Admin.updateOne(
+      { _id: adminId },
+      { $set: { status: !adminOld.status } }
+    );
+  }
+
+  const adminNew = await Admin.findById({ _id: adminId });
+
+  if (adminNew && isMe._id != adminId) {
+    res.send({ status: adminNew.status, success: true });
+  } else {
+    res.send({ success: false });
+  }
 };

@@ -216,9 +216,18 @@
         height: 1000px;
         bottom: 0;
         right: 0;
-        z-index: 1000000;
+        z-index: 1;
         opacity: 0;
         cursor: pointer; }
+      .wrapper__main__content__table .table-responsive-xxl .is-status {
+        position: relative; }
+        .wrapper__main__content__table .table-responsive-xxl .is-status .form-status {
+          position: absolute;
+          right: 0.75rem;
+          top: 50%;
+          transform: translateY(-50%); }
+      .wrapper__main__content__table .table-responsive-xxl button {
+        position: relative; }
 
 @media screen and (max-width: 768px) {
   .wrapper .show {
@@ -410,7 +419,8 @@
   font-size: 12px; }
 
 .btn-orange {
-  background-color: #eb5e28; }
+  background-color: #eb5e28;
+  color: #ffffff !important; }
   .btn-orange:hover {
     background-color: #db5824; }
 

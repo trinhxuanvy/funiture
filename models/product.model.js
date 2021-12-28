@@ -10,6 +10,7 @@ const Product = new Schema(
     description: {
       type: String,
       required: false,
+      default: "",
     },
     amount: {
       type: Number,
@@ -61,22 +62,27 @@ const Product = new Schema(
     color: {
       type: String,
       required: false,
+      default: "",
     },
     width: {
       type: Number,
       required: false,
+      default: "",
     },
     height: {
       type: Number,
       required: false,
+      default: "",
     },
     depth: {
       type: Number,
       required: false,
+      default: "",
     },
     weight: {
       type: Number,
       required: false,
+      default: "",
     },
     soldQuantity: {
       type: Number,
