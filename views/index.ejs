@@ -158,13 +158,15 @@
                                                         <img src=<%=awesomeProduct.prodImage[0].imageLink %> alt="">
                                                     </a>
                                                     <div class="single_product_text">
-                                                        <h4>
-                                                            <%= awesomeProduct.prodName %>
-                                                        </h4>
-                                                        <h3 class="money">
-                                                            <%= awesomeProduct.price %>
-                                                        </h3>
-                                                        <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                                        <a href="/products/<%= awesomeProduct._id %>" style="visibility: initial; opacity: 1">
+                                                            <h4>
+                                                                <%= awesomeProduct.prodName %>
+                                                            </h4>
+                                                            <h3 class="money">
+                                                                <%= awesomeProduct.price %>
+                                                            </h3>
+                                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                                            </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -181,6 +183,7 @@
                                                             <img src=<%=awesomeProduct.prodImage[0].imageLink %> alt="">
                                                         </a>
                                                         <div class="single_product_text">
+                                                            <a href="/products/<%= awesomeProduct._id %>" style="visibility: initial; opacity: 1">
                                                             <h4>
                                                                 <%= awesomeProduct.prodName %>
                                                             </h4>
@@ -188,6 +191,7 @@
                                                                 <%= awesomeProduct.price %>
                                                             </h3>
                                                             <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                                            </a>
                                                         </div>
                                                     </a>
                                                 </div>
@@ -254,9 +258,15 @@
                                             <img src=<%=bestSeller.prodImage[0].imageLink %> alt="">
                                         </a>
                                         <div class="single_product_text">
-                                            <h4><%= bestSeller.prodName %> </h4>
-                                            <h3 class="money"><%= bestSeller.price %></h3>
-                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                            <a href="/products/<%= bestSeller._id %>" style="visibility: initial; opacity: 1">
+                                                <h4>
+                                                    <%= bestSeller.prodName %>
+                                                </h4>
+                                                <h3 class="money">
+                                                    <%= bestSeller.price %>
+                                                </h3>
+                                                <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                                </a>
                                         </div>
                                     </div>
                                 <% }) %>
