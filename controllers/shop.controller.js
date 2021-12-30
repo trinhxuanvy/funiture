@@ -27,6 +27,15 @@ exports.categories = async (req, res, next) => {
       }
     }
   );
+  var cartTotal = 0;
+  if(user != null)
+  {
+    cartTotal = user.cart.totalQuantity;
+  }
+  else
+  {
+    cartTotal = req.session.totalQuantity;
+  }
 
   //Biến truyền qua view
   const category = {
@@ -36,6 +45,7 @@ exports.categories = async (req, res, next) => {
     allCategories: 0,
     allBrands: 0,
     user,
+    cartTotal: 0,
   };
 
   //Set số sản phẩm trên một trang, và lấy trang hiện tại
@@ -61,12 +71,35 @@ exports.categories = async (req, res, next) => {
 
   category.user = user;
 
+  category.cartTotal = cartTotal;
 
   res.render("categories", category);
 };
 
 exports.cart = async (req, res, next) => {
-  res.render("cart");
+  const user = jwt.verify(
+    req.cookies?.token,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+
+  var cartTotal = 0;
+  if(user != null)
+  {
+    cartTotal = user.cart.totalQuantity;
+  }
+  else
+  {
+    cartTotal = req.session.totalQuantity;
+  }
+
+  res.render("cart", { user, cartTotal });
 };
 
 exports.signup = async (req, res, next) => {
@@ -81,7 +114,17 @@ exports.signup = async (req, res, next) => {
       }
     }
   );
-  res.render("signup", {user});
+
+  var cartTotal = 0;
+  if(user != null)
+  {
+    cartTotal = user.cart.totalQuantity;
+  }
+  else
+  {
+    cartTotal = req.session.totalQuantity;
+  }
+  res.render("signup", { user, cartTotal });
 };
 
 exports.singleProduct = async (req, res, next) => {
@@ -100,7 +143,17 @@ exports.checkout = async (req, res, next) => {
       }
     }
   );
-  res.render("checkout", {user});
+
+  var cartTotal = 0;
+  if(user != null)
+  {
+    cartTotal = user.cart.totalQuantity;
+  }
+  else
+  {
+    cartTotal = req.session.totalQuantity;
+  }
+  res.render("checkout", { user, cartTotal });
 };
 
 //render trang chu
@@ -116,12 +169,21 @@ exports.getIndex = async (req, res, next) => {
       }
     }
   );
+  var cartTotal = 0;
+  if(user != null)
+  {
+    cartTotal = user.cart.totalQuantity;
+  }
+  else
+  {
+    cartTotal = req.session.totalQuantity;
+  }
 
   const bestSellers = await Product.find()
     .sort({ hasSold: -1 })
     .limit(10)
     .exec();
-    
+
   const awesomeProducts = await Product.find()
     .sort({ viewCount: -1 })
     .limit(12)
@@ -130,7 +192,8 @@ exports.getIndex = async (req, res, next) => {
   res.render("index", {
     awesomeProducts: awesomeProducts,
     bestSellers: bestSellers,
-    user: user
+    user: user,
+    cartTotal: cartTotal
   });
 };
 
@@ -146,19 +209,25 @@ exports.getProduct = async (req, res, next) => {
       }
     }
   );
+
+  var cartTotal = 0;
+  if(user != null)
+  {
+    cartTotal = user.cart.totalQuantity;
+  }
+  else
+  {
+    cartTotal = req.session.totalQuantity;
+  }
+
   const prodId = req.params.id;
   const product = await Product.findById({ _id: prodId });
   const bestSellers = await Product.find({ status: true }).exec();
-  return res.render("products", {
-    product: product,
-    bestSellers: bestSellers,
-    user: user,
-  });
+  return res.render("products", {product, bestSellers, user, cartTotal});
 };
 
 exports.postAccount = async (req, res, next) => {
   req.session.url = req.url;
-
 
   res.render("signup", {
     pageName: " signup ",
@@ -166,17 +235,14 @@ exports.postAccount = async (req, res, next) => {
 };
 
 exports.getUserbyUserName = async (req, res, next) => {
-   const userName = req.params.username;
-   const findUser = await Customer.findOne( {username:userName} )
-   if(findUser)
-   {
-     res.send(true);
-   }
-   else
-   {
-     res.send(false);
-   }
-}
+  const userName = req.params.username;
+  const findUser = await Customer.findOne({ username: userName });
+  if (findUser) {
+    res.send(true);
+  } else {
+    res.send(false);
+  }
+};
 
 exports.postCustomer = async (req, res, next) => {
   req.session.url = req.url;
@@ -203,7 +269,7 @@ exports.profile = async (req, res, next) => {
     process.env.KEY_JWT,
     function (err, data) {
       if (err) {
-        return {};
+        return null;
       } else {
         return data;
       }
@@ -219,4 +285,100 @@ exports.profile = async (req, res, next) => {
     user,
     cusModel: CUSTOMER_MODEL,
   });
+};
+
+exports.addCard = async (req, res, next) => {
+  const user = jwt.verify(
+    req.cookies?.token,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+
+  const product = await Product.findById(req.params.id);
+
+  const newCardDetail = {
+    productId: product._id,
+    productName: product.prodName,
+    productImg: product.prodImage[0].imageLink,
+    price: product.price,
+    amount: 1,
+  };
+
+  if (user != null) {
+    var flag = false;
+    for (let i = 0; i < user.cart.cartDetails.length; i++) {
+      if (user.cart.cartDetails[i].productId == newCardDetail.productId) {
+        user.cart.cartDetails[i].amount++;
+        user.cart.cartDetails[i].price =
+          product.price * user.cart.cartDetails[i].amount;
+        flag = true;
+
+        break;
+      }
+    }
+    user.cart.totalQuantity++;
+
+    if (!flag) {
+      user.cart.cartDetails.push(newCardDetail);
+    }
+
+
+    await Customer.updateOne({ _id: user._id }, { cart: user.cart });
+
+    const userToken = {
+      _id: user._id,
+      cusName: user.cusName,
+      phone: user.phone,
+      email: user.email,
+      dateOfBirth: user.dateOfBirth,
+      avatarLink: user.avatarLink,
+      username: user.username,
+      password: user.password,
+      cart: user.cart,
+    };
+
+    const token = jwt.sign(userToken, process.env.KEY_JWT, {
+      algorithm: "HS256",
+      expiresIn: "1h",
+    });
+
+    res.cookie("token", token);
+    res.send({amount: user.cart.totalQuantity});
+  } 
+  else {
+    var cartDetails = [];
+    var totalQuantity = req.session.totalQuantity || 0;
+    console.log(totalQuantity);
+    var flag = false;
+    console.log(req.session.cartDetails);
+    if (req.session?.cartDetails) {
+      cartDetails = req.session.cartDetails;
+      for (let i = 0; i < cartDetails.length; i++) {
+        if (cartDetails[i].productId == newCardDetail.productId) {
+          cartDetails[i].amount++;
+          cartDetails[i].price = product.price * cartDetails[i].amount;
+          flag = true;
+          console.log("okne");
+          break;
+        }
+      }
+    }
+    if (!flag) {
+      //console.log("okla");
+      cartDetails.push(newCardDetail);
+    }
+
+    //console.log(cartDetails);
+    req.session.totalQuantity = totalQuantity + 1;
+    req.session.cartDetails = cartDetails;
+    res.send({amount: req.session.totalQuantity});
+    //console.log(req.session.cartDetails);
+  }
+  //res.status(200).json({status: 'success'})
 };

@@ -79,22 +79,23 @@
             font-size: 18px;
         }
 
-        a {
-            color: $primary_color;
+        button {
+            color: $white;
             text-transform: uppercase;
+            border-radius: 50px;
+            width: 200px;
             font-size: 18px;
             font-weight: 500;
             display: block;
-            margin-top: 10px;
             opacity: 0;
             visibility: hidden;
+            padding: 4px 0;
+            margin: 10px auto 0;
+            background-color: $primary_color;
+            border: none;
             @include transform_time(0.5s);
-
-            i {
-                float: right;
-                font-size: 18px;
-                line-height: 26px;
-                color: $black_color;
+            &:hover {
+                box-shadow: 0px 0px 16px rgba($primary_color, 0.5);
             }
         }
     }
@@ -106,7 +107,7 @@
             padding: 32px 32px;
         }
 
-        a {
+        button {
             opacity: 1;
             visibility: visible;
         }
