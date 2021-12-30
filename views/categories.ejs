@@ -149,10 +149,11 @@
                             <div class="row align-items-center latest_product_inner">
                                 <% products.forEach(product => { %>
                                     <div class="col-lg-4 col-sm-6">
+                                        <a href="./products/<%= product._id %> ">
                                         <div class="single_product_item">
-                                            <a href="./products/<%= product._id %> ">
+
                                                 <img src="<%= product.prodImage[1].imageLink %> " alt="">
-                                            </a>
+
                                             <div class="single_product_text">
                                                 <h4>
                                                     <%= product.prodName %>
@@ -162,6 +163,7 @@
                                                 <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
                                             </div>
                                         </div>
+                                    </a>
                                     </div>
                                 <% }) %>
                                 

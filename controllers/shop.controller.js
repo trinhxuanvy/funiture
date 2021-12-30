@@ -165,6 +165,19 @@ exports.postAccount = async (req, res, next) => {
   });
 };
 
+exports.getUserbyUserName = async (req, res, next) => {
+   const userName = req.params.username;
+   const findUser = await Customer.findOne( {username:userName} )
+   if(findUser)
+   {
+     res.send(true);
+   }
+   else
+   {
+     res.send(false);
+   }
+}
+
 exports.postCustomer = async (req, res, next) => {
   req.session.url = req.url;
   const newPassword = await bcrypt.hash(req.body.password, 12);

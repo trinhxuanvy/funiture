@@ -9,6 +9,8 @@ router.get("/index", shopController.getIndex);
 
 router.get("/signup", shopController.signup);
 
+router.get("/signup/:username", shopController.getUserbyUserName);
+
 router.get("/profile", shopController.profile);
 
 router.post(
