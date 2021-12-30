@@ -124,7 +124,7 @@ exports.getIndex = async (req, res, next) => {
     
   const awesomeProducts = await Product.find()
     .sort({ viewCount: -1 })
-    .limit(10)
+    .limit(12)
     .exec();
 
   res.render("index", {
