@@ -19,6 +19,16 @@ exports.getLogin = async (req, res, next) => {
         }
       );
 
+      var cartTotal = 0;
+      if(user != null)
+      {
+        cartTotal = user.cart.totalQuantity;
+      }
+      else
+      {
+        cartTotal = req.session.totalQuantity;
+      }
+
   const message = req.cookies?.message || "",
     username = "",
     password = "";
@@ -26,7 +36,7 @@ exports.getLogin = async (req, res, next) => {
     res.clearCookie("message");
   }
   console.log(user, "login");
-  res.render("login", { message, username, password, user });
+  res.render("login", { message, username, password, user, cartTotal });
 };
 
 exports.postLogin = async (req, res, next) => {

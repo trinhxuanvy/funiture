@@ -447,4 +447,43 @@
     });
   });
 
+  $(function () {
+    const btnAddCart = $(".add_cart");
+    const badge = $("#badge");
+
+    for (let i = 0; i < btnAddCart.length; i++) {
+      $(btnAddCart[i]).click(function (e) {
+        e.preventDefault();
+
+        const url = new URL(window.location.href);
+        // statusLoading({
+        //   posLoading: this,
+        //   isCompleted: false,
+        //   isSuccess: false,
+        // });
+
+        $.ajax({
+          method: "get",
+          contentType: "application/json",
+          url:
+            url.origin +
+            "/cart/add/product/" +
+            $(btnAddCart[i]).val(),
+          dataType: "json",
+          success: function (response) {
+            // statusLoading({
+            //   posLoading: btnAddCart[i],
+            //   isCompleted: true,
+            //   isSuccess: true,
+            // });
+            console.log(response);
+            if (response.amount) {
+              $(badge[0]).html(response.amount);
+            }
+          },
+        });
+      });
+    }
+  });
+
 })(jQuery);

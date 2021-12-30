@@ -22,9 +22,9 @@ router.post(
 
 router.get("/categories/:page?", shopController.categories);
 
-router.get("/cart", (req, res, next) => {
-  res.render("cart");
-});
+router.get("/cart", shopController.cart);
+
+router.get("/cart/add/product/:id", shopController.addCard);
 
 router.get("/products/:id", shopController.getProduct);
 

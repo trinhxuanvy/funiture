@@ -36,7 +36,7 @@ const Customer = new Schema({
         default: true
     },
     cart: {
-        cartDetail: [{
+        cartDetails: [{
             productId: {
                 type: Schema.Types.ObjectId,
                 required: true,
@@ -45,9 +45,14 @@ const Customer = new Schema({
                 type: String,
                 required: true,
             },
+            productImg: {
+                type: String,
+                required: true,
+            },
             amount: {
                 type: Number,
                 required: false,
+                default: 1
             },
             price: {
                 type: Number,
@@ -56,11 +61,13 @@ const Customer = new Schema({
         }, ],
         totalQuantity: {
             type: Number,
+            default: 0,
             required: false,
         },
         totalPrice: {
             type: Number,
             required: false,
+            default: 0,
         },
     },
 }, {

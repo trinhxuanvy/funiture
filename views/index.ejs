@@ -165,8 +165,9 @@
                                                             <h3 class="money">
                                                                 <%= awesomeProduct.price %>
                                                             </h3>
-                                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                                            </a>
+                                                        </a>
+                                                        <button value="<%= awesomeProduct._id %>" class="add_cart">+ add to cart
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -179,21 +180,20 @@
                                             <div class="col-lg-3 col-sm-6">
                                                 <div class="single_product_item">
                                                     <a href="products/<%= awesomeProduct._id %> ">
-                                                        <a href="products/<%= awesomeProduct._id %> ">
-                                                            <img src=<%=awesomeProduct.prodImage[0].imageLink %> alt="">
-                                                        </a>
-                                                        <div class="single_product_text">
-                                                            <a href="/products/<%= awesomeProduct._id %>" style="visibility: initial; opacity: 1">
+                                                        <img src=<%=awesomeProduct.prodImage[0].imageLink %> alt="">
+                                                    </a>
+                                                    <div class="single_product_text">
+                                                        <a href="/products/<%= awesomeProduct._id %>" style="visibility: initial; opacity: 1">
                                                             <h4>
                                                                 <%= awesomeProduct.prodName %>
                                                             </h4>
                                                             <h3 class="money">
                                                                 <%= awesomeProduct.price %>
                                                             </h3>
-                                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                                            </a>
-                                                        </div>
-                                                    </a>
+                                                        </a>
+                                                        <button value="<%= awesomeProduct._id %>" class="add_cart">+ add to cart
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         <% }) %>
@@ -265,8 +265,8 @@
                                                 <h3 class="money">
                                                     <%= bestSeller.price %>
                                                 </h3>
-                                                <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                                </a>
+                                            </a>
+                                            <button value="<%= bestSeller._id %>" class="add_cart">+ add to cart</button>
                                         </div>
                                     </div>
                                 <% }) %>
