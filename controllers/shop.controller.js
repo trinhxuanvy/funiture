@@ -28,12 +28,9 @@ exports.categories = async (req, res, next) => {
     }
   );
   var cartTotal = 0;
-  if(user != null)
-  {
+  if (user != null) {
     cartTotal = user.cart.totalQuantity;
-  }
-  else
-  {
+  } else {
     cartTotal = req.session.totalQuantity;
   }
 
@@ -90,12 +87,9 @@ exports.cart = async (req, res, next) => {
   );
 
   var cartTotal = 0;
-  if(user != null)
-  {
+  if (user != null) {
     cartTotal = user.cart.totalQuantity;
-  }
-  else
-  {
+  } else {
     cartTotal = req.session.totalQuantity;
   }
 
@@ -116,12 +110,9 @@ exports.signup = async (req, res, next) => {
   );
 
   var cartTotal = 0;
-  if(user != null)
-  {
+  if (user != null) {
     cartTotal = user.cart.totalQuantity;
-  }
-  else
-  {
+  } else {
     cartTotal = req.session.totalQuantity;
   }
   res.render("signup", { user, cartTotal });
@@ -145,12 +136,9 @@ exports.checkout = async (req, res, next) => {
   );
 
   var cartTotal = 0;
-  if(user != null)
-  {
+  if (user != null) {
     cartTotal = user.cart.totalQuantity;
-  }
-  else
-  {
+  } else {
     cartTotal = req.session.totalQuantity;
   }
   res.render("checkout", { user, cartTotal });
@@ -170,12 +158,9 @@ exports.getIndex = async (req, res, next) => {
     }
   );
   var cartTotal = 0;
-  if(user != null)
-  {
+  if (user != null) {
     cartTotal = user.cart.totalQuantity;
-  }
-  else
-  {
+  } else {
     cartTotal = req.session.totalQuantity;
   }
 
@@ -193,7 +178,7 @@ exports.getIndex = async (req, res, next) => {
     awesomeProducts: awesomeProducts,
     bestSellers: bestSellers,
     user: user,
-    cartTotal: cartTotal
+    cartTotal: cartTotal,
   });
 };
 
@@ -211,19 +196,16 @@ exports.getProduct = async (req, res, next) => {
   );
 
   var cartTotal = 0;
-  if(user != null)
-  {
+  if (user != null) {
     cartTotal = user.cart.totalQuantity;
-  }
-  else
-  {
+  } else {
     cartTotal = req.session.totalQuantity;
   }
 
   const prodId = req.params.id;
   const product = await Product.findById({ _id: prodId });
   const bestSellers = await Product.find({ status: true }).exec();
-  return res.render("products", {product, bestSellers, user, cartTotal});
+  return res.render("products", { product, bestSellers, user, cartTotal });
 };
 
 exports.postAccount = async (req, res, next) => {
@@ -246,14 +228,13 @@ exports.getUserbyUserName = async (req, res, next) => {
 
 exports.postCustomer = async (req, res, next) => {
   req.session.url = req.url;
-  const newPassword = await bcrypt.hash(req.body.password, 12);
 
   const newCustomer = {
     cusName: req.body.fullName,
     phone: req.body.phone,
     email: req.body.email,
     username: req.body.username,
-    password: newPassword,
+    password: req.body.password,
     status: true,
   };
   const customer = new Customer(newCustomer);
@@ -328,7 +309,6 @@ exports.addCard = async (req, res, next) => {
       user.cart.cartDetails.push(newCardDetail);
     }
 
-
     await Customer.updateOne({ _id: user._id }, { cart: user.cart });
 
     const userToken = {
@@ -349,9 +329,8 @@ exports.addCard = async (req, res, next) => {
     });
 
     res.cookie("token", token);
-    res.send({amount: user.cart.totalQuantity});
-  } 
-  else {
+    res.send({ amount: user.cart.totalQuantity });
+  } else {
     var cartDetails = [];
     var totalQuantity = req.session.totalQuantity || 0;
     console.log(totalQuantity);
@@ -377,7 +356,7 @@ exports.addCard = async (req, res, next) => {
     //console.log(cartDetails);
     req.session.totalQuantity = totalQuantity + 1;
     req.session.cartDetails = cartDetails;
-    res.send({amount: req.session.totalQuantity});
+    res.send({ amount: req.session.totalQuantity });
     //console.log(req.session.cartDetails);
   }
   //res.status(200).json({status: 'success'})

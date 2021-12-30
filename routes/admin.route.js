@@ -108,10 +108,36 @@ router.get(
 );
 
 router.get(
-  "/admin/users",
-  //authAdminController.checkExpired,
-  adminController.users
+  "/admin/customers",
+  authAdminController.checkExpired,
+  adminController.getCustomer
 );
+
+router.post(
+  "/admin/customers",
+  authAdminController.checkExpired,
+  adminController.postCustomer
+);
+
+router.post(
+  "/admin/customers/update/:id",
+  authAdminController.checkExpired,
+  adminController.updateCustomer
+);
+
+router.get(
+  "/admin/customers/delete/:id",
+  authAdminController.checkExpired,
+  adminController.deleteCustomer
+);
+
+router.get(
+  "/admin/customers/:username",
+  authAdminController.checkExpired,
+  adminController.getCustomerbyUsername
+);
+
+router.get("/admin/customers/:id/reset", adminController.resetPasswordCustomer);
 
 router.get(
   "/admin/admins",
@@ -138,7 +164,13 @@ router.get(
   adminController.deleteAdmin
 );
 
-router.get("/admin/admins/:id/reset", adminController.resetPassword);
+router.get(
+  "/admin/admins/:username",
+  authAdminController.checkExpired,
+  adminController.getAdminbyUsername
+);
+
+router.get("/admin/admins/:id/reset", adminController.resetPasswordAdmin);
 
 router.post(
   "/admin/profile",
