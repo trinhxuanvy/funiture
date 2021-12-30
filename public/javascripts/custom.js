@@ -5,18 +5,16 @@
     $(".datetimepicker").datepicker();
   });
 
-  $('.popup-youtube, .popup-vimeo').magnificPopup({
+  $(".popup-youtube, .popup-vimeo").magnificPopup({
     // disableOn: 700,
-    type: 'iframe',
-    mainClass: 'mfp-fade',
+    type: "iframe",
+    mainClass: "mfp-fade",
     removalDelay: 160,
     preloader: false,
-    fixedContentPos: false
+    fixedContentPos: false,
   });
 
-
-
-  var review = $('.textimonial_iner');
+  var review = $(".textimonial_iner");
   if (review.length) {
     review.owlCarousel({
       items: 1,
@@ -29,18 +27,17 @@
       responsive: {
         0: {
           margin: 15,
-
         },
         600: {
           margin: 10,
         },
         1000: {
           margin: 10,
-        }
-      }
+        },
+      },
     });
   }
-  var best_product_slider = $('.best_product_slider');
+  var best_product_slider = $(".best_product_slider");
   if (best_product_slider.length) {
     best_product_slider.owlCarousel({
       items: 4,
@@ -55,29 +52,29 @@
         0: {
           margin: 15,
           items: 1,
-          nav: false
+          nav: false,
         },
         576: {
           margin: 15,
           items: 2,
-          nav: false
+          nav: false,
         },
         768: {
           margin: 30,
           items: 3,
-          nav: true
+          nav: true,
         },
         991: {
           margin: 30,
           items: 4,
-          nav: true
-        }
-      }
+          nav: true,
+        },
+      },
     });
   }
 
   //product list slider
-  var product_list_slider = $('.product_list_slider');
+  var product_list_slider = $(".product_list_slider");
   if (product_list_slider.length) {
     product_list_slider.owlCarousel({
       items: 1,
@@ -93,19 +90,19 @@
         0: {
           margin: 15,
           nav: false,
-          items: 1
+          items: 1,
         },
         600: {
           margin: 15,
           items: 1,
-          nav: false
+          nav: false,
         },
         768: {
           margin: 30,
           nav: true,
-          items: 1
-        }
-      }
+          items: 1,
+        },
+      },
     });
   }
 
@@ -125,52 +122,50 @@
   //   });
   // }
 
-  if ($('.img-gal').length > 0) {
-    $('.img-gal').magnificPopup({
-      type: 'image',
+  if ($(".img-gal").length > 0) {
+    $(".img-gal").magnificPopup({
+      type: "image",
       gallery: {
-        enabled: true
-      }
+        enabled: true,
+      },
     });
   }
 
-
   //single banner slider
-  $('.banner_slider').on('initialized.owl.carousel changed.owl.carousel', function (e) {
-    function pad2(number) {
-      return (number < 10 ? '0' : '') + number
-    }
-    var carousel = e.relatedTarget;
-    $('.slider-counter').text(pad2(carousel.current()));
-
-  }).owlCarousel({
-    items: 1,
-    loop: true,
-    dots: false,
-    autoplay: true,
-    autoplayHoverPause: true,
-    autoplayTimeout: 5000,
-    nav: true,
-    navText: ["next", "previous"],
-    smartSpeed: 1000,
-    responsive: {
-      0: {
-        nav: false
-      },
-      600: {
-        nav: false
-      },
-      768: {
-        nav: true
+  $(".banner_slider")
+    .on("initialized.owl.carousel changed.owl.carousel", function (e) {
+      function pad2(number) {
+        return (number < 10 ? "0" : "") + number;
       }
-    }
-  });
-
-
+      var carousel = e.relatedTarget;
+      $(".slider-counter").text(pad2(carousel.current()));
+    })
+    .owlCarousel({
+      items: 1,
+      loop: true,
+      dots: false,
+      autoplay: true,
+      autoplayHoverPause: true,
+      autoplayTimeout: 5000,
+      nav: true,
+      navText: ["next", "previous"],
+      smartSpeed: 1000,
+      responsive: {
+        0: {
+          nav: false,
+        },
+        600: {
+          nav: false,
+        },
+        768: {
+          nav: true,
+        },
+      },
+    });
 
   // niceSelect js code
   $(document).ready(function () {
-    $('select').niceSelect();
+    $("select").niceSelect();
   });
 
   // menu fixed js code
@@ -183,40 +178,40 @@
   //   }
   // });
 
-
-  $('.counter').counterUp({
-    time: 2000
+  $(".counter").counterUp({
+    time: 2000,
   });
 
-  $('.slider').slick({
+  $(".slider").slick({
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
     speed: 300,
     infinite: true,
-    asNavFor: '.slider-nav-thumbnails',
+    asNavFor: ".slider-nav-thumbnails",
     autoplay: true,
     pauseOnFocus: true,
     dots: true,
   });
 
-  $('.slider-nav-thumbnails').slick({
+  $(".slider-nav-thumbnails").slick({
     slidesToShow: 3,
     slidesToScroll: 1,
-    asNavFor: '.slider',
+    asNavFor: ".slider",
     focusOnSelect: true,
     infinite: true,
     prevArrow: false,
     nextArrow: false,
     centerMode: true,
-    responsive: [{
-      breakpoint: 480,
-      settings: {
-        centerMode: false,
-      }
-    }]
+    responsive: [
+      {
+        breakpoint: 480,
+        settings: {
+          centerMode: false,
+        },
+      },
+    ],
   });
-
 
   // Search Toggle
   $("#search_input_box").hide();
@@ -225,31 +220,32 @@
     $("#search_input").focus();
   });
   $("#close_search").on("click", function () {
-    $('#search_input_box').slideUp(500);
+    $("#search_input_box").slideUp(500);
   });
 
-  //------- Mailchimp js --------//  
+  //------- Mailchimp js --------//
   function mailChimp() {
-    $('#mc_embed_signup').find('form').ajaxChimp();
+    $("#mc_embed_signup").find("form").ajaxChimp();
   }
   mailChimp();
 
-  //------- makeTimer js --------//  
+  //------- makeTimer js --------//
   function makeTimer() {
-
-    //		var endTime = new Date("29 April 2018 9:56:00 GMT+01:00");	
+    //		var endTime = new Date("29 April 2018 9:56:00 GMT+01:00");
     var endTime = new Date("27 Sep 2019 12:56:00 GMT+01:00");
-    endTime = (Date.parse(endTime) / 1000);
+    endTime = Date.parse(endTime) / 1000;
 
     var now = new Date();
-    now = (Date.parse(now) / 1000);
+    now = Date.parse(now) / 1000;
 
     var timeLeft = endTime - now;
 
     var days = Math.floor(timeLeft / 86400);
-    var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
-    var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600)) / 60);
-    var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+    var hours = Math.floor((timeLeft - days * 86400) / 3600);
+    var minutes = Math.floor((timeLeft - days * 86400 - hours * 3600) / 60);
+    var seconds = Math.floor(
+      timeLeft - days * 86400 - hours * 3600 - minutes * 60
+    );
 
     if (hours < "10") {
       hours = "0" + hours;
@@ -265,52 +261,46 @@
     $("#hours").html("<span>Hours</span>" + hours);
     $("#minutes").html("<span>Minutes</span>" + minutes);
     $("#seconds").html("<span>Seconds</span>" + seconds);
-
   }
-// click counter js
-(function() {
- 
-  window.inputNumber = function(el) {
+  // click counter js
+  (function () {
+    window.inputNumber = function (el) {
+      var min = el.attr("min") || false;
+      var max = el.attr("max") || false;
 
-    var min = el.attr('min') || false;
-    var max = el.attr('max') || false;
+      var els = {};
 
-    var els = {};
+      els.dec = el.prev();
+      els.inc = el.next();
 
-    els.dec = el.prev();
-    els.inc = el.next();
+      el.each(function () {
+        init($(this));
+      });
 
-    el.each(function() {
-      init($(this));
-    });
+      function init(el) {
+        els.dec.on("click", decrement);
+        els.inc.on("click", increment);
 
-    function init(el) {
+        function decrement() {
+          var value = el[0].value;
+          value--;
+          if (!min || value >= min) {
+            el[0].value = value;
+          }
+        }
 
-      els.dec.on('click', decrement);
-      els.inc.on('click', increment);
-
-      function decrement() {
-        var value = el[0].value;
-        value--;
-        if(!min || value >= min) {
-          el[0].value = value;
+        function increment() {
+          var value = el[0].value;
+          value++;
+          if (!max || value <= max) {
+            el[0].value = value++;
+          }
         }
       }
+    };
+  })();
 
-      function increment() {
-        var value = el[0].value;
-        value++;
-        if(!max || value <= max) {
-          el[0].value = value++;
-        }
-      }
-    }
-  }
-})();
-
-inputNumber($('.input-number'));
-
-
+  inputNumber($(".input-number"));
 
   setInterval(function () {
     makeTimer();
@@ -318,55 +308,143 @@ inputNumber($('.input-number'));
 
   // click counter js
 
-
   // var a = 0;
   // $('.increase').on('click', function(){
-     
-    
 
   //   console.log(  $(this).innerHTML='Product Count: '+ a++ );
   // });
 
- var product_overview = $('#vertical');
- if (product_overview.length) {
-   product_overview.lightSlider({
-     gallery: true,
-     item: 1,
-     vertical: true,
-     verticalHeight: 450,
-     thumbItem: 3,
-     slideMargin: 0,
-     speed: 600,
-     autoplay: true,
-     responsive: [
-       {
-         breakpoint: 991,
-         settings: {
-           item: 1,
-         },
-       },
-       {
-         breakpoint: 576,
-         settings: {
-           item: 1,
-           slideMove: 1,
-           verticalHeight: 350,
-         },
-       },
-     ],
-   });
- }
+  var product_overview = $("#vertical");
+  if (product_overview.length) {
+    product_overview.lightSlider({
+      gallery: true,
+      item: 1,
+      vertical: true,
+      verticalHeight: 450,
+      thumbItem: 3,
+      slideMargin: 0,
+      speed: 600,
+      autoplay: true,
+      responsive: [
+        {
+          breakpoint: 991,
+          settings: {
+            item: 1,
+          },
+        },
+        {
+          breakpoint: 576,
+          settings: {
+            item: 1,
+            slideMove: 1,
+            verticalHeight: 350,
+          },
+        },
+      ],
+    });
+  }
 
- // handle fix money
- $(function () {
-   const money = $(".money");
+  // handle fix money
+  $(function () {
+    const money = $(".money");
 
-   for (let i = 0; i < money.length; i++) {
-     money[i].innerHTML = new Intl.NumberFormat("en-US", {
-       style: "currency",
-       currency: "USD",
-     }).format(money[i].innerHTML);
-   }
- });
+    for (let i = 0; i < money.length; i++) {
+      money[i].innerHTML = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(money[i].innerHTML);
+    }
+  });
 
-}(jQuery));
+  jQuery.validator.addMethod('valid_phone', function (value) {
+    var regex = /^[0-9]*$/gm;
+    return value.trim().match(regex);
+  });
+
+  jQuery.validator.addMethod('valid_username', function (value) {
+    const url = new URL(window.location.href);
+    const txtUsername = $("#username_signup")
+        var data = $.ajax({
+          method: "get",
+          contentType: "application/json",
+          async: false,
+          url:
+            url.origin +
+            url.pathname +
+            "/" +
+            $(txtUsername[0]).val() +
+            url.search,
+          dataType: "json",
+          success: function (response) {
+            return response;
+          },
+        });
+    return !data.responseJSON;
+  });
+
+  // Xử lý valide signup
+  $(function () {
+    const btnSubmit = $("#btnSubmit");
+    $(btnSubmit[0]).click(function (e) {
+      e.preventDefault();
+      console.log("oke");
+      $("#formSubmit").validate({
+        rules: {
+          email: {
+            required: true,
+            email: true,
+          },
+          phone: {
+            valid_phone: true,
+            minlength: 10,
+            maxlength: 10,
+          },
+          username: {
+            valid_username: true,
+          },
+          password: {
+            required: true,
+            minlength: 8,
+          },
+          confirmPassword: {
+            required: true,
+            minlength: 8,
+            equalTo: "#password",
+          },
+        },
+        messages: {
+          email: {
+            required: "Please enter email",
+          },
+          username: {
+            required: "Please enter username",
+            valid_username: "Username already exists"
+          },
+          phone: {
+            required: "Please enter phone",
+            minlength: "Please enter min-length 10 numbers",
+            maxlength: "Please enter max-length 10 numbers",
+            valid_phone: "Please enter right phonenumber"
+          },
+          confirmPassword: {
+            required: "Please enter confirm password",
+            equalTo: "Password doesn't match",
+            minlength: "Please enter atleast 8 characters",
+          },
+          password: {
+            required: "Please enter password",
+            minlength: "Please enter atleast 8 characters",
+          },
+        },
+      });
+      if ($("#formSubmit").valid()) {
+        $(this).find("div").remove();
+        $(this).append(
+          `<div class="form-status" style="margin-left: 8px;"><div class="spinner-border spinner-border-sm"></div></div>`
+        );
+        $("#formSubmit").submit();
+      }
+    });
+  });
+
+})(jQuery);
