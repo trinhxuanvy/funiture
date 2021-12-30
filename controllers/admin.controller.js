@@ -1,6 +1,7 @@
 const Admin = require("../models/admin.model");
 const Category = require("../models/category.model");
 const Product = require("../models/product.model");
+const Customer = require("../models/customer.model");
 const Brand = require("../models/brand.model");
 const firebase = require("../services/firebase");
 const jwt = require("jsonwebtoken");
@@ -11,6 +12,7 @@ const {
   ADMIN_MODEL,
   BRAND_MODEL,
   CATEGORY_MODEL,
+  CUSTOMER_MODEL,
 } = require("../constants/modal");
 
 dotenv.config();
@@ -651,8 +653,158 @@ exports.profile = async (req, res, next) => {
   });
 };
 
-exports.users = async (req, res, next) => {
-  res.render("admin/users", { pageName: "customer" });
+exports.getCustomer = async (req, res, next) => {
+  let page = req.body.page || 1;
+  let search = req.query.search || "";
+  let customers = [];
+
+  if (search) {
+    customers = await Customer.find({
+      cusName: { $regex: search, $options: "i" },
+    })
+      .sort({ createdAt: -1 })
+      .exec();
+
+    search = "?search=" + search;
+  } else {
+    customers = await Customer.find().sort({ createdAt: -1 }).exec();
+  }
+
+  const getPage = Math.floor(customers.length / ITEM_PAGE);
+  const totalPage = customers.length % ITEM_PAGE != 0 ? getPage + 1 : getPage;
+  const nextPage = parseInt(page) + 1;
+  const prevPage = parseInt(page) - 1;
+  const numPage = customers.length ? page : 0;
+  customers = customers.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
+
+  res.render("admin/customers", {
+    pageName: "customer",
+    customers,
+    customerModel: CUSTOMER_MODEL,
+    page,
+    totalPage,
+    nextPage,
+    prevPage,
+    numPage,
+    search,
+  });
+};
+
+exports.postCustomer = async (req, res, next) => {
+  let page = req.body.page || 1;
+  let search = req.query.search || "";
+  let customers = [];
+
+  if (!req.body.page) {
+    const customer = {
+      cusName: req.body.cusName,
+      phone: req.body.phone,
+      email: req.body.email,
+      username: req.body.username,
+      password: "Cus@" + req.body.phone,
+    };
+
+    const newCustomer = new Customer(customer);
+    await newCustomer.save();
+  }
+
+  if (search) {
+    customers = await Customer.find({
+      cusName: { $regex: search, $options: "i" },
+    })
+      .sort({ createdAt: -1 })
+      .exec();
+
+    search = "?search=" + search;
+  } else {
+    customers = await Customer.find().sort({ createdAt: -1 }).exec();
+  }
+
+  const getPage = Math.floor(customers.length / ITEM_PAGE);
+  const totalPage = customers.length % ITEM_PAGE != 0 ? getPage + 1 : getPage;
+  const nextPage = parseInt(page) + 1;
+  const prevPage = parseInt(page) - 1;
+  const numPage = customers.length ? page : 0;
+  customers = customers.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
+
+  res.render("admin/customers", {
+    pageName: "customer",
+    customers,
+    customerModel: CUSTOMER_MODEL,
+    page,
+    totalPage,
+    nextPage,
+    prevPage,
+    numPage,
+    search,
+  });
+};
+
+exports.updateCustomer = async (req, res, next) => {
+  let url = "";
+  const cusId = req.params.id || "";
+
+  switch (Object.keys(req.body)[0]) {
+    default:
+      let cusProperty = { $set: {} };
+      cusProperty["$set"][Object.keys(req.body)[0]] =
+        req.body[Object.keys(req.body)[0]] || "";
+
+      await Customer.updateOne({ _id: cusId }, cusProperty);
+      break;
+  }
+
+  const cusNew = await Customer.findById({ _id: cusId });
+
+  if (cusNew) {
+    res.send({ cusNew, success: true });
+  } else {
+    res.send({ success: false });
+  }
+};
+
+exports.deleteCustomer = async (req, res, next) => {
+  const cusId = req.params.id;
+  const cusOld = await Customer.findById({ _id: cusId });
+  const update = await Customer.updateOne(
+    { _id: cusId },
+    { $set: { status: !cusOld.status } }
+  );
+  const cusNew = await Customer.findById({ _id: cusId });
+
+  if (cusNew) {
+    res.send({ status: cusNew.status, success: true });
+  } else {
+    res.send({ success: false });
+  }
+};
+
+exports.getCustomerbyUsername = async (req, res, next) => {
+  const username = req.params.username;
+  const findCustomer = await Customer.findOne({ username: username });
+  if (findCustomer) {
+    res.send(true);
+  } else {
+    res.send(false);
+  }
+};
+
+exports.resetPasswordCustomer = async (req, res, next) => {
+  // const token = req.cookies?.token || "";
+  // jwt.verify(token, process.env.KEY_JWT, async (err, data) => {
+  //   if (!err) {
+  //     await Admin.updateOne({ _id: data._id }, { password: data.identityCard });
+  //   }
+  // });
+
+  // res.clearCookie("token");
+  // res.redirect("/admin/login");
+  const id = req.params.id;
+  const customer = await Customer.findById({ _id: id });
+  const newPassword = await bcrypt.hash("Cus@" + customer.phone, 12);
+
+  await Customer.updateOne({ _id: id }, { password: newPassword });
+  res.redirect("/admin/customers");
 };
 
 exports.getAdmin = async (req, res, next) => {
@@ -749,59 +901,6 @@ exports.postAdmin = async (req, res, next) => {
   });
 };
 
-exports.updateProfile = async (req, res, next) => {
-  const admin = jwt.verify(
-    req.cookies.token,
-    process.env.KEY_JWT,
-    (err, data) => {
-      if (!err) {
-        return data;
-      }
-    }
-  );
-  const aboutMe = req.body.aboutMe ? req.body.aboutMe : admin.aboutMe;
-  let newPassword = admin.password;
-
-  if (req.body?.password) {
-    newPassword = await bcrypt.hash(req.body?.password, 12);
-  }
-
-  const newAdmin = {
-    email: req.body.email,
-    password: newPassword,
-    adminName: req.body.adminName,
-    phone: req.body.phone,
-    dateOfBirth: req.body.dateOfBirth,
-    identityCard: req.body.identityCard,
-    address: req.body.address,
-    aboutMe: aboutMe,
-  };
-
-  await Admin.updateOne({ _id: admin._id }, newAdmin);
-
-  res.cookie("message", { message: "Please login again", type: "warning" });
-  res.clearCookie("token");
-  res.redirect("/admin/login");
-};
-
-exports.resetPassword = async (req, res, next) => {
-  // const token = req.cookies?.token || "";
-  // jwt.verify(token, process.env.KEY_JWT, async (err, data) => {
-  //   if (!err) {
-  //     await Admin.updateOne({ _id: data._id }, { password: data.identityCard });
-  //   }
-  // });
-
-  // res.clearCookie("token");
-  // res.redirect("/admin/login");
-  const id = req.params.id;
-  const admin = await Admin.findById({ _id: id });
-  const newPassword = await bcrypt.hash("Admin@" + admin.identityCard, 12);
-
-  await Admin.updateOne({ _id: id }, { password: newPassword });
-  res.redirect("/admin/admins");
-};
-
 exports.updateAdmin = async (req, res, next) => {
   let url = "";
   const adminId = req.params.id || "";
@@ -860,4 +959,67 @@ exports.deleteAdmin = async (req, res, next) => {
   } else {
     res.send({ success: false });
   }
+};
+
+exports.getAdminbyUsername = async (req, res, next) => {
+  const username = req.params.username;
+  const findAdmin = await Admin.findOne({ username: username });
+  if (findAdmin) {
+    res.send(true);
+  } else {
+    res.send(false);
+  }
+};
+
+exports.updateProfile = async (req, res, next) => {
+  const admin = jwt.verify(
+    req.cookies.token,
+    process.env.KEY_JWT,
+    (err, data) => {
+      if (!err) {
+        return data;
+      }
+    }
+  );
+  const aboutMe = req.body.aboutMe ? req.body.aboutMe : admin.aboutMe;
+  let newPassword = admin.password;
+
+  if (req.body?.password) {
+    newPassword = await bcrypt.hash(req.body?.password, 12);
+  }
+
+  const newAdmin = {
+    email: req.body.email,
+    password: newPassword,
+    adminName: req.body.adminName,
+    phone: req.body.phone,
+    dateOfBirth: req.body.dateOfBirth,
+    identityCard: req.body.identityCard,
+    address: req.body.address,
+    aboutMe: aboutMe,
+  };
+
+  await Admin.updateOne({ _id: admin._id }, newAdmin);
+
+  res.cookie("message", { message: "Please login again", type: "warning" });
+  res.clearCookie("token");
+  res.redirect("/admin/login");
+};
+
+exports.resetPasswordAdmin = async (req, res, next) => {
+  // const token = req.cookies?.token || "";
+  // jwt.verify(token, process.env.KEY_JWT, async (err, data) => {
+  //   if (!err) {
+  //     await Admin.updateOne({ _id: data._id }, { password: data.identityCard });
+  //   }
+  // });
+
+  // res.clearCookie("token");
+  // res.redirect("/admin/login");
+  const id = req.params.id;
+  const admin = await Admin.findById({ _id: id });
+  const newPassword = await bcrypt.hash("Admin@" + admin.identityCard, 12);
+
+  await Admin.updateOne({ _id: id }, { password: newPassword });
+  res.redirect("/admin/admins");
 };

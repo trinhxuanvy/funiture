@@ -164,6 +164,7 @@ $(document).ready(function () {
               isCompleted: true,
               isSuccess: true,
             });
+
             if (response.success) {
               if (!response.status) {
                 $(trProd[i]).css("opacity", "0.5");
@@ -384,12 +385,33 @@ $(document).ready(function () {
     }
   });
 
+  // Thêm validate phone
+  jQuery.validator.addMethod("valid_phone", function (value) {
+    var regex = /^[0-9]*$/gm;
+    return value.trim().match(regex);
+  });
+
+  // Thêm validate username
+  jQuery.validator.addMethod("valid_username", function (value) {
+    const url = new URL(window.location.href);
+    var data = $.ajax({
+      method: "get",
+      contentType: "application/json",
+      async: false,
+      url: url.origin + url.pathname + "/" + value,
+      dataType: "json",
+      success: function (response) {
+        return response;
+      },
+    });
+    return !data.responseJSON;
+  });
+
   // Xử lý thêm sản phẩm/admins
   $(function () {
     const btnSubmit = $("#btnSubmit");
     $(btnSubmit[0]).click(function (e) {
       e.preventDefault();
-      console.log("oke");
       $("#formSubmit").validate({
         rules: {
           price: {
@@ -410,6 +432,16 @@ $(document).ready(function () {
           },
           avatarLink: {
             required: true,
+          },
+          phone: {
+            required: true,
+            valid_phone: true,
+            minlength: 10,
+            maxlength: 10,
+          },
+          username: {
+            required: true,
+            valid_username: true,
           },
         },
         messages: {
@@ -453,9 +485,13 @@ $(document).ready(function () {
           },
           username: {
             required: "Please enter username",
+            valid_username: "Username already exists",
           },
           phone: {
             required: "Please enter phone",
+            minlength: "Please enter min-length 10 numbers",
+            maxlength: "Please enter max-length 10 numbers",
+            valid_phone: "Please enter right phonenumber",
           },
           address: {
             required: "Please enter address",
@@ -473,6 +509,10 @@ $(document).ready(function () {
           // category
           prodTypeName: {
             required: "Please enter category",
+          },
+          // customer
+          cusName: {
+            required: "Please enter customer name",
           },
         },
       });
