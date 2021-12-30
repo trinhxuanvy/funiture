@@ -154,10 +154,16 @@
                                         <% awesomeProducts.forEach(awesomeProduct => { %>
                                             <div class="col-lg-3 col-sm-6">
                                                 <div class="single_product_item">
-                                                    <img src="images/product/product_1.png" alt="">
+                                                    <a href="products/<%= awesomeProduct._id %> ">
+                                                        <img src=<%=awesomeProduct.prodImage[0].imageLink %> alt="">
+                                                    </a>
                                                     <div class="single_product_text">
-                                                        <h4><%= awesomeProduct.prodName %> </h4>
-                                                        <h3><%= awesomeProduct.price %> </h3>
+                                                        <h4>
+                                                            <%= awesomeProduct.prodName %>
+                                                        </h4>
+                                                        <h3 class="money">
+                                                            <%= awesomeProduct.price %>
+                                                        </h3>
                                                         <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
                                                     </div>
                                                 </div>
@@ -170,12 +176,20 @@
                                         <% awesomeProducts.forEach(awesomeProduct => { %>
                                             <div class="col-lg-3 col-sm-6">
                                                 <div class="single_product_item">
-                                                    <img src="images/product/product_1.png" alt="">
-                                                    <div class="single_product_text">
-                                                        <h4><%= awesomeProduct.prodName %> </h4>
-                                                        <h3><%= awesomeProduct.price %> </h3>
-                                                        <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                                    </div>
+                                                    <a href="products/<%= awesomeProduct._id %> ">
+                                                        <a href="products/<%= awesomeProduct._id %> ">
+                                                            <img src=<%=awesomeProduct.prodImage[0].imageLink %> alt="">
+                                                        </a>
+                                                        <div class="single_product_text">
+                                                            <h4>
+                                                                <%= awesomeProduct.prodName %>
+                                                            </h4>
+                                                            <h3 class="money">
+                                                                <%= awesomeProduct.price %>
+                                                            </h3>
+                                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                                        </div>
+                                                    </a>
                                                 </div>
                                             </div>
                                         <% }) %>
@@ -236,14 +250,16 @@
                             <div class="best_product_slider owl-carousel">
                                 <% bestSellers.forEach(bestSeller => { %>
                                     <div class="single_product_item">
-                                        <img src="images/product/product_1.png" alt="">
+                                        <a href="products/<%= bestSeller._id %> ">
+                                            <img src=<%=bestSeller.prodImage[0].imageLink %> alt="">
+                                        </a>
                                         <div class="single_product_text">
                                             <h4><%= bestSeller.prodName %> </h4>
-                                            <h3><%= bestSeller.price %></h3>
+                                            <h3 class="money"><%= bestSeller.price %></h3>
+                                            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
                                         </div>
                                     </div>
                                 <% }) %>
-                                ejs
                             </div>
                         </div>
                     </div>
