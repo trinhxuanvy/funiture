@@ -178,4 +178,10 @@ router.post(
   adminController.updateProfile
 );
 
+router.post(
+  "/admin/profile/update/:id",
+  authAdminController.checkExpired,
+  adminController.updateImageProfile
+);
+
 module.exports = router;
