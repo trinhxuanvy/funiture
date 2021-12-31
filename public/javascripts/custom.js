@@ -164,9 +164,9 @@
     });
 
   // niceSelect js code
-  $(document).ready(function () {
-    $("select").niceSelect();
-  });
+  // $(document).ready(function () {
+  //   $("select").niceSelect();
+  // });
 
   // menu fixed js code
   // $(window).scroll(function () {
@@ -356,6 +356,14 @@
     }
   });
 
+  function convertMoney(money) {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(money);
+  }
+  
+
   jQuery.validator.addMethod('valid_phone', function (value) {
     var regex = /^[0-9]*$/gm;
     return value.trim().match(regex);
@@ -387,7 +395,7 @@
     const btnSubmit = $("#btnSubmit");
     $(btnSubmit[0]).click(function (e) {
       e.preventDefault();
-      console.log("oke");
+      // console.log("oke");
       $("#formSubmit").validate({
         rules: {
           email: {
@@ -476,9 +484,191 @@
             //   isCompleted: true,
             //   isSuccess: true,
             // });
-            console.log(response);
+            // console.log(response);
             if (response.amount) {
               $(badge[0]).html(response.amount);
+            }
+          },
+        });
+      });
+    }
+  });
+
+
+  // Load thông tin tỉnh thành Việt Nam
+  $(function () {
+    const selectVietNamProvinces = $("#vietNamProvinces");
+    const selectVietNamDistrict = $("#vietNamDistrict");
+    const selectVietNamCommune = $("#vietNamCommune");
+
+    $.ajax({
+      type: "get",
+      url: "https://provinces.open-api.vn/api/?depth=1",
+      dataType: "json",
+      success: function (response) {
+        response.forEach((item) => {
+          $(selectVietNamProvinces[0]).append(
+            `<option value="${item.name}">${item.name}</option>`
+          );
+        });
+      },
+    });
+
+    $(selectVietNamDistrict[0]).focus(function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: "get",
+        url: "https://provinces.open-api.vn/api/?depth=2",
+        dataType: "json",
+        success: function (response) {
+          const dataFilter = response.filter(
+            (data) => data.name == $(selectVietNamProvinces[0]).val()
+          );
+
+          $(selectVietNamDistrict[0]).find(".list-option").remove().end();
+
+          dataFilter[0]?.districts.forEach((item) => {
+            $(selectVietNamDistrict[0]).append(
+              `<option class="list-option" value="${item.name}">${item.name}</option>`
+            );
+          });
+        },
+      });
+    });
+
+    $(selectVietNamCommune[0]).focus(function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: "get",
+        url: "https://provinces.open-api.vn/api/?depth=3",
+        dataType: "json",
+        success: function (response) {
+          let dataFilter = response.filter(
+            (data) => data.name == $(selectVietNamProvinces[0]).val()
+          );
+
+          dataFilter = dataFilter[0]?.districts.filter(
+            (data) => data.name == $(selectVietNamDistrict[0]).val()
+          );
+
+          $(selectVietNamCommune[0]).find(".list-option").remove().end();
+
+          dataFilter[0]?.wards.forEach((item) => {
+            $(selectVietNamCommune[0]).append(
+              `<option class="list-option" value="${item.name}">${item.name}</option>`
+            );
+          });
+        },
+      });
+    });
+
+    $(selectVietNamProvinces[0]).change(function (e) {
+      e.preventDefault();
+      $(selectVietNamCommune[0]).find(".list-option").remove().end();
+      $(selectVietNamCommune[0]).find(".primary-option-ward").remove().end();
+      $(selectVietNamDistrict[0]).find(".list-option").remove().end();
+      $(selectVietNamDistrict[0])
+        .find(".primary-option-district")
+        .remove()
+        .end();
+    });
+
+    $(selectVietNamDistrict[0]).change(function (e) {
+      e.preventDefault();
+      $(selectVietNamCommune[0]).find(".list-option").remove().end();
+      $(selectVietNamCommune[0]).find(".primary-option-ward").remove().end();
+    });
+  });
+
+
+    // Load thong ti gio hang
+    $(function () {
+      const cartDetails = $(".input-number-cart-detail");
+      const priceCarts = $(".price-cart-detail");
+      const subtotalCarts = $(".cart-details-total");
+      const totalCarts = $(".all-card-total");
+      const badge = $("#badge");
+      console.log(cartDetails);
+      for(let i = 0; i < cartDetails.length; i++)
+      {
+        $(cartDetails[i]).change(function (e) { 
+          e.preventDefault();
+          const url = new URL(window.location.href);
+          var productId = $(cartDetails[i]).attr("id");
+          var productAmount = $(cartDetails[i]).val();
+          $.ajax({
+            method: "get",
+            contentType: "application/json",
+            url:
+            url.origin +
+            "/cart/change/product/" +
+            productId + "/" + productAmount,
+            dataType: "json",
+            success: function (response) {
+              // statusLoading({
+              //   posLoading: btnAddCart[i],
+              //   isCompleted: true,
+              //   isSuccess: true,
+              // });
+              if(response.success)
+              {
+                var toTalCartDetail = convertMoney(response.cartsPrice);
+                var subTotalCarts = convertMoney(response.totalCarts);
+                var AlltotalCarts = convertMoney(response.totalCarts+20);
+                $(priceCarts[i] ).html(toTalCartDetail);
+                $(subtotalCarts[0] ).html(subTotalCarts);
+                $(totalCarts[0] ).html(AlltotalCarts);
+                $(badge[0]).html(response.totalQuantity);
+              }
+            },
+          });
+        });
+      }
+    });
+
+
+      // Xử lý chức năng xóa sản phẩm trong cart
+  $(function () {
+    const btnDeleteProd = $(".btn-delete-card-detail");
+    const rowCardDetail = $(".line-card-detail");
+    const subtotalCarts = $(".cart-details-total");
+    const totalCarts = $(".all-card-total");
+    const badge = $("#badge");
+    for (let i = 0; i < btnDeleteProd.length; i++) {
+      $(btnDeleteProd[i]).click(function (e) {
+        e.preventDefault();
+
+        const url = new URL(window.location.href);
+        var productId = $(btnDeleteProd[i]).attr("id");
+        // statusLoading({
+        //   posLoading: this,
+        //   isCompleted: false,
+        //   isSuccess: false,
+        // });
+
+        $.ajax({
+          method: "get",
+          contentType: "application/json",
+          url:
+            url.origin +
+            "/cart/delete/product/" +
+            productId,
+          dataType: "json",
+          success: function (response) {
+            // statusLoading({
+            //   posLoading: btnDeleteProd[i],
+            //   isCompleted: true,
+            //   isSuccess: true,
+            // });
+            console.log(response);
+            if (response.success) {
+              console.log(rowCardDetail[i])
+              $(rowCardDetail[i]).remove();
+              var subTotalCarts = convertMoney(response.totalCarts);
+              var AlltotalCarts = convertMoney(response.totalCarts+20);
+              $(subtotalCarts[0] ).html(subTotalCarts);
+              $(totalCarts[0] ).html(AlltotalCarts);
+              $(badge[0]).html(response.totalQuantity);
             }
           },
         });

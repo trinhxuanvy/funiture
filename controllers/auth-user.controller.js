@@ -8,7 +8,7 @@ dotenv.config();
 exports.getLogin = async (req, res, next) => {
 
     const user = jwt.verify(
-        req.cookies?.token,
+        req.cookies?.cusToken,
         process.env.KEY_JWT,
         function (err, data) {
           if (err) {
@@ -35,7 +35,6 @@ exports.getLogin = async (req, res, next) => {
   if (message) {
     res.clearCookie("message");
   }
-  console.log(user, "login");
   res.render("login", { message, username, password, user, cartTotal });
 };
 
@@ -44,7 +43,9 @@ exports.postLogin = async (req, res, next) => {
   const password = req.body?.password;
   passport.authenticate("local.customer.login", function (err, user, info) {
     if (info) {
-      res.render("login", { message: info, username, password });
+      var cartTotal = 0;
+      var user = null;
+      res.render("login", { message: info, username, password, user, cartTotal });
     } else {
           const userToken = {
             _id: user._id,
@@ -63,7 +64,7 @@ exports.postLogin = async (req, res, next) => {
             expiresIn: "1h",
           });
 
-          res.cookie("token", token);
+          res.cookie("cusToken", token);
 
           if (req.cookies?.oldUrl) {
             let oldUrl = req.cookies?.oldUrl;
@@ -78,7 +79,7 @@ exports.postLogin = async (req, res, next) => {
 };
 
 exports.checkExpired = (req, res, next) => {
-  const token = req.cookies?.token || "";
+  const token = req.cookies?.cusToken || "";
 
   jwt.verify(token, process.env.KEY_JWT, (err, data) => {
     if (err) {
@@ -96,6 +97,6 @@ exports.checkExpired = (req, res, next) => {
 };
 
 exports.getLogout = async (req, res, next) => {
-  res.clearCookie("token");
+  res.clearCookie("cusToken");
   res.redirect("/login");
 };

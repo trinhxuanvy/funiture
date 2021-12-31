@@ -11,6 +11,10 @@ router.get("/signup", shopController.signup);
 
 router.get("/signup/:username", shopController.getUserbyUserName);
 
+router.get("/cart/delete/product/:productId", shopController.deleteProductCart);
+
+router.get("/cart/change/product/:productId/:productAmount", shopController.getAllPriceByProductId);
+
 router.get("/profile", shopController.profile);
 
 router.post(

@@ -17,7 +17,7 @@ exports.login = (req, res, next) => {
 
 exports.categories = async (req, res, next) => {
   const user = jwt.verify(
-    req.cookies?.token,
+    req.cookies?.cusToken,
     process.env.KEY_JWT,
     function (err, data) {
       if (err) {
@@ -28,9 +28,12 @@ exports.categories = async (req, res, next) => {
     }
   );
   var cartTotal = 0;
-  if (user != null) {
+  if(user != null)
+  {
     cartTotal = user.cart.totalQuantity;
-  } else {
+  }
+  else
+  {
     cartTotal = req.session.totalQuantity;
   }
 
@@ -75,7 +78,7 @@ exports.categories = async (req, res, next) => {
 
 exports.cart = async (req, res, next) => {
   const user = jwt.verify(
-    req.cookies?.token,
+    req.cookies?.cusToken,
     process.env.KEY_JWT,
     function (err, data) {
       if (err) {
@@ -85,20 +88,45 @@ exports.cart = async (req, res, next) => {
       }
     }
   );
+  
+  var cartDetails = [];
 
   var cartTotal = 0;
-  if (user != null) {
+  var totalCarts = 0;
+  var allTotalCarts = 0;
+  if(user != null)
+  {
     cartTotal = user.cart.totalQuantity;
-  } else {
+    cartDetails = user.cart.cartDetails;
+    if(user.cart)
+    {
+      for(let i = 0; i < user.cart.cartDetails.length; i++)
+      {
+        totalCarts += user.cart.cartDetails[i].price*user.cart.cartDetails[i].amount;
+      }
+    }
+  }
+  else
+  {
     cartTotal = req.session.totalQuantity;
+    if(req.session.cartDetails)
+    {
+      cartDetails = req.session.cartDetails;
+      for(let i = 0; i < req.session.cartDetails.length; i++)
+      {
+        totalCarts += req.session.cartDetails[i].price*req.session.cartDetails[i].amount;
+      }
+    }
   }
 
-  res.render("cart", { user, cartTotal });
+  allTotalCarts = totalCarts + 20;
+
+  res.render("cart", { user, cartTotal, cartDetails, totalCarts, allTotalCarts});
 };
 
 exports.signup = async (req, res, next) => {
   const user = jwt.verify(
-    req.cookies?.token,
+    req.cookies?.cusToken,
     process.env.KEY_JWT,
     function (err, data) {
       if (err) {
@@ -110,9 +138,12 @@ exports.signup = async (req, res, next) => {
   );
 
   var cartTotal = 0;
-  if (user != null) {
+  if(user != null)
+  {
     cartTotal = user.cart.totalQuantity;
-  } else {
+  }
+  else
+  {
     cartTotal = req.session.totalQuantity;
   }
   res.render("signup", { user, cartTotal });
@@ -124,7 +155,7 @@ exports.singleProduct = async (req, res, next) => {
 
 exports.checkout = async (req, res, next) => {
   const user = jwt.verify(
-    req.cookies?.token,
+    req.cookies?.cusToken,
     process.env.KEY_JWT,
     function (err, data) {
       if (err) {
@@ -136,9 +167,12 @@ exports.checkout = async (req, res, next) => {
   );
 
   var cartTotal = 0;
-  if (user != null) {
+  if(user != null)
+  {
     cartTotal = user.cart.totalQuantity;
-  } else {
+  }
+  else
+  {
     cartTotal = req.session.totalQuantity;
   }
   res.render("checkout", { user, cartTotal });
@@ -147,7 +181,7 @@ exports.checkout = async (req, res, next) => {
 //render trang chu
 exports.getIndex = async (req, res, next) => {
   const user = jwt.verify(
-    req.cookies?.token,
+    req.cookies?.cusToken,
     process.env.KEY_JWT,
     function (err, data) {
       if (err) {
@@ -158,9 +192,12 @@ exports.getIndex = async (req, res, next) => {
     }
   );
   var cartTotal = 0;
-  if (user != null) {
+  if(user != null)
+  {
     cartTotal = user.cart.totalQuantity;
-  } else {
+  }
+  else
+  {
     cartTotal = req.session.totalQuantity;
   }
 
@@ -178,13 +215,13 @@ exports.getIndex = async (req, res, next) => {
     awesomeProducts: awesomeProducts,
     bestSellers: bestSellers,
     user: user,
-    cartTotal: cartTotal,
+    cartTotal: cartTotal
   });
 };
 
 exports.getProduct = async (req, res, next) => {
   const user = jwt.verify(
-    req.cookies?.token,
+    req.cookies?.cusToken,
     process.env.KEY_JWT,
     function (err, data) {
       if (err) {
@@ -196,16 +233,19 @@ exports.getProduct = async (req, res, next) => {
   );
 
   var cartTotal = 0;
-  if (user != null) {
+  if(user != null)
+  {
     cartTotal = user.cart.totalQuantity;
-  } else {
+  }
+  else
+  {
     cartTotal = req.session.totalQuantity;
   }
 
   const prodId = req.params.id;
   const product = await Product.findById({ _id: prodId });
   const bestSellers = await Product.find({ status: true }).exec();
-  return res.render("products", { product, bestSellers, user, cartTotal });
+  return res.render("products", {product, bestSellers, user, cartTotal});
 };
 
 exports.postAccount = async (req, res, next) => {
@@ -246,7 +286,7 @@ exports.postCustomer = async (req, res, next) => {
 
 exports.profile = async (req, res, next) => {
   const user = jwt.verify(
-    req.cookies?.token,
+    req.cookies?.cusToken,
     process.env.KEY_JWT,
     function (err, data) {
       if (err) {
@@ -270,7 +310,7 @@ exports.profile = async (req, res, next) => {
 
 exports.addCard = async (req, res, next) => {
   const user = jwt.verify(
-    req.cookies?.token,
+    req.cookies?.cusToken,
     process.env.KEY_JWT,
     function (err, data) {
       if (err) {
@@ -296,10 +336,9 @@ exports.addCard = async (req, res, next) => {
     for (let i = 0; i < user.cart.cartDetails.length; i++) {
       if (user.cart.cartDetails[i].productId == newCardDetail.productId) {
         user.cart.cartDetails[i].amount++;
-        user.cart.cartDetails[i].price =
-          product.price * user.cart.cartDetails[i].amount;
+        user.cart.cartDetails[i].price = product.price;
+        user.cart.price += user.cart.cartDetails[i].price;
         flag = true;
-
         break;
       }
     }
@@ -307,6 +346,87 @@ exports.addCard = async (req, res, next) => {
 
     if (!flag) {
       user.cart.cartDetails.push(newCardDetail);
+      user.cart.price += newCardDetail.price;
+    }
+
+
+    await Customer.updateOne({ _id: user._id }, { cart: user.cart });
+
+    const userToken = {
+      _id: user._id,
+      cusName: user.cusName,
+      phone: user.phone,
+      email: user.email,
+      dateOfBirth: user.dateOfBirth,
+      avatarLink: user.avatarLink,
+      username: user.username,
+      password: user.password,
+      cart: user.cart,
+    };
+
+    const token = jwt.sign(userToken, process.env.KEY_JWT, {
+      algorithm: "HS256",
+      expiresIn: "1h",
+    });
+
+    res.cookie("cusToken", token);
+    res.send({amount: user.cart.totalQuantity});
+  } 
+  else {
+    var cartDetails = [];
+    var totalQuantity = req.session.totalQuantity || 0;
+    var totalCarts = req.session.totalCarts || 0;
+    var flag = false;
+    if (req.session?.cartDetails) {
+      cartDetails = req.session.cartDetails;
+      for (let i = 0; i < cartDetails.length; i++) {
+        if (cartDetails[i].productId == newCardDetail.productId) {
+          cartDetails[i].amount++;
+          cartDetails[i].price = product.price;
+          totalCarts += cartDetails[i].price;
+          flag = true;
+          break;
+        }
+      }
+    }
+    if (!flag) {
+      cartDetails.push(newCardDetail);
+      totalCarts += newCardDetail.price;
+    }
+
+    req.session.totalQuantity = totalQuantity + 1;
+    req.session.cartDetails = cartDetails;
+    req.session.totalCarts = totalCarts;
+    res.send({amount: req.session.totalQuantity});
+  }
+};
+
+exports.getAllPriceByProductId = async (req, res, next) => {
+  const user = jwt.verify(
+    req.cookies?.cusToken,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+
+  var productId = req.params.productId;
+  var newProductAmount = parseInt(req.params.productAmount);
+
+  if (user != null) {
+    
+    var cartsPrice = 0;
+    for (let i = 0; i < user.cart.cartDetails.length; i++) {
+      if (user.cart.cartDetails[i].productId == productId) {
+        user.cart.totalQuantity = user.cart.totalQuantity - user.cart.cartDetails[i].amount + newProductAmount;
+        user.cart.price += user.cart.cartDetails[i].price*newProductAmount - user.cart.cartDetails[i].price*user.cart.cartDetails[i].amount;
+        user.cart.cartDetails[i].amount = newProductAmount;
+        cartsPrice = user.cart.cartDetails[i].price*user.cart.cartDetails[i].amount;
+      }
     }
 
     await Customer.updateOne({ _id: user._id }, { cart: user.cart });
@@ -328,36 +448,104 @@ exports.addCard = async (req, res, next) => {
       expiresIn: "1h",
     });
 
-    res.cookie("token", token);
-    res.send({ amount: user.cart.totalQuantity });
-  } else {
+    res.cookie("cusToken", token);
+    res.send({cartsPrice: cartsPrice, totalCarts: user.cart.price, totalQuantity: user.cart.totalQuantity, success: true});
+  } 
+  else {
     var cartDetails = [];
-    var totalQuantity = req.session.totalQuantity || 0;
-    console.log(totalQuantity);
-    var flag = false;
-    console.log(req.session.cartDetails);
+    var cartsPrice = 0;
     if (req.session?.cartDetails) {
       cartDetails = req.session.cartDetails;
       for (let i = 0; i < cartDetails.length; i++) {
-        if (cartDetails[i].productId == newCardDetail.productId) {
-          cartDetails[i].amount++;
-          cartDetails[i].price = product.price * cartDetails[i].amount;
-          flag = true;
-          console.log("okne");
-          break;
+        if (cartDetails[i].productId == productId) {
+          req.session.totalQuantity = req.session.totalQuantity - req.session.cartDetails[i].amount + newProductAmount;
+          req.session.totalCarts +=  cartDetails[i].price*newProductAmount - cartDetails[i].price*cartDetails[i].amount;
+          cartDetails[i].amount = newProductAmount;
+          cartsPrice = cartDetails[i].price*cartDetails[i].amount;
         }
       }
     }
-    if (!flag) {
-      //console.log("okla");
-      cartDetails.push(newCardDetail);
+
+    req.session.cartsPrice = cartsPrice;
+    req.session.cartDetails = cartDetails;
+    res.send({cartsPrice: req.session.cartsPrice, totalCarts: req.session.totalCarts, totalQuantity: req.session.totalQuantity, success: true});
+  }
+};
+
+
+exports.deleteProductCart = async (req, res, next) => {
+  const user = jwt.verify(
+    req.cookies?.cusToken,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+  // console.log(user.cart.cartDetails);
+  var productId = req.params.productId;
+  if (user != null) {
+
+    for (let i = 0; i < user.cart.cartDetails.length; i++) {
+      if (user.cart.cartDetails[i].productId == productId) {
+        user.cart.totalQuantity = user.cart.totalQuantity - user.cart.cartDetails[i].amount;
+        user.cart.price -= user.cart.cartDetails[i].price*user.cart.cartDetails[i].amount;
+      }
     }
 
-    //console.log(cartDetails);
-    req.session.totalQuantity = totalQuantity + 1;
-    req.session.cartDetails = cartDetails;
-    res.send({ amount: req.session.totalQuantity });
-    //console.log(req.session.cartDetails);
+    user.cart.cartDetails = user.cart.cartDetails.filter( data => data.productId != productId);
+
+    Customer.updateOne({ _id: user._id }, { cart: user.cart }, (error) =>
+    {
+      if(!error)
+      {
+        const userToken = {
+          _id: user._id,
+          cusName: user.cusName,
+          phone: user.phone,
+          email: user.email,
+          dateOfBirth: user.dateOfBirth,
+          avatarLink: user.avatarLink,
+          username: user.username,
+          password: user.password,
+          cart: user.cart,
+        };
+    
+        const token = jwt.sign(userToken, process.env.KEY_JWT, {
+          algorithm: "HS256",
+          expiresIn: "1h",
+        });
+    
+        res.cookie("cusToken", token);
+        console.log(user.cart.cartDetails);
+        res.send({success: true, totalCarts: user.cart.price, totalQuantity: user.cart.totalQuantity});
+      }
+      else
+      {
+        res.send({success: false});
+      }
+    });
   }
-  //res.status(200).json({status: 'success'})
+  else
+  {
+    if (req.session?.cartDetails) {
+      for (let i = 0; i < req.session.cartDetails.length; i++) {
+        if (req.session.cartDetails[i].productId == productId) {
+          req.session.totalQuantity = req.session.totalQuantity - req.session.cartDetails[i].amount;
+          req.session.totalCarts -= req.session.cartDetails[i].price*req.session.cartDetails[i].amount;
+        }
+      }
+    }
+    req.session.cartDetails = req.session?.cartDetails.filter( data => data.productId != productId);
+    res.send({success: true, totalCarts: req.session.totalCarts, totalQuantity: req.session.totalQuantity});
+  }
+
+  // if (product) {
+  //   res.send({price: product.price, success: true});
+  // } else {
+  //   res.send({success: false});
+  // }
 };
