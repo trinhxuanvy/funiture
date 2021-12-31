@@ -16,7 +16,7 @@ const {
 } = require("../constants/modal");
 
 dotenv.config();
-const ITEM_PAGE = 4;
+const ITEM_PAGE = 8;
 
 exports.uploadFile = async (req, res, next) => {
   let upload = [];
@@ -628,7 +628,7 @@ exports.deleteBrand = async (req, res, next) => {
 };
 
 exports.profile = async (req, res, next) => {
-  const getUser = jwt.verify(
+  const user = jwt.verify(
     req.cookies?.token,
     process.env.KEY_JWT,
     function (err, data) {
@@ -640,16 +640,19 @@ exports.profile = async (req, res, next) => {
     }
   );
 
-  let user = await Admin.findById({ _id: getUser?._id });
-
   const date = new Date(user?.dateOfBirth);
   user.dateOfBirth =
     date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
+
+  const message = req.cookies.message;
+  res.clearCookie("message");
 
   res.render("admin/profile", {
     pageName: "profile",
     user,
     adminModel: ADMIN_MODEL,
+    type: req.query?.type,
+    message,
   });
 };
 
@@ -902,7 +905,16 @@ exports.postAdmin = async (req, res, next) => {
 };
 
 exports.updateAdmin = async (req, res, next) => {
-  let url = "";
+  const isMe = jwt.verify(
+    req.cookies?.token,
+    process.env.KEY_JWT,
+    (err, data) => {
+      if (err) return [];
+      return data;
+    }
+  );
+
+  let user = {};
   const adminId = req.params.id || "";
 
   switch (Object.keys(req.body)[0]) {
@@ -925,10 +937,36 @@ exports.updateAdmin = async (req, res, next) => {
       break;
   }
 
-  const adminNew = await Admin.findById({ _id: adminId });
+  if (isMe._id == adminId) {
+    user = await Admin.findById({ _id: adminId });
 
-  if (adminNew) {
-    res.send({ adminNew, success: true });
+    const userToken = {
+      _id: user._id,
+      adminName: user.adminName,
+      phone: user.phone,
+      email: user.email,
+      address: user.address,
+      dateOfBirth: user.dateOfBirth,
+      avatarLink: user.avatarLink,
+      username: user.username,
+      password: user.password,
+      aboutMe: user.aboutMe,
+      roleLevel: user.roleLevel,
+      avatarLink: user.avatarLink,
+      roleLevel: user.roleLevel,
+      identityCard: user.identityCard,
+    };
+
+    const token = jwt.sign(userToken, process.env.KEY_JWT, {
+      algorithm: "HS256",
+      expiresIn: "1h",
+    });
+
+    res.cookie("token", token);
+  }
+
+  if (user) {
+    res.send({ user, success: true });
   } else {
     res.send({ success: false });
   }
@@ -982,28 +1020,101 @@ exports.updateProfile = async (req, res, next) => {
     }
   );
   const aboutMe = req.body.aboutMe ? req.body.aboutMe : admin.aboutMe;
-  let newPassword = admin.password;
+  let newAdmin = {};
 
   if (req.body?.password) {
-    newPassword = await bcrypt.hash(req.body?.password, 12);
+    const newPassword = await bcrypt.hash(req.body?.password, 12);
+    newAdmin = {
+      password: newPassword,
+    };
+  } else {
+    newAdmin = {
+      email: req.body.email,
+      adminName: req.body.adminName,
+      phone: req.body.phone,
+      dateOfBirth: req.body.dateOfBirth,
+      identityCard: req.body.identityCard,
+      address: req.body.address,
+      aboutMe: aboutMe,
+    };
   }
-
-  const newAdmin = {
-    email: req.body.email,
-    password: newPassword,
-    adminName: req.body.adminName,
-    phone: req.body.phone,
-    dateOfBirth: req.body.dateOfBirth,
-    identityCard: req.body.identityCard,
-    address: req.body.address,
-    aboutMe: aboutMe,
-  };
 
   await Admin.updateOne({ _id: admin._id }, newAdmin);
 
-  res.cookie("message", { message: "Please login again", type: "warning" });
-  res.clearCookie("token");
-  res.redirect("/admin/login");
+  const user = await Admin.findById({ _id: admin._id });
+
+  const userToken = {
+    _id: user._id,
+    adminName: user.adminName,
+    phone: user.phone,
+    email: user.email,
+    address: user.address,
+    dateOfBirth: user.dateOfBirth,
+    avatarLink: user.avatarLink,
+    username: user.username,
+    password: user.password,
+    aboutMe: user.aboutMe,
+    roleLevel: user.roleLevel,
+    avatarLink: user.avatarLink,
+    roleLevel: user.roleLevel,
+    identityCard: user.identityCard,
+  };
+
+  const token = jwt.sign(userToken, process.env.KEY_JWT, {
+    algorithm: "HS256",
+    expiresIn: "1h",
+  });
+
+  res.cookie("token", token);
+
+  res.cookie("message", { message: "Update Success", type: "success" });
+  res.redirect("/admin/profile");
+};
+
+exports.updateImageProfile = async (req, res, next) => {
+  const admin = jwt.verify(
+    req.cookies.token,
+    process.env.KEY_JWT,
+    (err, data) => {
+      if (!err) {
+        return data;
+      }
+    }
+  );
+
+  const avatarLink = req.body?.avatarLink || admin.avatarLink;
+  await Admin.updateOne({ _id: admin._id }, { avatarLink: avatarLink });
+  const user = await Admin.findById({ _id: admin._id });
+
+  const userToken = {
+    _id: user._id,
+    adminName: user.adminName,
+    phone: user.phone,
+    email: user.email,
+    address: user.address,
+    dateOfBirth: user.dateOfBirth,
+    avatarLink: user.avatarLink,
+    username: user.username,
+    password: user.password,
+    aboutMe: user.aboutMe,
+    roleLevel: user.roleLevel,
+    avatarLink: user.avatarLink,
+    roleLevel: user.roleLevel,
+    identityCard: user.identityCard,
+  };
+
+  const token = jwt.sign(userToken, process.env.KEY_JWT, {
+    algorithm: "HS256",
+    expiresIn: "1h",
+  });
+
+  res.cookie("token", token);
+
+  if (user) {
+    res.send({ userToken, success: true });
+  } else {
+    res.send({ success: false });
+  }
 };
 
 exports.resetPasswordAdmin = async (req, res, next) => {

@@ -53,8 +53,42 @@
                     <img src="/images/admin/background.jpg" alt="" />
                   </div>
                   <div class="wrapper__main__content__card__content">
-                    <div class="wrapper__main__content__card__content__author">
-                      <img src="<%= user.avatarLink %>" alt="" />
+                    <div
+                      id="<%= user._id %>"
+                      class="wrapper__main__content__card__content__author"
+                    >
+                      <form
+                        action="/admin/profile"
+                        id="table-model"
+                        method="post"
+                      >
+                        <div
+                          class="tb-image is-status"
+                          style="
+                            width: 100px;
+                            height: 100px;
+                            position: relative;
+                            margin: 0 auto;
+                            border-radius: 50%;
+                            overflow: hidden;
+                          "
+                        >
+                          <input
+                            type="file"
+                            name="<%= adminModel.avatarLink %>"
+                            id="<%= adminModel.avatarLink %>"
+                            style="
+                              position: absolute;
+                              z-index: 1000;
+                              width: 100%;
+                              height: 100%;
+                              opacity: 0;
+                              cursor: pointer;
+                            "
+                          />
+                          <img src="<%= user.avatarLink %>" alt="" />
+                        </div>
+                      </form>
                       <h4><%= user.adminName %></h4>
                       <a href=""><small><%= user.email %></small></a>
                     </div>
@@ -63,6 +97,24 @@
                     >
                       <%= user.aboutMe %>
                     </div>
+
+                    <form action="/admin/profile" method="get">
+                      <% if (type == "Change Password") { %>
+                      <input
+                        type="submit"
+                        name="type"
+                        value="Profile"
+                        class="btn btn-orange d-inline-block mx-auto mb-4"
+                      />
+                      <% } else { %>
+                      <input
+                        type="submit"
+                        name="type"
+                        value="Change Password"
+                        class="btn btn-orange d-inline-block mx-auto mb-4"
+                      />
+                      <% } %>
+                    </form>
                   </div>
                 </div>
                 <!-- <div class="wrapper__main__content__member">
@@ -105,9 +157,45 @@
               </div>
               <div class="col-xl-8">
                 <div class="wrapper__main__content__form">
-                  <p class="wrapper__main__content__form__title">Profile</p>
-                  <form action="/admin/profile" method="post" class="row g-3">
-                    <div class="col-md-6">
+                  <p class="wrapper__main__content__form__title">
+                    <% if (type == "Change Password") { %> Change Password <% }
+                    else { %> Profile <% } %>
+                  </p>
+                  <form
+                    action="/admin/profile"
+                    id="formSubmit"
+                    method="post"
+                    class="row g-3 fix-right"
+                  >
+                    <% if (type == "Change Password") { %>
+                    <div class="col-md-7 mx-auto position-relative">
+                      <label for="<%= adminModel.password %>" class="form-label"
+                        >Password</label
+                      >
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="<%= adminModel.password %>"
+                        name="<%= adminModel.password %>"
+                        placeholder="Enter password"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-7 mx-auto mb-4 position-relative">
+                      <label for="confirmPassword" class="form-label"
+                        >Confirm Password</label
+                      >
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Enter confirm password"
+                        required
+                      />
+                    </div>
+                    <% } else { %>
+                    <div class="col-md-6 position-relative">
                       <label for="<%= adminModel.email %>" class="form-label"
                         >Email</label
                       >
@@ -117,22 +205,11 @@
                         id="<%= adminModel.email %>"
                         name="<%= adminModel.email %>"
                         value="<%= user.email %>"
+                        placeholder="Enter mail"
+                        required
                       />
                     </div>
-                    <div class="col-md-6">
-                      <label for="<%= adminModel.password %>" class="form-label"
-                        >Password</label
-                      >
-                      <input
-                        type="password"
-                        class="form-control"
-                        id="<%= adminModel.password %>"
-                        placeholder="Abc@1234"
-                        name="<%= adminModel.password %>"
-                        value=""
-                      />
-                    </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 position-relative">
                       <label
                         for="<%= adminModel.adminName %>"
                         class="form-label"
@@ -142,12 +219,13 @@
                         type="text"
                         class="form-control"
                         id="<%= adminModel.adminName %>"
-                        placeholder=""
+                        placeholder="Enter name"
                         name="<%= adminModel.adminName %>"
                         value="<%= user.adminName %>"
+                        required
                       />
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4 mt-4 position-relative">
                       <label for="<%= adminModel.phone %>" class="form-label"
                         >Phone</label
                       >
@@ -155,24 +233,25 @@
                         type="text"
                         class="form-control"
                         id="<%= adminModel.phone %>"
-                        placeholder="0907461369"
+                        placeholder="Enter phone"
                         value="<%= user.phone %>"
                         name="<%= adminModel.phone %>"
+                        required
                       />
                     </div>
-                    <div class="col-md-6 form-group">
+                    <div class="col-md-4 mt-4 form-group position-relative">
                       <label
                         for="<%= adminModel.dateOfBirth %>"
                         class="form-label"
                         >Date of Birth</label
                       >
                       <div class="input-group date datetimepicker" id="">
-                        <input type="text" class="form-control"
+                        <input type="text" class="form-control" required
                         placeholder="mm/dd/yyyy" name="<%=
                         adminModel.dateOfBirth %>" id="<%=
                         adminModel.dateOfBirth %>" value="<%= (new
                         Date(user.dateOfBirth)).toLocaleString("en-US", { year:
-                        "numeric", month: "numeric", day: "numeric" }) %>" />
+                        "numeric", month: "numeric", day: "numeric" }) %>"/>
                         <span class="input-group-addon">
                           <span class="input-group-text d-block">
                             <i class="fa fa-calendar"></i>
@@ -180,7 +259,7 @@
                         </span>
                       </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4 mt-4 position-relative">
                       <label
                         for="<%= adminModel.identityCard %>"
                         class="form-label"
@@ -192,9 +271,11 @@
                         id="<%= adminModel.identityCard %>"
                         name="<%= adminModel.identityCard %>"
                         value="<%= user.identityCard %>"
+                        placeholder="Enter identity card"
+                        required
                       />
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-4 position-relative">
                       <label for="<%= adminModel.address %>" class="form-label"
                         >Address</label
                       >
@@ -204,9 +285,11 @@
                         id="<%= adminModel.address %>"
                         name="<%= adminModel.address %>"
                         value="<%= user.address %>"
+                        required
+                        placeholder="Enter address"
                       />
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-4">
                       <div class="form-group">
                         <label
                           for="<%= adminModel.aboutMe %>"
@@ -220,14 +303,25 @@
                           class="form-control border-input"
                           placeholder="Here can be your description"
                         >
-<%= user.aboutMe %></textarea
+  <%= user.aboutMe %></textarea
                         >
                       </div>
                     </div>
+                    <% } %>
                     <div class="col-12">
                       <button
                         type="submit"
-                        class="m-auto d-block btn text-white btn-orange"
+                        id="btnSubmit"
+                        class="
+                          btn btn-orange
+                          text-white
+                          m-auto
+                          d-block
+                          is-status
+                          d-flex
+                          justify-content-between
+                          align-items-center
+                        "
                       >
                         Update Profile
                       </button>
@@ -240,7 +334,7 @@
         </div>
       </div>
     </div>
-
-    <%- include ("./share/scripts.ejs") %>
+    <%- include ("./share/message.ejs") %> <%- include ("./share/scripts.ejs")
+    %>
   </body>
 </html>

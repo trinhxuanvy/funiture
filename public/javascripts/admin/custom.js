@@ -210,7 +210,6 @@ $(document).ready(function () {
             url.search,
           dataType: "json",
           success: function (response) {
-            console.log(response);
             statusLoading({
               posLoading: btnPreviewProd[i],
               isCompleted: true,
@@ -315,8 +314,6 @@ $(document).ready(function () {
             isSuccess: false,
           });
 
-          console.log(url.origin + url.pathname, id);
-
           $.ajax({
             method: "post",
             contentType: "application/json",
@@ -324,7 +321,6 @@ $(document).ready(function () {
             data: JSON.stringify(postData),
             dataType: "json",
             success: function (response) {
-              console.log(response);
               statusUpdate({
                 posStatus: input[i],
                 posLoading: input[i].parentNode,
@@ -374,7 +370,7 @@ $(document).ready(function () {
                       isCompleted: true,
                       isSuccess: true,
                     });
-                    input[i].parentNode.childNodes[1].src = link;
+                    $(input[i].parentNode).find("img").attr("src", link);
                   },
                 });
               }
@@ -386,7 +382,7 @@ $(document).ready(function () {
   });
 
   // Thêm validate phone
-  jQuery.validator.addMethod("valid_phone", function (value) {
+  jQuery.validator.addMethod("valid_number", function (value) {
     var regex = /^[0-9]*$/gm;
     return value.trim().match(regex);
   });
@@ -435,13 +431,26 @@ $(document).ready(function () {
           },
           phone: {
             required: true,
-            valid_phone: true,
+            valid_number: true,
             minlength: 10,
             maxlength: 10,
+          },
+          identityCard: {
+            required: true,
+            valid_number: true,
           },
           username: {
             required: true,
             valid_username: true,
+          },
+          password: {
+            required: true,
+            minlength: 8,
+          },
+          confirmPassword: {
+            required: true,
+            equalTo: "#password",
+            minlength: 8,
           },
         },
         messages: {
@@ -489,9 +498,13 @@ $(document).ready(function () {
           },
           phone: {
             required: "Please enter phone",
-            minlength: "Please enter min-length 10 numbers",
-            maxlength: "Please enter max-length 10 numbers",
-            valid_phone: "Please enter right phonenumber",
+            minlength: "Min length: 10 numbers",
+            maxlength: "Max length: 10 numbers",
+            valid_number: "Phone number just contains 0-9",
+          },
+          identityCard: {
+            required: "Please enter phone",
+            valid_number: "Phone number just contains 0-9",
           },
           address: {
             required: "Please enter address",
@@ -514,6 +527,16 @@ $(document).ready(function () {
           cusName: {
             required: "Please enter customer name",
           },
+          // profile
+          password: {
+            required: "Please enter password",
+            minlength: "Min length: 8",
+          },
+          confirmPassword: {
+            required: "Please enter confirm password",
+            minlength: "Min length: 8",
+            equalTo: "Password doesn't match",
+          },
         },
       });
       if ($("#formSubmit").valid()) {
@@ -532,6 +555,8 @@ $(document).ready(function () {
       $(this).parent(".alert").fadeOut();
     });
   });
+
+  // Xử lý tabs
 });
 
 // function showBoxModal() {

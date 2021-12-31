@@ -24,6 +24,18 @@ exports.postLogin = async (req, res, next) => {
     } else {
       const userToken = {
         _id: user._id,
+        adminName: user.adminName,
+        phone: user.phone,
+        email: user.email,
+        address: user.address,
+        dateOfBirth: user.dateOfBirth,
+        avatarLink: user.avatarLink,
+        identityCard: user.identityCard,
+        username: user.username,
+        password: user.password,
+        aboutMe: user.aboutMe,
+        roleLevel: user.roleLevel,
+        avatarLink: user.avatarLink,
         roleLevel: user.roleLevel,
       };
 

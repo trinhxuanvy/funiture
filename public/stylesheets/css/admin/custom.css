@@ -24,3 +24,7 @@ label.error {
   top: 100%;
   right: 0;
 }
+
+.fix-right label.error {
+  right: 8px;
+}
