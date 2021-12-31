@@ -504,7 +504,7 @@ $(document).ready(function () {
           },
           identityCard: {
             required: "Please enter phone",
-            valid_number: "Phone number just contains 0-9",
+            valid_number: "Identity Card just contains 0-9",
           },
           address: {
             required: "Please enter address",
