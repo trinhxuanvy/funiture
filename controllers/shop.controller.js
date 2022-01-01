@@ -607,37 +607,36 @@ exports.updateCustomerProfile = async (req, res, next) => {
   {
     if(!error)
     {
-      console.log("update ok")
+      const userToken = {
+        _id: user._id,
+        cusName: req.body.cusName,
+        phone: req.body.phone,
+        email: req.body.email,
+        dateOfBirth: req.body.dateOfBirth,
+        avatarLink: user.avatarLink,
+        username: user.username,
+        password: user.password,
+        cart: user.cart,
+        province: req.body.province,
+        district: req.body.district,
+        commune: req.body.commune,
+        address: req.body.address,
+      };
+    
+      // console.log(userToken);
+    
+      const token = jwt.sign(userToken, process.env.KEY_JWT, {
+        algorithm: "HS256",
+        expiresIn: "1h",
+      });
+    
+      res.cookie("cusToken", token);
+      res.cookie("message", { message: "Update Success", type: "success" });
+      res.redirect("/profile");
     }
     else{
-      console.log("update fail")
+      res.cookie("message", { message: "Update Fail", type: "fail" });
     }
   });
 
-  const userToken = {
-    _id: user._id,
-    cusName: req.body.cusName,
-    phone: req.body.phone,
-    email: req.body.email,
-    dateOfBirth: req.body.dateOfBirth,
-    avatarLink: user.avatarLink,
-    username: user.username,
-    password: user.password,
-    cart: user.cart,
-    province: req.body.province,
-    district: req.body.district,
-    commune: req.body.commune,
-    address: req.body.address,
-  };
-
-  console.log(userToken);
-
-  const token = jwt.sign(userToken, process.env.KEY_JWT, {
-    algorithm: "HS256",
-    expiresIn: "1h",
-  });
-
-  res.cookie("cusToken", token);
-  res.cookie("message", { message: "Update Success", type: "success" });
-  res.redirect("/profile");
 };

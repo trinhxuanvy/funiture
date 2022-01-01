@@ -51,24 +51,37 @@
                 <label for="vietNamProvinces" class="form-label"
                 >Provinces</label>
                 <select class="country_select form-control" id="vietNamProvinces">
+                  <% if (user.province) { %>
+                    <option class="list-option" value="<%= user.province %>"><%= user.province %></option>
+                  <% } %> 
                 </select>
               </div>
               <div class="col-md-6 form-group p_star">
                 <label for="vietNamDistrict" class="form-label"
                 >District</label>
                 <select class="country_select form-control" id="vietNamDistrict">
+                  <% if (user.district) { %>
+                    <option class="list-option" value="<%= user.district %>"><%= user.district %></option>
+                  <% } %> 
                 </select>
               </div>
               <div class="col-md-6 form-group p_star">
                 <label for="vietNamCommune" class="form-label"
                 >Commune</label>
                 <select class="country_select form-control" id="vietNamCommune">
+                  <% if (user.commune) { %>
+                    <option class="list-option" value="<%= user.commune %>"><%= user.commune %></option>
+                  <% } %> 
                 </select>
               </div>
               <div class="col-md-12 form-group">
                 <label for="adress" class="form-label"
                 >Address</label>
-                <input type="text" class="form-control" id="adress" name="adress"/>
+                <input type="text" class="form-control"
+                <% if (user.address) { %>
+                  value="<%= user.address %>"
+                <% } %>
+                id="adress" name="adress"/>
               </div>
               <div class="col-md-12 form-group">
                 <div class="cupon_area">
