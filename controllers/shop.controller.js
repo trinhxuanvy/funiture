@@ -166,16 +166,14 @@ exports.checkout = async (req, res, next) => {
     }
   );
 
-  var cartTotal = 0;
   if(user != null)
   {
-    cartTotal = user.cart.totalQuantity;
+    res.render("checkout", { user: user, cartDetails: user.cart.cartDetails, cartTotal: user.cart.totalQuantity, totalCarts: user.cart.price, allTotalCarts : user.cart.price + 20 });
   }
   else
   {
-    cartTotal = req.session.totalQuantity;
+    res.render("checkout", { user: user, cartDetails: req.session.cartDetails, cartTotal: req.session.totalQuantity, totalCarts: req.session.totalCarts, allTotalCarts : req.session.totalCarts + 20 });
   }
-  res.render("checkout", { user, cartTotal });
 };
 
 //render trang chu
@@ -297,6 +295,16 @@ exports.profile = async (req, res, next) => {
     }
   );
 
+  var cartTotal = 0;
+  if(user != null)
+  {
+    cartTotal = user.cart.totalQuantity;
+  }
+  else
+  {
+    cartTotal = req.session.totalQuantity;
+  }
+
   const date = new Date(user?.dateOfBirth);
   user.dateOfBirth =
     date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
@@ -305,6 +313,7 @@ exports.profile = async (req, res, next) => {
     pageName: "profile",
     user,
     cusModel: CUSTOMER_MODEL,
+    cartTotal: cartTotal
   });
 };
 
