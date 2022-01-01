@@ -3,6 +3,7 @@
 <body>
   <!--::header part start::-->
   <%- include ("share/menu-top.ejs") %>
+  <%- include ("share/message.ejs") %>
   <!-- Header part end-->
 
   <!--================Home Banner Area =================-->
@@ -35,12 +36,7 @@
                   Manage Your Account And Shipping Feld
                 </h3>
               </div>
-              <form
-                class="row contact_form"
-                action="/update/account"
-                method="post"
-                novalidate="novalidate"
-              >
+              <form class="row contact_form" action="/update/customer" method="post">
                 <div class="col-md-6 form-group p_star">
                     <label for="<%= cusModel.cusName %>" class="form-label"
                       >Full Name</label>
@@ -50,6 +46,7 @@
                         id="<%= cusModel.cusName %>"
                         name="<%= cusModel.cusName %>"
                         value="<%= user.cusName %>"
+                        required
                     />
                 </div>
                 <div class="col-md-6 form-group p_star">
@@ -61,6 +58,7 @@
                         id="<%= cusModel.phone %>"
                         name="<%= cusModel.phone %>"
                         value="<%= user.phone %>"
+                        required
                     />
                 </div>
                 <div class="col-md-6 form-group p_star">
@@ -72,6 +70,7 @@
                       id="<%= cusModel.email %>"
                       name="<%= cusModel.email %>"
                       value="<%= user.email %>"
+                      required
                   />
                 </div>
                 <div class="col-md-6 form-group p_star">
@@ -94,28 +93,37 @@
                 <div class="col-md-6 form-group p_star">
                   <label for="vietNamProvinces" class="form-label"
                     >Provinces</label>
-                  <select class="country_select form-control" id="vietNamProvinces">
+                  <select  name="<%= cusModel.province %>" class="country_select form-control" id="vietNamProvinces">
+                    <% if (user.province) { %>
+                      <option class="list-option" value="<%= user.province %>"><%= user.province %></option>
+                    <% } %> 
                   </select>
                 </div>
                 <div class="col-md-6 form-group p_star">
                   <label for="vietNamDistrict" class="form-label"
                   >District</label>
-                  <select class="country_select form-control" id="vietNamDistrict">
+                  <select name="<%= cusModel.district %>" class="country_select form-control" id="vietNamDistrict">
+                    <% if (user.district) { %>
+                      <option class="list-option" value="<%= user.district %>"><%= user.district %></option>
+                    <% } %> 
                   </select>
                 </div>
                 <div class="col-md-6 form-group p_star">
                   <label for="vietNamDistrict" class="form-label"
                   >Commune</label>
-                  <select class="country_select form-control" id="vietNamCommune">
+                  <select name="commune" class="country_select form-control" id="vietNamCommune">
+                    <% if (user.commune) { %>
+                      <option class="list-option" value="<%= user.commune %>"><%= user.commune %></option>
+                    <% } %> 
                   </select>
                 </div>
                 <div class="col-md-6 form-group p_star">
                   <label for="adress" class="form-label">Address</label>
-                  <input type="text" class="form-control" id="adress" name="adress" />
+                  <input name="<%= cusModel.address %>" id="<%= cusModel.address %>" value="<%= user.address %>" type="text" class="form-control" />
                 </div>
                 <div class="col-md-12 form-group">
-                  <button type="submit" value="submit" class="btn_3">
-                    Update profile
+                  <button type="submit" id="Submitbtn" value="submit" class="btn_3">
+                    Update profile  
                   </button>
                 </div>
               </form>

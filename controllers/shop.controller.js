@@ -295,6 +295,8 @@ exports.profile = async (req, res, next) => {
     }
   );
 
+  var message = req.cookies?.message || "";
+  res.clearCookie("message");
   var cartTotal = 0;
   if(user != null)
   {
@@ -313,7 +315,8 @@ exports.profile = async (req, res, next) => {
     pageName: "profile",
     user,
     cusModel: CUSTOMER_MODEL,
-    cartTotal: cartTotal
+    cartTotal: cartTotal,
+    message: message,
   });
 };
 
@@ -371,6 +374,10 @@ exports.addCard = async (req, res, next) => {
       username: user.username,
       password: user.password,
       cart: user.cart,
+      province: user.province,
+      district: user.district,
+      commune: user.commune,
+      address: user.address,
     };
 
     const token = jwt.sign(userToken, process.env.KEY_JWT, {
@@ -450,6 +457,10 @@ exports.getAllPriceByProductId = async (req, res, next) => {
       username: user.username,
       password: user.password,
       cart: user.cart,
+      province: user.province,
+      district: user.district,
+      commune: user.commune,
+      address: user.address,
     };
 
     const token = jwt.sign(userToken, process.env.KEY_JWT, {
@@ -521,6 +532,10 @@ exports.deleteProductCart = async (req, res, next) => {
           username: user.username,
           password: user.password,
           cart: user.cart,
+          province: user.province,
+          district: user.district,
+          commune: user.commune,
+          address: user.address,
         };
     
         const token = jwt.sign(userToken, process.env.KEY_JWT, {
@@ -551,10 +566,78 @@ exports.deleteProductCart = async (req, res, next) => {
     req.session.cartDetails = req.session?.cartDetails.filter( data => data.productId != productId);
     res.send({success: true, totalCarts: req.session.totalCarts, totalQuantity: req.session.totalQuantity});
   }
+};
 
-  // if (product) {
-  //   res.send({price: product.price, success: true});
-  // } else {
-  //   res.send({success: false});
-  // }
+exports.updateCustomerProfile = async (req, res, next) => {
+  const user = jwt.verify(
+    req.cookies?.cusToken,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+
+  var newCustomer = {};
+
+  if (req.body?.password) {
+    const newPassword = await bcrypt.hash(req.body?.password, 12);
+    newCustomer = {
+      password: newPassword,
+    };
+  } else {
+    newCustomer = {
+      cusName: req.body.cusName,
+      email: req.body.email,
+      phone: req.body.phone,
+      dateOfBirth: req.body.dateOfBirth,
+      province: req.body.province,
+      district: req.body.district,
+      commune: req.body.commune,
+      address: req.body.address,
+    };
+  }
+
+  console.log(newCustomer);
+
+  Customer.updateOne({ _id: user._id }, newCustomer, (error) =>
+  {
+    if(!error)
+    {
+      console.log("update ok")
+    }
+    else{
+      console.log("update fail")
+    }
+  });
+
+  const userToken = {
+    _id: user._id,
+    cusName: req.body.cusName,
+    phone: req.body.phone,
+    email: req.body.email,
+    dateOfBirth: req.body.dateOfBirth,
+    avatarLink: user.avatarLink,
+    username: user.username,
+    password: user.password,
+    cart: user.cart,
+    province: req.body.province,
+    district: req.body.district,
+    commune: req.body.commune,
+    address: req.body.address,
+  };
+
+  console.log(userToken);
+
+  const token = jwt.sign(userToken, process.env.KEY_JWT, {
+    algorithm: "HS256",
+    expiresIn: "1h",
+  });
+
+  res.cookie("cusToken", token);
+  res.cookie("message", { message: "Update Success", type: "success" });
+  res.redirect("/profile");
 };

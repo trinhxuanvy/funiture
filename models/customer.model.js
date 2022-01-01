@@ -44,7 +44,7 @@ const Customer = new Schema(
       required: false,
       default: "",
     },
-    ward: {
+    commune: {
       type: String,
       required: false,
       default: "",
