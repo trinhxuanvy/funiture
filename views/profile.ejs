@@ -119,7 +119,11 @@
                 </div>
                 <div class="col-md-6 form-group p_star">
                   <label for="adress" class="form-label">Address</label>
-                  <input name="<%= cusModel.address %>" id="<%= cusModel.address %>" value="<%= user.address %>" type="text" class="form-control" />
+                  <input name="<%= cusModel.address %>" id="<%= cusModel.address %>" 
+                  <% if (user.address) { %>
+                    value="<%= user.address %>"
+                  <% } %>
+                  type="text" class="form-control" />
                 </div>
                 <div class="col-md-12 form-group">
                   <button type="submit" id="Submitbtn" value="submit" class="btn_3">
