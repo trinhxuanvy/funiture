@@ -184,16 +184,4 @@ router.post(
   adminController.updateImageProfile
 );
 
-router.get(
-  "/admin/statistic",
-  authAdminController.checkExpired,
-  adminController.getStatistic
-);
-
-router.get(
-  "/admin/statistic/:time/:start/:end",
-  authAdminController.checkExpired,
-  adminController.getStatisticSales
-);
-
 module.exports = router;
