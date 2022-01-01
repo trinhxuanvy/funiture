@@ -14,6 +14,7 @@ const {
   CATEGORY_MODEL,
   CUSTOMER_MODEL,
 } = require("../constants/modal");
+const { data } = require("../data-sample/data");
 
 dotenv.config();
 const ITEM_PAGE = 8;
@@ -1133,4 +1134,38 @@ exports.resetPasswordAdmin = async (req, res, next) => {
 
   await Admin.updateOne({ _id: id }, { password: newPassword });
   res.redirect("/admin/admins");
+};
+
+exports.getStatistic = async (req, res, next) => {
+  res.render("admin/statistic", {
+    pageName: "statistic",
+  });
+};
+
+exports.postStatistic = async (req, res, next) => {
+  res.send(data);
+};
+
+exports.getStatisticSales = async (req, res, next) => {
+  const type = req.params?.time;
+  const start = req.params?.start;
+  const end = req.params?.end;
+
+  switch (type) {
+    case "day":
+      break;
+
+    default:
+      break;
+  }
+  setTimeout(() => {
+    res.send({
+      data: data,
+      titleX: "Daily Sales Data",
+      titleY: "USD",
+      success: true,
+      start: start,
+      end: end,
+    });
+  }, 5000);
 };
