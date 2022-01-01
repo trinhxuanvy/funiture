@@ -508,7 +508,7 @@
       success: function (response) {
         response.forEach((item) => {
           $(selectVietNamProvinces[0]).append(
-            `<option value="${item.name}">${item.name}</option>`
+            `<option class="list-option" value="${item.name}">${item.name}</option>`
           );
         });
       },
@@ -676,4 +676,10 @@
     }
   });
 
+    // Xử lý hiển thị message box
+    $(function () {
+      $(".close").click(function () {
+        $(this).parent(".alert").fadeOut();
+      });
+    });
 })(jQuery);

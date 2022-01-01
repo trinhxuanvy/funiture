@@ -57,6 +57,10 @@ exports.postLogin = async (req, res, next) => {
             username: user.username,
             password: user.password,
             cart: user.cart,
+            province: user.province,
+            district: user.district,
+            commune: user.commune,
+            address: user.address,
           };
 
           const token = jwt.sign(userToken, process.env.KEY_JWT, {

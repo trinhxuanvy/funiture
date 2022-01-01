@@ -31,6 +31,53 @@
 // breadcrumb scss
 @import "breadcrumb";
 
+h6 {
+    font-family: "Quicksand";
+    margin-top: 8px;
+  }
+  .alert {
+    margin: 20px auto;
+    padding: 16px 64px 16px 16px;
+    position: fixed;
+    border-radius: 5px;
+    box-shadow: 0px 0px 16px rgba($section_bg_1, 0.3);
+    bottom: 32px;
+    right: 16px;
+    z-index: 100000;
+  }
+  .close {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    opacity: 0.5;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 50%;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.6em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @mixin alert($name, $bgColor) {
+    $accentColor: darken($bgColor, 50);
+    .#{$name} {
+      background-color: #{$bgColor};
+      border-left: 5px solid $accentColor;
+      .close {
+        border-color: $accentColor;
+        color: $accentColor;
+      }
+    }
+  }
+  @include alert(simple-alert, #ebebeb);
+  @include alert(success-alert, #a8f0c6);
+  @include alert(danger-alert, #f7a7a3);
+  @include alert(warning-alert, #ffd48a);
+
 
 
 

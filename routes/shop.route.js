@@ -17,10 +17,10 @@ router.get("/cart/change/product/:productId/:productAmount", shopController.getA
 
 router.get("/profile", shopController.profile);
 
-router.post(
-    "/signup",
-    shopController.postCustomer
-  );
+router.post("/signup", shopController.postCustomer);
+
+router.post("/update/customer", shopController.updateCustomerProfile);
+
 
 //router.get("/categories/:page?", shopController.categories);
 
