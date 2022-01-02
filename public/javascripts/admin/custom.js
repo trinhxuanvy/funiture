@@ -496,6 +496,9 @@ $(document).ready(function () {
   $(function () {
     getChart({});
 
+    $("#startDay").datepicker({ format: "mm-dd-yyyy", autoclose: true });
+    $("#endDay").datepicker({ format: "mm-dd-yyyy", autoclose: true });
+
     // Xử lý các button day month year
     $("#btnGroupStatistic button").click(function (e) {
       e.preventDefault();
@@ -537,9 +540,6 @@ $(document).ready(function () {
         $("#formStatistic").css("display", "none");
       }
     });
-
-    $("#startDay").datepicker({ format: "mm-dd-yyyy", autoclose: true });
-    $("#endDay").datepicker({ format: "mm-dd-yyyy", autoclose: true });
 
     $("#btnSubmitStatistic").click(function (e) {
       e.preventDefault();
@@ -658,11 +658,20 @@ function convertMoney(money) {
 }
 
 function getChart(data) {
+  CanvasJS.addColorSet("primary", ["#EB5E28"]);
+
   var dataPoints = [];
   var titleX = data.titleX || "";
   var titleY = data.titleY || "";
   var options = {
     animationEnabled: true,
+    colorSet: "primary",
+    zoomEnabled: true,
+    zoomType: "x",
+    legend: {
+      horizontalAlign: "right",
+      verticalAlign: "center",
+    },
     theme: "light2",
     title: {
       text: titleX,
