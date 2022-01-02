@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $(function () {
-    $(".datetimepicker").datepicker();
+    $(".datetimepicker").datepicker({ autoclose: true });
   });
 
   // Xử lý toggle menu
@@ -19,70 +19,6 @@ $(document).ready(function () {
         $(main).addClass("move");
       }
     });
-  });
-
-  // Xử lý validate form
-  $(function () {
-    // $("#addModal").validate({
-    //   rules: {
-    //     prodName: {
-    //       required: true,
-    //     },
-    //     prodTypeId: {
-    //       required: true,
-    //     },
-    //     brandId: {
-    //       required: true,
-    //     },
-    //     price: {
-    //       required: true,
-    //     },
-    //     amount: {
-    //       required: true,
-    //     },
-    //     primaryImage: {
-    //       required: true,
-    //     },
-    //     secondaryImage_1: {
-    //       required: true,
-    //     },
-    //     secondaryImage_2: {
-    //       required: true,
-    //     },
-    //     secondaryImage_3: {
-    //       required: true,
-    //     },
-    //   },
-    //   messages: {
-    //     prodName: {
-    //       required: "This field can't be empty",
-    //     },
-    //     prodTypeId: {
-    //       required: "This field can't be empty",
-    //     },
-    //     brandId: {
-    //       required: "This field can't be empty",
-    //     },
-    //     price: {
-    //       required: "This field can't be empty",
-    //     },
-    //     amount: {
-    //       required: "This field can't be empty",
-    //     },
-    //     primaryImage: {
-    //       required: "This field can't be empty",
-    //     },
-    //     secondaryImage_1: {
-    //       required: "This field can't be empty",
-    //     },
-    //     secondaryImage_2: {
-    //       required: "This field can't be empty",
-    //     },
-    //     secondaryImage_3: {
-    //       required: "This field can't be empty",
-    //     },
-    //   },
-    // });
   });
 
   // $(function() {
@@ -301,7 +237,7 @@ $(document).ready(function () {
       if ($(input[i]).attr("type") != "file") {
         $(input[i]).focusout(function (e) {
           e.preventDefault();
-
+          console.log($(this).val());
           const id = $(input[i].parentNode.parentNode.parentNode).attr("id");
           const url = new URL(window.location.href);
           const name = $(input[i]).attr("name");
@@ -783,6 +719,8 @@ function getChart(data) {
       y: 1600,
     });
   }
-
-  $("#chartContainer").CanvasJSChart(options);
+  const chartContainer = $("#chartContainer");
+  if (chartContainer.length) {
+    $("#chartContainer").CanvasJSChart(options);
+  }
 }
