@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $(function () {
-    $(".datetimepicker").datepicker();
+    $(".datetimepicker").datepicker({ autoclose: true });
   });
 
   // Xử lý toggle menu
@@ -20,76 +20,6 @@ $(document).ready(function () {
       }
     });
   });
-
-  // Xử lý validate form
-  $(function () {
-    // $("#addModal").validate({
-    //   rules: {
-    //     prodName: {
-    //       required: true,
-    //     },
-    //     prodTypeId: {
-    //       required: true,
-    //     },
-    //     brandId: {
-    //       required: true,
-    //     },
-    //     price: {
-    //       required: true,
-    //     },
-    //     amount: {
-    //       required: true,
-    //     },
-    //     primaryImage: {
-    //       required: true,
-    //     },
-    //     secondaryImage_1: {
-    //       required: true,
-    //     },
-    //     secondaryImage_2: {
-    //       required: true,
-    //     },
-    //     secondaryImage_3: {
-    //       required: true,
-    //     },
-    //   },
-    //   messages: {
-    //     prodName: {
-    //       required: "This field can't be empty",
-    //     },
-    //     prodTypeId: {
-    //       required: "This field can't be empty",
-    //     },
-    //     brandId: {
-    //       required: "This field can't be empty",
-    //     },
-    //     price: {
-    //       required: "This field can't be empty",
-    //     },
-    //     amount: {
-    //       required: "This field can't be empty",
-    //     },
-    //     primaryImage: {
-    //       required: "This field can't be empty",
-    //     },
-    //     secondaryImage_1: {
-    //       required: "This field can't be empty",
-    //     },
-    //     secondaryImage_2: {
-    //       required: "This field can't be empty",
-    //     },
-    //     secondaryImage_3: {
-    //       required: "This field can't be empty",
-    //     },
-    //   },
-    // });
-  });
-
-  // $(function() {
-  //     $("select").select2({
-  //         theme: "bootstrap-5",
-  //     });
-  // });
 
   // Xử lý popup single product admin page
   $(function () {
@@ -299,9 +229,8 @@ $(document).ready(function () {
 
     for (let i = 0; i < input.length; i++) {
       if ($(input[i]).attr("type") != "file") {
-        $(input[i]).focusout(function (e) {
+        $(input[i]).change(function (e) {
           e.preventDefault();
-
           const id = $(input[i].parentNode.parentNode.parentNode).attr("id");
           const url = new URL(window.location.href);
           const name = $(input[i]).attr("name");
@@ -556,20 +485,112 @@ $(document).ready(function () {
     });
   });
 
-  // Xử lý tabs
+  // Thêm validate time start-end
+  jQuery.validator.addMethod("valid_form_statistic", function (value) {
+    var inputStart = new Date($("#formDay input[name='startDate']").val());
+
+    return new Date(value) > inputStart;
+  });
+
+  // Xử lý phân tích load chart
+  $(function () {
+    getChart({});
+
+    // Xử lý các button day month year
+    $("#btnGroupStatistic button").click(function (e) {
+      e.preventDefault();
+      $("#btnGroupStatistic button").removeClass("btn-active");
+      const btnActive = $(this).hasClass("btn-active");
+      if (btnActive) {
+        $(this).removeClass("btn-active");
+      } else {
+        $(this).addClass("btn-active");
+      }
+
+      const type = $(this).val();
+      $("#dayStatistic").css("display", "none");
+      $("#monthStatistic").css("display", "none");
+      $("#yearStatistic").css("display", "none");
+
+      switch (type) {
+        case "day":
+          $("#dayStatistic").css("display", "block");
+          break;
+        case "month":
+          $("#monthStatistic").css("display", "block");
+          break;
+        case "year":
+          $("#yearStatistic").css("display", "block");
+          break;
+        default:
+          break;
+      }
+    });
+
+    // XỬ lý button config
+    $("#configStatistic").click(function (e) {
+      e.preventDefault();
+      const formActive = $("#formStatistic").css("display");
+      if (formActive == "none") {
+        $("#formStatistic").css("display", "block");
+      } else {
+        $("#formStatistic").css("display", "none");
+      }
+    });
+
+    $("#startDay").datepicker({ format: "mm-dd-yyyy", autoclose: true });
+    $("#endDay").datepicker({ format: "mm-dd-yyyy", autoclose: true });
+
+    $("#btnSubmitStatistic").click(function (e) {
+      e.preventDefault();
+
+      // Validate form
+      $("#formDay").validate({
+        rules: {
+          endDate: {
+            valid_form_statistic: true,
+            required: true,
+            date: true,
+          },
+        },
+        messages: {
+          endDate: {
+            valid_form_statistic: "Start date must be less than end date",
+            required: "Please enter end date",
+            date: "Please enter date",
+          },
+          startDate: {
+            required: "Please enter start date",
+          },
+        },
+      });
+
+      if ($("#formDay").valid()) {
+        $("#formStatistic").css("display", "none"); // Ẩn form
+        $(".loading").css("visibility", "initial"); // Hiển thị loading
+        const url = new URL(window.location.href);
+        const inputStart = $("#formDay input[name='startDate']").val();
+        const inputEnd = $("#formDay input[name='endDate']").val();
+
+        // Xử lý ajax để get data
+        $.ajax({
+          type: "get",
+          url:
+            url.origin + url.pathname + "/day/" + inputStart + "/" + inputEnd,
+          dataType: "json",
+          contentType: "application/json",
+          success: function (response) {
+            if (response.success) {
+              $(".loading").css("visibility", "hidden");
+              getChart(response);
+              $(".show-range").html(response.start + " to " + response.end);
+            }
+          },
+        });
+      }
+    });
+  });
 });
-
-// function showBoxModal() {
-//   const modal = $("#boxModal");
-//   $(modal[0]).css("right", "-100%");
-//   setTimeout(() => {
-//     $(modal[0]).css("right", "32px");
-//   }, 400);
-
-//   setTimeout(() => {
-//     $(modal[0]).css("right", "-100%");
-//   }, 2000);
-// }
 
 function statusUpdate({
   posStatus = null,
@@ -634,4 +655,66 @@ function convertMoney(money) {
     style: "currency",
     currency: "USD",
   }).format(money);
+}
+
+function getChart(data) {
+  var dataPoints = [];
+  var titleX = data.titleX || "";
+  var titleY = data.titleY || "";
+  var options = {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: titleX,
+    },
+    axisX: {
+      valueFormatString: "DD-MM-YYYY",
+    },
+    axisY: {
+      title: titleY,
+      titleFontSize: 24,
+    },
+    data: [
+      {
+        type: "spline",
+        yValueFormatString: "$#,###.##",
+        dataPoints: dataPoints,
+      },
+    ],
+  };
+
+  if (data?.data?.length) {
+    for (let i = 0; i < data?.data?.length; i++) {
+      dataPoints.push({
+        x: new Date(data.data[i].date),
+        y: data.data[i].units,
+      });
+    }
+  } else {
+    dataPoints.push({
+      x: "",
+      y: 800,
+    });
+    dataPoints.push({
+      x: "",
+      y: 1000,
+    });
+    dataPoints.push({
+      x: "",
+      y: 1200,
+    });
+    dataPoints.push({
+      x: "",
+      y: 1400,
+    });
+    dataPoints.push({
+      x: "",
+      y: 1600,
+    });
+  }
+
+  const chartContainer = $("#chartContainer");
+  if (chartContainer.length) {
+    $("#chartContainer").CanvasJSChart(options);
+  }
 }
