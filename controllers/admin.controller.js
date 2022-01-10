@@ -176,176 +176,180 @@ exports.postProduct = async (req, res, next) => {
   });
 };
 
-exports.deleteProduct = async (req, res, next) => {
+exports.deleteProduct = (req, res, next) => {
   const prodId = req.params.id;
-  const prodOld = await Product.findById({ _id: prodId });
-  const update = await Product.updateOne(
-    { _id: prodId },
-    { $set: { status: !prodOld.status } }
-  );
-  const prodNew = await Product.findById({ _id: prodId });
 
-  if (prodNew) {
-    res.send({ status: prodNew.status, success: true });
-  } else {
-    res.send({ success: false });
-  }
+  Product.findById({ _id: prodId }, async (err, data) => {
+    if (!err) {
+      const update = await Product.updateOne(
+        { _id: prodId },
+        { $set: { status: !data.status } }
+      );
+
+      if (update?.modifiedCount != 0) {
+        res.send({ status: !data.status, success: true });
+      } else {
+        res.send({ success: false });
+      }
+    }
+  });
 };
 
 exports.updateProduct = async (req, res, next) => {
-  let url = "";
-  const prodId = req.params.id || "";
-  const prodOld = await Product.findById({ _id: prodId });
+  try {
+    let update;
+    const prodId = req.params.id || "";
+    const prodOld = await Product.findById({ _id: prodId });
 
-  switch (Object.keys(req.body)[0]) {
-    case PRODUCT_MODEL.prodTypeId:
-      const prodType = await Category.findById(req.body.prodTypeId);
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            prodTypeId: req.body.prodTypeId,
-            prodTypeName: prodType.prodTypeName,
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.brandId:
-      const brand = await Brand.findById(req.body.brandId);
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            brandId: req.body.brandId,
-            brandName: brand.brandName,
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.primaryImage:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            prodImage: [
-              {
-                imageLink: req.body.primaryImage,
-                type: "1",
-              },
-              {
-                imageLink: prodOld?.prodImage?.[1].imageLink,
-                type: "2",
-              },
-              {
-                imageLink: prodOld?.prodImage?.[2].imageLink,
-                type: "3",
-              },
-              {
-                imageLink: prodOld?.prodImage?.[3].imageLink,
-                type: "4",
-              },
-            ],
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.secondaryImage1:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            prodImage: [
-              {
-                imageLink: prodOld?.prodImage?.[0].imageLink,
-                type: "1",
-              },
-              {
-                imageLink: req.body.secondaryImage1,
-                type: "2",
-              },
-              {
-                imageLink: prodOld?.prodImage?.[2].imageLink,
-                type: "3",
-              },
-              {
-                imageLink: prodOld?.prodImage?.[3].imageLink,
-                type: "4",
-              },
-            ],
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.secondaryImage2:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            prodImage: [
-              {
-                imageLink: prodOld?.prodImage?.[0].imageLink,
-                type: "1",
-              },
-              {
-                imageLink: prodOld?.prodImage?.[1].imageLink,
-                type: "2",
-              },
-              {
-                imageLink: req.body.secondaryImage2,
-                type: "3",
-              },
-              {
-                imageLink: prodOld?.prodImage?.[3].imageLink,
-                type: "4",
-              },
-            ],
-          },
-        }
-      );
-      break;
-    case PRODUCT_MODEL.secondaryImage3:
-      await Product.updateOne(
-        { _id: prodId },
-        {
-          $set: {
-            prodImage: [
-              {
-                imageLink: prodOld?.prodImage?.[0].imageLink,
-                type: "1",
-              },
-              {
-                imageLink: prodOld?.prodImage?.[1].imageLink,
-                type: "2",
-              },
-              {
-                imageLink: prodOld?.prodImage?.[2].imageLink,
-                type: "3",
-              },
-              {
-                imageLink: req.body.secondaryImage3,
-                type: "4",
-              },
-            ],
-          },
-        }
-      );
-      break;
-    default:
-      let prodProperty = { $set: {} };
-      prodProperty["$set"][Object.keys(req.body)[0]] =
-        req.body[Object.keys(req.body)[0]] || "";
+    switch (Object.keys(req.body)[0]) {
+      case PRODUCT_MODEL.prodTypeId:
+        const prodType = await Category.findById(req.body.prodTypeId);
+        update = await Product.updateOne(
+          { _id: prodId },
+          {
+            $set: {
+              prodTypeId: req.body.prodTypeId,
+              prodTypeName: prodType.prodTypeName,
+            },
+          }
+        );
+        break;
+      case PRODUCT_MODEL.brandId:
+        const brand = await Brand.findById(req.body.brandId);
+        update = await Product.updateOne(
+          { _id: prodId },
+          {
+            $set: {
+              brandId: req.body.brandId,
+              brandName: brand.brandName,
+            },
+          }
+        );
+        break;
+      case PRODUCT_MODEL.primaryImage:
+        update = await Product.updateOne(
+          { _id: prodId },
+          {
+            $set: {
+              prodImage: [
+                {
+                  imageLink: req.body.primaryImage,
+                  type: "1",
+                },
+                {
+                  imageLink: prodOld?.prodImage?.[1].imageLink,
+                  type: "2",
+                },
+                {
+                  imageLink: prodOld?.prodImage?.[2].imageLink,
+                  type: "3",
+                },
+                {
+                  imageLink: prodOld?.prodImage?.[3].imageLink,
+                  type: "4",
+                },
+              ],
+            },
+          }
+        );
+        break;
+      case PRODUCT_MODEL.secondaryImage1:
+        update = await Product.updateOne(
+          { _id: prodId },
+          {
+            $set: {
+              prodImage: [
+                {
+                  imageLink: prodOld?.prodImage?.[0].imageLink,
+                  type: "1",
+                },
+                {
+                  imageLink: req.body.secondaryImage1,
+                  type: "2",
+                },
+                {
+                  imageLink: prodOld?.prodImage?.[2].imageLink,
+                  type: "3",
+                },
+                {
+                  imageLink: prodOld?.prodImage?.[3].imageLink,
+                  type: "4",
+                },
+              ],
+            },
+          }
+        );
+        break;
+      case PRODUCT_MODEL.secondaryImage2:
+        update = await Product.updateOne(
+          { _id: prodId },
+          {
+            $set: {
+              prodImage: [
+                {
+                  imageLink: prodOld?.prodImage?.[0].imageLink,
+                  type: "1",
+                },
+                {
+                  imageLink: prodOld?.prodImage?.[1].imageLink,
+                  type: "2",
+                },
+                {
+                  imageLink: req.body.secondaryImage2,
+                  type: "3",
+                },
+                {
+                  imageLink: prodOld?.prodImage?.[3].imageLink,
+                  type: "4",
+                },
+              ],
+            },
+          }
+        );
+        break;
+      case PRODUCT_MODEL.secondaryImage3:
+        update = await Product.updateOne(
+          { _id: prodId },
+          {
+            $set: {
+              prodImage: [
+                {
+                  imageLink: prodOld?.prodImage?.[0].imageLink,
+                  type: "1",
+                },
+                {
+                  imageLink: prodOld?.prodImage?.[1].imageLink,
+                  type: "2",
+                },
+                {
+                  imageLink: prodOld?.prodImage?.[2].imageLink,
+                  type: "3",
+                },
+                {
+                  imageLink: req.body.secondaryImage3,
+                  type: "4",
+                },
+              ],
+            },
+          }
+        );
+        break;
+      default:
+        let prodProperty = { $set: {} };
+        prodProperty["$set"][Object.keys(req.body)[0]] =
+          req.body[Object.keys(req.body)[0]] || "";
 
-      await Product.updateOne({ _id: prodId }, prodProperty);
-      break;
-  }
+        update = await Product.updateOne({ _id: prodId }, prodProperty);
+        break;
+    }
 
-  const prodNew = await Product.findById({ _id: prodId });
-
-  if (prodNew) {
-    res.send({ prodNew, success: true });
-  } else {
-    res.send({ success: false });
-  }
+    if (update?.modifiedCount != 0) {
+      const prodNew = await Product.findById({ _id: prodId });
+      res.send({ prodNew, success: true });
+    } else {
+      res.send({ success: false });
+    }
+  } catch (error) {}
 };
 
 exports.getProductById = async (req, res, next) => {
@@ -443,57 +447,61 @@ exports.postCategory = async (req, res, next) => {
 };
 
 exports.updateCategory = async (req, res, next) => {
-  let url = "";
-  const prodTypeId = req.params.id || "";
+  try {
+    let update;
+    const prodTypeId = req.params.id || "";
 
-  switch (Object.keys(req.body)[0]) {
-    case CATEGORY_MODEL.prodTypeName:
-      await Category.updateOne(
-        { _id: prodTypeId },
-        {
-          $set: {
-            prodTypeName: req.body.prodTypeName,
-          },
-        }
-      );
-      break;
-    case CATEGORY_MODEL.amount:
-      await Category.updateOne(
-        { _id: prodTypeId },
-        {
-          $set: {
-            amount: req.body.amount,
-          },
-        }
-      );
-      break;
-    default:
-      break;
-  }
+    switch (Object.keys(req.body)[0]) {
+      case CATEGORY_MODEL.prodTypeName:
+        update = await Category.updateOne(
+          { _id: prodTypeId },
+          {
+            $set: {
+              prodTypeName: req.body.prodTypeName,
+            },
+          }
+        );
+        break;
+      case CATEGORY_MODEL.amount:
+        update = await Category.updateOne(
+          { _id: prodTypeId },
+          {
+            $set: {
+              amount: req.body.amount,
+            },
+          }
+        );
+        break;
+      default:
+        break;
+    }
 
-  const prodTypeNew = await Category.findById({ _id: prodTypeId });
-
-  if (prodTypeNew) {
-    res.send({ prodTypeNew, success: true });
-  } else {
-    res.send({ success: false });
-  }
+    if (update?.modifiedCount != 0) {
+      const prodTypeNew = await Category.findById({ _id: prodTypeId });
+      res.send({ prodTypeNew, success: true });
+    } else {
+      res.send({ success: false });
+    }
+  } catch (error) {}
 };
 
-exports.deleteCategory = async (req, res, next) => {
+exports.deleteCategory = (req, res, next) => {
   const prodTypeId = req.params.id;
-  const prodTypeOld = await Category.findById({ _id: prodTypeId });
-  const update = await Category.updateOne(
-    { _id: prodTypeId },
-    { $set: { status: !prodTypeOld.status } }
-  );
-  const prodTypeNew = await Category.findById({ _id: prodTypeId });
 
-  if (prodTypeNew) {
-    res.send({ status: prodTypeNew.status, success: true });
-  } else {
-    res.send({ success: false });
-  }
+  Category.findById({ _id: prodTypeId }, async (err, data) => {
+    if (!err) {
+      const update = await Category.updateOne(
+        { _id: prodTypeId },
+        { $set: { status: !data.status } }
+      );
+
+      if (update?.modifiedCount != 0) {
+        res.send({ status: !data.status, success: true });
+      } else {
+        res.send({ success: false });
+      }
+    }
+  });
 };
 
 exports.getBrand = async (req, res, next) => {
@@ -580,52 +588,55 @@ exports.postBrand = async (req, res, next) => {
 };
 
 exports.updateBrand = async (req, res, next) => {
-  let url = "";
-  const brandId = req.params.id || "";
+  try {
+    const brandId = req.params.id || "";
+    let update;
 
-  switch (Object.keys(req.body)[0]) {
-    case BRAND_MODEL.brandName:
-      await Brand.updateOne(
-        { _id: brandId },
-        {
-          $set: {
-            brandName: req.body.brandName,
-          },
-        }
-      );
-      break;
-    default:
-      // let brandProperty = { $set: {} };
-      // brandProperty["$set"][Object.keys(req.body)[0]] =
-      //   req.body[Object.keys(req.body)[0]] || "";
+    switch (Object.keys(req.body)[0]) {
+      case BRAND_MODEL.brandName:
+        update = await Brand.updateOne(
+          { _id: brandId },
+          {
+            $set: {
+              brandName: req.body.brandName,
+            },
+          }
+        );
+        break;
+      default:
+        // let brandProperty = { $set: {} };
+        // brandProperty["$set"][Object.keys(req.body)[0]] =
+        //   req.body[Object.keys(req.body)[0]] || "";
 
-      // await Brand.updateOne({ _id: brandId }, brandProperty);
-      break;
-  }
+        // await Brand.updateOne({ _id: brandId }, brandProperty);
+        break;
+    }
 
-  const brandNew = await Brand.findById({ _id: brandId });
-
-  if (brandNew) {
-    res.send({ brandNew, success: true });
-  } else {
-    res.send({ success: false });
-  }
+    if (update?.modifiedCount != 0) {
+      const brandNew = await Brand.findById({ _id: brandId });
+      res.send({ brandNew, success: true });
+    } else {
+      res.send({ success: false });
+    }
+  } catch (error) {}
 };
 
-exports.deleteBrand = async (req, res, next) => {
+exports.deleteBrand = (req, res, next) => {
   const brandId = req.params.id;
-  const brandOld = await Brand.findById({ _id: brandId });
-  const update = await Brand.updateOne(
-    { _id: brandId },
-    { $set: { status: !brandOld.status } }
-  );
-  const brandNew = await Brand.findById({ _id: brandId });
+  Brand.findById({ _id: brandId }, async (err, data) => {
+    if (!err) {
+      const update = await Brand.updateOne(
+        { _id: brandId },
+        { $set: { status: !data.status } }
+      );
 
-  if (brandNew) {
-    res.send({ status: brandNew.status, success: true });
-  } else {
-    res.send({ success: false });
-  }
+      if (update?.modifiedCount != 0) {
+        res.send({ status: !data.status, success: true });
+      } else {
+        res.send({ success: false });
+      }
+    }
+  });
 };
 
 exports.profile = async (req, res, next) => {
@@ -745,52 +756,57 @@ exports.postCustomer = async (req, res, next) => {
 };
 
 exports.updateCustomer = async (req, res, next) => {
-  let url = "";
-  const cusId = req.params.id || "";
+  try {
+    const cusId = req.params.id || "";
+    let update;
 
-  switch (Object.keys(req.body)[0]) {
-    default:
-      let cusProperty = { $set: {} };
-      cusProperty["$set"][Object.keys(req.body)[0]] =
-        req.body[Object.keys(req.body)[0]] || "";
+    switch (Object.keys(req.body)[0]) {
+      default:
+        let cusProperty = { $set: {} };
+        cusProperty["$set"][Object.keys(req.body)[0]] =
+          req.body[Object.keys(req.body)[0]] || "";
 
-      await Customer.updateOne({ _id: cusId }, cusProperty);
-      break;
-  }
+        update = await Customer.updateOne({ _id: cusId }, cusProperty);
+        break;
+    }
 
-  const cusNew = await Customer.findById({ _id: cusId });
-
-  if (cusNew) {
-    res.send({ cusNew, success: true });
-  } else {
-    res.send({ success: false });
-  }
+    if (update?.modifiedCount != 0) {
+      const cusNew = await Customer.findById({ _id: cusId });
+      res.send({ cusNew, success: true });
+    } else {
+      res.send({ success: false });
+    }
+  } catch (error) {}
 };
 
-exports.deleteCustomer = async (req, res, next) => {
+exports.deleteCustomer = (req, res, next) => {
   const cusId = req.params.id;
-  const cusOld = await Customer.findById({ _id: cusId });
-  const update = await Customer.updateOne(
-    { _id: cusId },
-    { $set: { status: !cusOld.status } }
-  );
-  const cusNew = await Customer.findById({ _id: cusId });
+  Customer.findById({ _id: cusId }, async (err, data) => {
+    const update = await Customer.updateOne(
+      { _id: cusId },
+      { $set: { status: !data.status } }
+    );
 
-  if (cusNew) {
-    res.send({ status: cusNew.status, success: true });
-  } else {
-    res.send({ success: false });
-  }
+    if (update?.modifiedCount != 0) {
+      res.send({ status: !data.status, success: true });
+    } else {
+      res.send({ success: false });
+    }
+  });
 };
 
 exports.getCustomerbyUsername = async (req, res, next) => {
-  const username = req.params.username;
-  const findCustomer = await Customer.findOne({ username: username });
-  if (findCustomer) {
-    res.send(true);
-  } else {
-    res.send(false);
-  }
+  try {
+    const username = req.params.username;
+
+    Customer.findOne({ username: username }, (err, data) => {
+      if (!err) {
+        res.send(true);
+      } else {
+        res.send(false);
+      }
+    });
+  } catch (error) {}
 };
 
 exports.resetPasswordCustomer = async (req, res, next) => {
@@ -803,12 +819,15 @@ exports.resetPasswordCustomer = async (req, res, next) => {
 
   // res.clearCookie("token");
   // res.redirect("/admin/login");
-  const id = req.params.id;
-  const customer = await Customer.findById({ _id: id });
-  const newPassword = await bcrypt.hash("Cus@" + customer.phone, 12);
 
-  await Customer.updateOne({ _id: id }, { password: newPassword });
-  res.redirect("/admin/customers");
+  try {
+    const id = req.params.id;
+    Customer.findById({ _id: id }, async (err, data) => {
+      const newPassword = await bcrypt.hash("Cus@" + data.phone, 12);
+      await Customer.updateOne({ _id: id }, { password: newPassword });
+      res.redirect("/admin/customers");
+    });
+  } catch (error) {}
 };
 
 exports.getAdmin = async (req, res, next) => {
@@ -906,108 +925,118 @@ exports.postAdmin = async (req, res, next) => {
 };
 
 exports.updateAdmin = async (req, res, next) => {
-  const isMe = jwt.verify(
-    req.cookies?.token,
-    process.env.KEY_JWT,
-    (err, data) => {
-      if (err) return [];
-      return data;
+  try {
+    const isMe = jwt.verify(
+      req.cookies?.token,
+      process.env.KEY_JWT,
+      (err, data) => {
+        if (err) return [];
+        return data;
+      }
+    );
+
+    let user = {};
+    let update;
+    const adminId = req.params.id || "";
+
+    switch (Object.keys(req.body)[0]) {
+      case ADMIN_MODEL.avatarLink:
+        update = await Admin.updateOne(
+          { _id: adminId },
+          {
+            $set: {
+              avatarLink: req.body.avatarLink,
+            },
+          }
+        );
+        break;
+      default:
+        let adminProperty = { $set: {} };
+        adminProperty["$set"][Object.keys(req.body)[0]] =
+          req.body[Object.keys(req.body)[0]] || "";
+
+        update = await Admin.updateOne({ _id: adminId }, adminProperty);
+        break;
     }
-  );
 
-  let user = {};
-  const adminId = req.params.id || "";
+    if (isMe._id == adminId && update?.modifiedCount != 0) {
+      user = await Admin.findById({ _id: adminId });
 
-  switch (Object.keys(req.body)[0]) {
-    case ADMIN_MODEL.avatarLink:
-      await Admin.updateOne(
-        { _id: adminId },
-        {
-          $set: {
-            avatarLink: req.body.avatarLink,
-          },
-        }
-      );
-      break;
-    default:
-      let adminProperty = { $set: {} };
-      adminProperty["$set"][Object.keys(req.body)[0]] =
-        req.body[Object.keys(req.body)[0]] || "";
+      const userToken = {
+        _id: user._id,
+        adminName: user.adminName,
+        phone: user.phone,
+        email: user.email,
+        address: user.address,
+        dateOfBirth: user.dateOfBirth,
+        avatarLink: user.avatarLink,
+        username: user.username,
+        password: user.password,
+        aboutMe: user.aboutMe,
+        roleLevel: user.roleLevel,
+        avatarLink: user.avatarLink,
+        roleLevel: user.roleLevel,
+        identityCard: user.identityCard,
+      };
 
-      await Admin.updateOne({ _id: adminId }, adminProperty);
-      break;
-  }
+      const token = jwt.sign(userToken, process.env.KEY_JWT, {
+        algorithm: "HS256",
+        expiresIn: "1h",
+      });
 
-  if (isMe._id == adminId) {
-    user = await Admin.findById({ _id: adminId });
+      res.cookie("token", token);
+    }
 
-    const userToken = {
-      _id: user._id,
-      adminName: user.adminName,
-      phone: user.phone,
-      email: user.email,
-      address: user.address,
-      dateOfBirth: user.dateOfBirth,
-      avatarLink: user.avatarLink,
-      username: user.username,
-      password: user.password,
-      aboutMe: user.aboutMe,
-      roleLevel: user.roleLevel,
-      avatarLink: user.avatarLink,
-      roleLevel: user.roleLevel,
-      identityCard: user.identityCard,
-    };
-
-    const token = jwt.sign(userToken, process.env.KEY_JWT, {
-      algorithm: "HS256",
-      expiresIn: "1h",
-    });
-
-    res.cookie("token", token);
-  }
-
-  if (user) {
-    res.send({ user, success: true });
-  } else {
-    res.send({ success: false });
-  }
+    if (user) {
+      res.send({ user, success: true });
+    } else {
+      res.send({ success: false });
+    }
+  } catch (error) {}
 };
 
-exports.deleteAdmin = async (req, res, next) => {
-  const adminId = req.params.id;
-  const adminOld = await Admin.findById({ _id: adminId });
-  const isMe = jwt.verify(
-    req.cookies?.token,
-    process.env.KEY_JWT,
-    (err, data) => {
-      if (err) return [];
-      return data;
-    }
-  );
-  if (isMe._id != adminId) {
-    const update = await Admin.updateOne(
-      { _id: adminId },
-      { $set: { status: !adminOld.status } }
+exports.deleteAdmin = (req, res, next) => {
+  try {
+    const adminId = req.params.id;
+    const isMe = jwt.verify(
+      req.cookies?.token,
+      process.env.KEY_JWT,
+      (err, data) => {
+        if (err) return [];
+        return data;
+      }
     );
-  }
+    if (isMe._id != adminId) {
+      Admin.findById({ _id: adminId }, async (err, data) => {
+        if (!err) {
+          const update = await Admin.updateOne(
+            { _id: adminId },
+            { $set: { status: !data.status } }
+          );
+        }
 
-  const adminNew = await Admin.findById({ _id: adminId });
-
-  if (adminNew && isMe._id != adminId) {
-    res.send({ status: adminNew.status, success: true });
-  } else {
-    res.send({ success: false });
-  }
+        if (update?.modifiedCount != 0) {
+          res.send({ status: !data.status, success: true });
+        } else {
+          res.send({ success: false });
+        }
+      });
+    } else {
+      res.send({ success: false });
+    }
+  } catch (error) {}
 };
 
 exports.getAdminbyUsername = async (req, res, next) => {
-  const username = req.params.username;
-  const findAdmin = await Admin.findOne({ username: username });
-  if (findAdmin) {
-    res.send(true);
-  } else {
-    res.send(false);
-  }
+  try {
+    const username = req.params.username;
+    const findAdmin = await Admin.findOne({ username: username });
+    if (findAdmin) {
+      res.send(true);
+    } else {
+      res.send(false);
+    }
+  } catch (error) {}
 };
 
 exports.updateProfile = async (req, res, next) => {
