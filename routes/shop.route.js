@@ -24,7 +24,7 @@ router.post("/update/customer", shopController.updateCustomerProfile);
 
 //router.get("/categories/:page?", shopController.categories);
 
-router.get("/categories/:page?", shopController.categories);
+router.get("/categories", shopController.categories);
 
 router.get("/cart", shopController.cart);
 

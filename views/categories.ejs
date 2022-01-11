@@ -177,12 +177,12 @@
                                             <% if(current == 1) { %> 
                                         <!-- // Nếu thông số http://localhost:3333/categories/1/ là 1 thì First sẽ bị disabled -->
                                                 <li class="page-item disabled">
-                                                <a class="page-link" href="/">First</a>
+                                                <a class="page-link"  href="" data-page="1">First</a>
                                                 </li>
                                             <% } else { %>
                                             <!-- // Nếu thông số http://localhost:3333/categories/2/ từ 2 trở lên thì First sẽ bỏ disabled -->
                                                 <li class="page-item">
-                                                <a class="page-link" href="/">First</a>
+                                                <a class="page-link"  href="" data-page="1">First</a>
                                                 </li>
                                             <% } %>
                                             
@@ -192,7 +192,7 @@
                                         <!-- // Nếu điều_kiện trả về true, toán tử có giá trị giá_trị_1. Ngược lại toán tử có giá trị giá_trị_2. -->
                                             <% if(i !== 1) { %>
                                                 <li class="page-item disabled">
-                                                <a class="page-link" href="#">...</a>
+                                                <a class="page-link" href="">...</a>
                                                 </li>
                                             <% } %>
                                             <% for(; i <= (Number(current) + 2) && i <= pages; i++) { %>
@@ -200,20 +200,20 @@
                                             // Trong vòng lặp for có ba biểu thức tùy chọn nên chỉ cần các bạn tách mỗi biểu thức bằng dấu `;` là oke rồi -->
                                             <% if(i == current) { %>
                                                 <li class="page-item active">
-                                                <a class="page-link" href="/categories/<%= i %>/">
+                                                <a class="page-link" href="" data-page="<%=i%>">
                                                     <%= i %>
                                                 </a>
                                                 </li>
                                             <% } else { %>
                                                 <li class="page-item">
-                                                <a class="page-link" href="/categories/<%= i %>/">
+                                                <a class="page-link" href="" data-page="<%=i%>">
                                                     <%= i %>
                                                 </a>
                                                 </li>
                                             <% } %>
                                             <% if (i == Number(current) + 2 && i < pages) { %>
                                                 <li class="page-item disabled">
-                                                <a class="page-link" href="#">...</a>
+                                                <a class="page-link" href="">...</a>
                                                 </li>
                                             <% } %>
                                             <% } %>
@@ -222,14 +222,14 @@
                                             <% if(current == pages) { %> 
                                         <!-- // Nếu số current( chỉ số phân trang ) là 6 và tổng số page là 6 thì Last bị disabled -->
                                                 <li class="page-item disabled">
-                                                <a class="page-link" href="#">
+                                                <a class="page-link" href="">
                                                     Last
                                                 </a>
                                                 </li>
                                             <% } else { %>
                                             <!-- // Ngược lại, thì Last là trang cuối cùng pages ở đây là 6 đồng nghĩa với Last là trang số 6 -->
                                                 <li class="page-item">
-                                                <a class="page-link" href="/categories/<%= pages %>/">
+                                                <a class="page-link"  href="" data-page="<%=pages%>">
                                                     Last
                                                 </a>
                                                 </li>
@@ -304,8 +304,31 @@
             <!--::footer_part start::-->
             <%- include ("share/footer.ejs") %>
 
-                <!--::javascripts:: -->
-                <%- include ("share/scripts.ejs") %>
+            <!--::javascripts:: -->
+            <%- include ("share/scripts.ejs") %>
+
+
+
+          <!-- Form -->
+          <form action="/categories" name="categories">
+            <input type="text" name="page" value="<%= current%>">
+          </form>
+
+          <script>
+            const form = $('form[name="categories"]');
+            const linkPage = $('.page-link');
+            const inputCurrent = $('input[name="page"]');
+
+            let current = $(inputCurrent).val();
+        
+            linkPage.click(function(event) {
+              event.preventDefault();
+              current = $(this).data("page");
+              $(inputCurrent).val(current);
+              form.submit();
+              
+            })
+          </script>     
     </body>
 
     </html>
