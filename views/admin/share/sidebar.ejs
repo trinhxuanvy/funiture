@@ -68,6 +68,14 @@
                     <span>Coupon</span>
                 </a>
             </li>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == "order") { %>
+                wrapper__sidebar__menu-item--active
+            <% } %>">
+                <a href="/admin/orders" class="wrapper__sidebar__menu-link">
+                    <i class="fas fa-file-invoice    "></i>
+                    <span>Order</span>
+                </a>
+            </li>
             <!-- <li class="wrapper__sidebar__menu-item">
                 <a href="" class="wrapper__sidebar__menu-link">
                     <i class="ti-map"></i>
