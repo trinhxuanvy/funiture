@@ -60,10 +60,19 @@ const CATEGORY_MODEL = {
   amount: "amount",
 };
 
+const COUPON_MODEL = {
+  code: "code",
+  promotionValue: "promotionValue",
+  startDate: "startDate",
+  endDate: "endDate",
+  amount: "amount",
+};
+
 module.exports = {
   PRODUCT_MODEL,
   ADMIN_MODEL,
   CUSTOMER_MODEL,
   BRAND_MODEL,
   CATEGORY_MODEL,
+  COUPON_MODEL,
 };

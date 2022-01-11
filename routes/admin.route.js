@@ -196,4 +196,34 @@ router.get(
   adminController.getStatisticSales
 );
 
+router.get(
+  "/admin/coupons",
+  authAdminController.checkExpired,
+  adminController.getCoupon
+);
+
+router.post(
+  "/admin/coupons",
+  authAdminController.checkExpired,
+  adminController.postCoupon
+);
+
+router.post(
+  "/admin/coupons/update/:id",
+  authAdminController.checkExpired,
+  adminController.updateCoupon
+);
+
+router.get(
+  "/admin/coupons/delete/:id",
+  authAdminController.checkExpired,
+  adminController.deleteConpon
+);
+
+router.get(
+  "/admin/coupons/:code",
+  authAdminController.checkExpired,
+  adminController.getCouponbyCode
+);
+
 module.exports = router;
