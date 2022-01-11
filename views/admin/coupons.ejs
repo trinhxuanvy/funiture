@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- flaticon CSS -->
+    <link rel="stylesheet" href="/stylesheets/css/flaticon.css" />
+    <link rel="stylesheet" href="/stylesheets/css/themify-icons.css" />
+    <link rel="stylesheet" href="/stylesheets/css/admin/custom.css" />
+    <link rel="stylesheet" href="/stylesheets/css/admin/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <%- include ("./share/sidebar.ejs") %>
+      <div class="wrapper__main" id="main">
+        <div class="wrapper__main__header">
+          <a href="/admin/admins"
+            ><span class="wrapper__main__header__title">Coupon</span></a
+          >
+          <div class="wrapper__main__header__function">
+            <form action="/admin/coupons" method="get">
+              <input
+                type="text"
+                id="search"
+                name="search"
+                placeholder="Search"
+              />
+              <button type="submit">
+                <i class="ti-search"></i>
+              </button>
+            </form>
+          </div>
+          <div class="menu-toggle">
+            <button id="menu-toggle" class="btn btn-secondary">
+              <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <div class="wrapper__main__content">
+          <div class="container-fluid" style="padding: 32px">
+            <div class="wrapper__main__content__table">
+              <div class="wrapper__main__content__table__header">
+                <div class="row">
+                  <div class="col-6">
+                    <p style="font-size: 24px">Coupon List</p>
+                  </div>
+                  <div class="col-6">
+                    <button
+                      type="button"
+                      class="btn btn-orange d-block"
+                      style="margin-left: auto"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addCouponModal"
+                    >
+                      <em class="ti-plus"></em> Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive-xxl">
+                <table
+                  class="table table-striped table-bordered"
+                  id="table-model"
+                >
+                  <thead>
+                    <tr>
+                      <th style="text-align: center; min-width: 150px">
+                        <em class="ti-settings"></em>
+                      </th>
+                      <th style="min-width: 300px">Code</th>
+                      <th style="min-width: 150px">Promotion Value</th>
+                      <th style="min-width: 150px">Amount</th>
+                      <th style="min-width: 150px">Start Date</th>
+                      <th style="min-width: 150px">End Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% coupons.forEach(item => { %>
+                    <tr class="tr-prod" <% if (!item.status) { %>
+                      style="opacity: 0.5;" <% } %> id="<%= item._id %>">
+                      <td align="center">
+                        <div class="mt-2 mb-2">
+                          <a
+                            href="/admin/coupous/<%= item._id %>/reset"
+                            class="btn btn-light"
+                            ><em class="ti-reload"></em
+                          ></a>
+                          <button
+                            value="<%= item._id %>"
+                            class="btn btn-danger btn-delete-prod is-status"
+                          >
+                            <em class="ti-trash"></em>
+                          </button>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2 form-group is-status">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="<%= couponModel.code %>"
+                            value="<%= item.code %>"
+                            placeholder="Enter code"
+                            name="<%= couponModel.code %>"
+                            required
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2 form-group is-status">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="<%= couponModel.amount %>"
+                            value="<%= item.amount %>"
+                            placeholder="Enter Promotion Value"
+                            name="<%= couponModel.amount %>"
+                            required
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2 form-group is-status">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="<%= couponModel.promotionValue %>"
+                            value="<%= item.promotionValue %>"
+                            placeholder="Enter Promotion Value"
+                            name="<%= couponModel.promotionValue %>"
+                            required
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2 input-group date is-status" id="">
+                          <input type="text" class="form-control datetimepicker"
+                          placeholder="mm/dd/yyyy" name="<%=
+                          couponModel.startDate %>" id="<%=
+                          couponModel.startDate %>" value="<%= (new
+                          Date(item.startDate)).toLocaleString("en-US", { year:
+                          "numeric", month: "numeric", day: "numeric" }) %>" />
+                          <span class="input-group-addon"> </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-2 mt-2 input-group date is-status" id="">
+                          <input type="text" class="form-control datetimepicker"
+                          placeholder="mm/dd/yyyy" name="<%= couponModel.endDate
+                          %>" id="<%= couponModel.endDate %>" value="<%= (new
+                          Date(item.endDate)).toLocaleString("en-US", { year:
+                          "numeric", month: "numeric", day: "numeric" }) %>" />
+                          <span class="input-group-addon"> </span>
+                        </div>
+                      </td>
+                    </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="wrapper__main__content__table__footer mt-4">
+                <div class="row align-items-center">
+                  <div class="col-4">
+                    Page <%= numPage %> of <%= totalPage %>
+                  </div>
+                  <div class="col-8">
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination justify-content-end m-auto">
+                        <li class="page-item">
+                          <form
+                            action="/admin/coupons<%= search %>"
+                            method="post"
+                            id="submitForm"
+                          >
+                            <% if (page <=1) { %>
+                            <button
+                              type="submit"
+                              class="page-link text-dark btn disabled"
+                              aria-label="Previous"
+                            >
+                              <span aria-hidden="true">&laquo;</span>
+                            </button>
+                            <% } else { %>
+                            <input
+                              type="text"
+                              name="page"
+                              id="page"
+                              value="<%= prevPage %>"
+                              style="display: none"
+                            />
+                            <button
+                              type="submit"
+                              class="page-link btn text-dark"
+                              aria-label="Previous"
+                            >
+                              <span aria-hidden="true">&laquo;</span>
+                            </button>
+                            <% } %>
+                          </form>
+                        </li>
+                        <li class="page-item">
+                          <form
+                            action="/admin/coupons<%= search %>"
+                            method="post"
+                          >
+                            <% if (page < 1) { %>
+                            <button
+                              type="submit"
+                              class="page-link text-dark btn disabled"
+                              aria-label="Previous"
+                            >
+                              <%= page %>
+                            </button>
+                            <% } else { %>
+                            <input
+                              type="text"
+                              name="page"
+                              id="page"
+                              value="<%= page %>"
+                              style="display: none"
+                            />
+                            <button
+                              type="submit"
+                              class="page-link btn btn-orange text-white"
+                              aria-label="Previous"
+                            >
+                              <%= page %>
+                            </button>
+                            <% } %>
+                          </form>
+                        </li>
+                        <li class="page-item">
+                          <form
+                            action="/admin/coupons<%= search %>"
+                            method="post"
+                          >
+                            <% if (parseInt(page) + 1> totalPage) { %>
+                            <button
+                              type="submit"
+                              class="page-link btn text-dark disabled"
+                              aria-label="Previous"
+                            >
+                              <%= parseInt(page) + 1 %>
+                            </button>
+                            <% } else { %>
+                            <input
+                              type="text"
+                              name="page"
+                              id="page"
+                              value="<%= parseInt(page) + 1 %>"
+                              style="display: none"
+                            />
+                            <button
+                              type="submit"
+                              class="page-link btn text-dark"
+                              aria-label="Previous"
+                            >
+                              <%= parseInt(page) + 1 %>
+                            </button>
+                            <% } %>
+                          </form>
+                        </li>
+                        <li class="page-item">
+                          <form
+                            action="/admin/coupons<%= search %>"
+                            method="post"
+                          >
+                            <% if (parseInt(page) + 2> totalPage) { %>
+                            <button
+                              type="submit"
+                              class="page-link btn text-dark disabled"
+                              aria-label="Previous"
+                            >
+                              <%= parseInt(page) + 2 %>
+                            </button>
+                            <% } else { %>
+                            <input
+                              type="text"
+                              name="page"
+                              id="page"
+                              value="<%= parseInt(page) + 2 %>"
+                              style="display: none"
+                            />
+                            <button
+                              type="submit"
+                              class="page-link btn text-dark"
+                              aria-label="Previous"
+                            >
+                              <%= parseInt(page) + 2 %>
+                            </button>
+                            <% } %>
+                          </form>
+                        </li>
+                        <li class="page-item">
+                          <form
+                            action="/admin/coupons<%= search %>"
+                            method="post"
+                          >
+                            <% if (page>= totalPage) { %>
+                            <button
+                              type="submit"
+                              class="page-link btn text-dark disabled"
+                              aria-label="Previous"
+                            >
+                              <span aria-hidden="true">&raquo;</span>
+                            </button>
+                            <% } else { %>
+                            <input
+                              type="text"
+                              name="page"
+                              id="page"
+                              value="<%= nextPage %>"
+                              style="display: none"
+                            />
+                            <button
+                              type="submit"
+                              class="page-link btn text-dark"
+                              aria-label="Previous"
+                            >
+                              <span aria-hidden="true">&raquo;</span>
+                            </button>
+                            <% } %>
+                          </form>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+
+              <!-- The Modal -->
+              <div class="modal" id="addCouponModal">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <h4 class="modal-title">Coupon</h4>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                      ></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                      <form
+                        action="/admin/coupons"
+                        id="formSubmit"
+                        method="post"
+                      >
+                        <div class="mb-3 mt-3 position-relative">
+                          <label for="<%= couponModel.code %>">Code</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="<%= couponModel.code %>"
+                            placeholder="Enter code"
+                            name="<%= couponModel.code %>"
+                            required
+                          />
+                        </div>
+                        <div class="mb-3 mt-3 position-relative">
+                          <label for="<%= couponModel.promotionValue %>"
+                            >Promotion Value</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="<%= couponModel.promotionValue %>"
+                            placeholder="Enter Promotion Value"
+                            name="<%= couponModel.promotionValue %>"
+                            required
+                          />
+                        </div>
+                        <div class="mb-3 mt-3 position-relative">
+                          <label for="<%= couponModel.code %>">Amount</label>
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="<%= couponModel.amount %>"
+                            placeholder="Enter amount"
+                            name="<%= couponModel.amount %>"
+                            required
+                          />
+                        </div>
+                        <div class="mb-3 mt-3">
+                          <label for="<%= couponModel.startDate %>"
+                            >Start Date</label
+                          >
+                          <div
+                            class="input-group position-relative date datetimepicker"
+                            id=""
+                          >
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="mm/dd/yyyy"
+                              name="<%=
+                              couponModel.startDate %>"
+                              id="<%=
+                              couponModel.startDate %>"
+                              required
+                            />
+                            <span class="input-group-addon">
+                              <span class="input-group-text d-block">
+                                <i class="fa fa-calendar"></i>
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="mb-3 mt-3">
+                          <label for="<%= couponModel.startDate %>"
+                            >End Date</label
+                          >
+                          <div
+                            class="input-group position-relative date datetimepicker"
+                            id=""
+                          >
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="mm/dd/yyyy"
+                              name="<%=
+                              couponModel.endDate %>"
+                              id="<%=
+                              couponModel.endDate %>"
+                              required
+                            />
+                            <span class="input-group-addon">
+                              <span class="input-group-text d-block">
+                                <i class="fa fa-calendar"></i>
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                        <button
+                          type="submit"
+                          id="btnSubmit"
+                          class="btn btn-orange m-auto mt-5 d-block is-status d-flex justify-content-between align-items-center"
+                        >
+                          Save
+                        </button>
+                      </form>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include ("./share/scripts.ejs") %>
+  </body>
+</html>

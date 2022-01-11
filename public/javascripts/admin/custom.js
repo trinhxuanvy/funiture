@@ -332,6 +332,30 @@ $(document).ready(function () {
     return !data.responseJSON;
   });
 
+  // Thêm validate username
+  jQuery.validator.addMethod("valid_code", function (value) {
+    const url = new URL(window.location.href);
+    var data = $.ajax({
+      method: "get",
+      contentType: "application/json",
+      async: false,
+      url: url.origin + url.pathname + "/" + value,
+      dataType: "json",
+      success: function (response) {
+        return response;
+      },
+    });
+    return !data.responseJSON;
+  });
+
+  // Thêm validate date
+  jQuery.validator.addMethod("valid_end_date", function (value) {
+    const startDateStr = $("#addCouponModal #startDate");
+    const startDate = new Date($(startDateStr[0]).val());
+    const endDate = new Date(value);
+    return startDate < endDate;
+  });
+
   // Xử lý thêm sản phẩm/admins
   $(function () {
     const btnSubmit = $("#btnSubmit");
@@ -339,6 +363,22 @@ $(document).ready(function () {
       e.preventDefault();
       $("#formSubmit").validate({
         rules: {
+          endDate: {
+            required: true,
+            valid_end_date: true,
+          },
+          amount: {
+            required: true,
+            min: 0,
+          },
+          promotionValue: {
+            required: true,
+            min: 0,
+          },
+          code: {
+            required: true,
+            valid_code: true,
+          },
           price: {
             required: true,
             min: 0,
@@ -465,6 +505,25 @@ $(document).ready(function () {
             required: "Please enter confirm password",
             minlength: "Min length: 8",
             equalTo: "Password doesn't match",
+          },
+          amount: {
+            required: "Please enter amount",
+            min: "Min: 0",
+          },
+          promotionValue: {
+            required: "Please enter promotion value",
+            min: "Min: 0",
+          },
+          code: {
+            required: "Please enter code",
+            valid_code: "Code already exists",
+          },
+          startDate: {
+            required: "Please enter start date",
+          },
+          endDate: {
+            required: "Please enter end date",
+            valid_end_date: "End date must be larger than start date",
           },
         },
       });
