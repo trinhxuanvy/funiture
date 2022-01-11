@@ -676,10 +676,54 @@
     }
   });
 
-    // Xử lý hiển thị message box
-    $(function () {
-      $(".close").click(function () {
-        $(this).parent(".alert").fadeOut();
+  $(function () {
+    const btnAddCoupon = $(".addCouponButton");
+    const inputCoupon = $("#code");
+    const discountMoney = $(".discountMoney");
+    const totalMoney = $(".totalMoney");
+    const checkCouponMessage = $(".checkCouponMessage");
+
+    for (let i = 0; i < btnAddCoupon.length; i++) {
+      $(btnAddCoupon[i]).click(function (e) {
+        e.preventDefault();
+
+        const url = new URL(window.location.href);
+
+        $.ajax({
+          method: "get",
+          contentType: "application/json",
+          url:
+            url.origin +
+            "/order/add/coupon/" +
+            $(inputCoupon[0]).val(),
+          dataType: "json",
+          success: function (response) {
+            // statusLoading({
+            //   posLoading: btnAddCart[i],
+            //   isCompleted: true,
+            //   isSuccess: true,
+            // });
+            if (response.status) {
+              $(discountMoney[0]).html(convertMoney(response.discountMoney));
+              $(totalMoney[0]).html(convertMoney(response.totalMoney));
+              $(checkCouponMessage[0]).html(response.message);
+            }
+            else
+            {
+              $(checkCouponMessage[0]).html(response.message);
+            }
+          },
+        });
       });
+    }
+  });
+
+
+
+  // Xử lý hiển thị message box
+  $(function () {
+    $(".close").click(function () {
+      $(this).parent(".alert").fadeOut();
     });
+  });
 })(jQuery);

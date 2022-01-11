@@ -1,5 +1,6 @@
 const express = require("express");
 const shopController = require("../controllers/shop.controller");
+const authUserController = require("../controllers/auth-user.controller");
 
 const router = express.Router();
 
@@ -30,8 +31,12 @@ router.get("/cart", shopController.cart);
 
 router.get("/cart/add/product/:id", shopController.addCard);
 
+router.get("/order/add/coupon/:code", shopController.addCoupon);
+
 router.get("/products/:id", shopController.getProduct);
 
-router.get("/checkout", shopController.checkout);
+router.get("/checkout",authUserController.checkExpired, shopController.checkout);
+
+router.post("/checkout",authUserController.checkExpired, shopController.postOrder);
 
 module.exports = router;

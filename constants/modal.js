@@ -42,7 +42,7 @@ const CUSTOMER_MODEL = {
   password: "password",
   province: "province",
   district: "district",
-  ward: "ward",
+  commune: "commune",
   address: "address",
   dateOfBirth: "dateOfBirth",
   avatarLink: "avatarLink",
@@ -68,11 +68,12 @@ const COUPON_MODEL = {
   amount: "amount",
 };
 
+
 module.exports = {
   PRODUCT_MODEL,
   ADMIN_MODEL,
   CUSTOMER_MODEL,
   BRAND_MODEL,
   CATEGORY_MODEL,
-  COUPON_MODEL,
+  COUPON_MODEL
 };
