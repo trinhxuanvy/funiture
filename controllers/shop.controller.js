@@ -51,8 +51,8 @@ exports.categories = async (req, res, next) => {
   //Set số sản phẩm trên một trang, và lấy trang hiện tại
   let perPage = 9;
   let page;
-  if (Number(req.params.page)) {
-    page = page <= 0 ? 1 : req.params.page;
+  if (Number(req.query.page)) {
+    page = page <= 0 ? 1 : req.query.page;
   } else {
     page = 1;
   }
