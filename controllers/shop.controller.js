@@ -2,9 +2,11 @@ const Category = require("../models/category.model");
 const Product = require("../models/product.model");
 const Brand = require("../models/brand.model");
 const Customer = require("../models/customer.model");
+const Coupon = require("../models/coupon.model");
+const Order = require("../models/order.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { PRODUCT_MODEL, CUSTOMER_MODEL } = require("../constants/modal");
+const { PRODUCT_MODEL, CUSTOMER_MODEL, COUPON_MODEL } = require("../constants/modal");
 // const passport = require("passport");
 
 exports.index = (req, res, next) => {
@@ -77,6 +79,7 @@ exports.categories = async (req, res, next) => {
 };
 
 exports.cart = async (req, res, next) => {
+  res.cookie("oldUrl", "/cart");
   const user = jwt.verify(
     req.cookies?.cusToken,
     process.env.KEY_JWT,
@@ -89,39 +92,64 @@ exports.cart = async (req, res, next) => {
     }
   );
   
-  var cartDetails = [];
-
-  var cartTotal = 0;
-  var totalCarts = 0;
-  var allTotalCarts = 0;
   if(user != null)
-  {
-    cartTotal = user.cart.totalQuantity;
-    cartDetails = user.cart.cartDetails;
-    if(user.cart)
+  {    if(req.session?.cartDetails)
     {
-      for(let i = 0; i < user.cart.cartDetails.length; i++)
+      for(let j = 0; j < req.session.cartDetails.length; j++)
       {
-        totalCarts += user.cart.cartDetails[i].price*user.cart.cartDetails[i].amount;
+        var flag = false;
+        for (let i = 0; i < user.cart.cartDetails.length; i++) {
+          if (user.cart.cartDetails[i].productId == req.session.cartDetails[j].productId) {
+            user.cart.cartDetails[i].amount+= req.session.cartDetails[j].amount;
+            user.cart.price += req.session.cartDetails[j].price*req.session.cartDetails[j].amount;
+            flag = true;
+            break;
+          }
+        }
+        user.cart.totalQuantity+=req.session.cartDetails[j].amount;
+  
+        if (!flag) {
+          user.cart.cartDetails.push(req.session.cartDetails[j]);
+          user.cart.price += req.session.cartDetails[j].price*req.session.cartDetails[j].amount;
+        }
       }
+  
+  
+      var checkUpdate = await Customer.updateOne({ _id: user._id }, { cart: user.cart });
+  
+      if(checkUpdate?.modifiedCount)
+      {
+        const userToken = {
+          _id: user._id,
+          cusName: user.cusName,
+          phone: user.phone,
+          email: user.email,
+          dateOfBirth: user.dateOfBirth,
+          avatarLink: user.avatarLink,
+          username: user.username,
+          password: user.password,
+          cart: user.cart,
+          province: user.province,
+          district: user.district,
+          commune: user.commune,
+          address: user.address,
+        };
+    
+        const token = jwt.sign(userToken, process.env.KEY_JWT, {
+          algorithm: "HS256",
+          expiresIn: "1h",
+        });
+    
+        res.cookie("cusToken", token);
+      }
+
     }
+    res.render("cart", { user: user, cartDetails: user.cart.cartDetails, cartTotal: user.cart.totalQuantity, totalCarts: user.cart.price, allTotalCarts : user.cart.price + 20 });
   }
   else
   {
-    cartTotal = req.session.totalQuantity;
-    if(req.session.cartDetails)
-    {
-      cartDetails = req.session.cartDetails;
-      for(let i = 0; i < req.session.cartDetails.length; i++)
-      {
-        totalCarts += req.session.cartDetails[i].price*req.session.cartDetails[i].amount;
-      }
-    }
+    res.render("cart", { user: user, cartDetails: req.session.cartDetails, cartTotal: req.session.totalQuantity, totalCarts: req.session.totalCarts, allTotalCarts : req.session.totalCarts + 20 });
   }
-
-  allTotalCarts = totalCarts + 20;
-
-  res.render("cart", { user, cartTotal, cartDetails, totalCarts, allTotalCarts});
 };
 
 exports.signup = async (req, res, next) => {
@@ -168,11 +196,11 @@ exports.checkout = async (req, res, next) => {
 
   if(user != null)
   {
-    res.render("checkout", { user: user, cartDetails: user.cart.cartDetails, cartTotal: user.cart.totalQuantity, totalCarts: user.cart.price, allTotalCarts : user.cart.price + 20 });
+    res.render("checkout", {cusModel:CUSTOMER_MODEL ,couponModel: COUPON_MODEL, user: user, cartDetails: user.cart.cartDetails, cartTotal: user.cart.totalQuantity, totalCarts: user.cart.price, allTotalCarts : user.cart.price + 20 });
   }
   else
   {
-    res.render("checkout", { user: user, cartDetails: req.session.cartDetails, cartTotal: req.session.totalQuantity, totalCarts: req.session.totalCarts, allTotalCarts : req.session.totalCarts + 20 });
+    res.render("checkout", {cusModel:CUSTOMER_MODEL ,couponModel: COUPON_MODEL, user: user, cartDetails: req.session.cartDetails, cartTotal: req.session.totalQuantity, totalCarts: req.session.totalCarts, allTotalCarts : req.session.totalCarts + 20 });
   }
 };
 
@@ -265,7 +293,7 @@ exports.getUserbyUserName = async (req, res, next) => {
 };
 
 exports.postCustomer = async (req, res, next) => {
-  req.session.url = req.url;
+  // req.session.url = req.url;
 
   const newCustomer = {
     cusName: req.body.fullName,
@@ -362,30 +390,34 @@ exports.addCard = async (req, res, next) => {
     }
 
 
-    await Customer.updateOne({ _id: user._id }, { cart: user.cart });
+    var checkUpdate = await Customer.updateOne({ _id: user._id }, { cart: user.cart });
 
-    const userToken = {
-      _id: user._id,
-      cusName: user.cusName,
-      phone: user.phone,
-      email: user.email,
-      dateOfBirth: user.dateOfBirth,
-      avatarLink: user.avatarLink,
-      username: user.username,
-      password: user.password,
-      cart: user.cart,
-      province: user.province,
-      district: user.district,
-      commune: user.commune,
-      address: user.address,
-    };
+    if(checkUpdate?.modifiedCount)
+    {
+      const userToken = {
+        _id: user._id,
+        cusName: user.cusName,
+        phone: user.phone,
+        email: user.email,
+        dateOfBirth: user.dateOfBirth,
+        avatarLink: user.avatarLink,
+        username: user.username,
+        password: user.password,
+        cart: user.cart,
+        province: user.province,
+        district: user.district,
+        commune: user.commune,
+        address: user.address,
+      };
+  
+      const token = jwt.sign(userToken, process.env.KEY_JWT, {
+        algorithm: "HS256",
+        expiresIn: "1h",
+      });
+  
+      res.cookie("cusToken", token);
+    }
 
-    const token = jwt.sign(userToken, process.env.KEY_JWT, {
-      algorithm: "HS256",
-      expiresIn: "1h",
-    });
-
-    res.cookie("cusToken", token);
     res.send({amount: user.cart.totalQuantity});
   } 
   else {
@@ -544,7 +576,6 @@ exports.deleteProductCart = async (req, res, next) => {
         });
     
         res.cookie("cusToken", token);
-        console.log(user.cart.cartDetails);
         res.send({success: true, totalCarts: user.cart.price, totalQuantity: user.cart.totalQuantity});
       }
       else
@@ -640,3 +671,141 @@ exports.updateCustomerProfile = async (req, res, next) => {
   });
 
 };
+
+exports.postOrder =async (req, res, next) => {
+  const user = jwt.verify(
+    req.cookies?.cusToken,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+
+  const newOrder = {
+    orderNote: req.body.orderNote,
+    shipping: 20,
+    province: req.body.province,
+    district: req.body.district,
+    commune: req.body.commune,
+    address: req.body.address,
+    receiverPhone: req.body.phone,
+    receiverName: req.body.cusName,
+    receiverMail: req.body.email,
+    orderDetails: user.cart.cartDetails,
+    totalQuantity: user.cart.totalQuantity,
+    subTotalPrice: user.cart.price,
+    discountMoney: 0,
+    cusId: user._id,
+    totalPrice: user.cart.price + 20,
+  };
+  console.log(user);
+  console.log(newOrder);
+
+  const coupon = await Coupon.findOne({code: req.body.code, status: true});
+  if(coupon != null)
+  {
+    if(coupon.amount > 0)
+    {
+      if(coupon.startDate <= Date.now() && coupon.endDate >= Date.now())
+      {
+        newOrder.couponCode = coupon.code;
+        newOrder.couponId = coupon.Id;
+        newOrder.discountMoney = Math.floor(user.cart.price*(coupon.promotionValue/100))
+        newOrder.totalPrice -= newOrder.discountMoney;
+      }
+    }
+  }
+
+  const order = new Order(newOrder);
+  order.save((err, data) => {
+    if(!err)
+    {
+      user.cart.totalQuantity = 0;
+      user.cart.price = 0;
+      user.cart.cartDetails = [];
+      Customer.updateOne({ _id: user._id }, { cart: user.cart }, (error) =>
+      {
+        if(!error)
+        {
+          const userToken = {
+            _id: user._id,
+            cusName: user.cusName,
+            phone: user.phone,
+            email: user.email,
+            dateOfBirth: user.dateOfBirth,
+            avatarLink: user.avatarLink,
+            username: user.username,
+            password: user.password,
+            cart: user.cart,
+            province: user.province,
+            district: user.district,
+            commune: user.commune,
+            address: user.address,
+          };
+      
+          const token = jwt.sign(userToken, process.env.KEY_JWT, {
+            algorithm: "HS256",
+            expiresIn: "1h",
+          });
+      
+          res.cookie("cusToken", token)
+          res.redirect("/index");
+        }
+        else
+        {
+          console.log(error);
+        }
+      })
+    }
+    else
+    {
+      console.log(err);
+    }
+  });
+};
+
+exports.addCoupon = async (req, res, next) => {
+  
+  const user = jwt.verify(
+    req.cookies?.cusToken,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+  var discountMoney = 0;
+  var totalMoney = 0;
+  var coupon = await Coupon.findOne({code: req.params.code, status: true});
+  if(coupon != null)
+  {
+    if(coupon.amount > 0)
+    {
+      if(coupon.startDate <= Date.now() && coupon.endDate >= Date.now())
+      {
+        discountMoney = Math.floor(user.cart.price*(coupon.promotionValue/100))
+        totalMoney = user.cart.price + 20 - discountMoney;
+        res.send({message: "Add coupon sussessfully", status: true, discountMoney: discountMoney, totalMoney: totalMoney});
+      }
+      else
+      {
+        res.send({message: "Coupon out of date", status: false});
+      }
+    }
+    else
+    {
+      res.send({message: "Limited used coupon", status: false});
+    }
+  }
+  else
+  {
+  res.send({message: "Not found coupon", status: false});
+  }
+}

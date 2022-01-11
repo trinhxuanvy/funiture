@@ -4642,6 +4642,9 @@ h6 {
     border-color: #8a5700;
     color: #8a5700; }
 
+.addCouponButton {
+  line-height: 18px !important; }
+
 /**********************footer part css*******************/
 .footer_part {
   padding: 130px 0px 25px; }

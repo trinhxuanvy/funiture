@@ -78,7 +78,9 @@ h6 {
   @include alert(danger-alert, #f7a7a3);
   @include alert(warning-alert, #ffd48a);
 
-
+  .addCouponButton {
+    line-height: 18px !important;
+  }
 
 
 

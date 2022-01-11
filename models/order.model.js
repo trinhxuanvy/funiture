@@ -8,21 +8,46 @@ const Order = new Schema({
     },
     shipping: {
         type: Number,
+        default: 20,
         required: true,
     },
     subTotalPrice: {
-        type: String,
+        type: Number,
+        required: true,
+    },
+    totalQuantity: {
+        type: Number,
         required: true,
     },
     totalPrice: {
         type: Number,
         required: true,
     },
-    receiverAddr: {
+    province: {
+        type: String,
+        required: false,
+        default: "",
+    },
+    district: {
+    type: String,
+    required: false,
+    default: "",
+    },
+    commune: {
+    type: String,
+    required: false,
+    default: "",
+    },
+    address: {
+    type: String,
+    required: false,
+    default: "",
+    },
+    receiverPhone: {
         type: String,
         required: true,
     },
-    receiverPhone: {
+    receiverMail: {
         type: String,
         required: true,
     },
@@ -44,8 +69,9 @@ const Order = new Schema({
         type: String,
         required: false,
     },
-    promotionValue: {
+    discountMoney: {
         type: Number,
+        default: 0,
         required: false,
     },
     status: {
@@ -66,21 +92,12 @@ const Order = new Schema({
             type: Number,
             required: true
         },
-        prodId: {
+        productId: {
             type: Schema.Types.ObjectId,
             ref: "Product",
             required: true
         },
-        prodName: {
-            type: String,
-            required: true
-        },
-        categoryId: {
-            type: Schema.Types.ObjectId,
-            ref: "Category",
-            required: true
-        },
-        categoryName: {
+        productName: {
             type: String,
             required: true
         }

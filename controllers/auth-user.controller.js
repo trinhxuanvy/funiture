@@ -72,7 +72,7 @@ exports.postLogin = async (req, res, next) => {
 
           if (req.cookies?.oldUrl) {
             let oldUrl = req.cookies?.oldUrl;
-            res.cookie("oldUrl", oldUrl);
+            //res.cookie("oldUrl", oldUrl);
             res.redirect(oldUrl);
           } else {
             console.log("abcd1234");

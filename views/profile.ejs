@@ -111,7 +111,7 @@
                 <div class="col-md-6 form-group p_star">
                   <label for="vietNamDistrict" class="form-label"
                   >Commune</label>
-                  <select name="commune" class="country_select form-control" id="vietNamCommune">
+                  <select name="<%= cusModel.commune %>" class="country_select form-control" id="vietNamCommune">
                     <% if (user.commune) { %>
                       <option class="list-option" value="<%= user.commune %>"><%= user.commune %></option>
                     <% } %> 
