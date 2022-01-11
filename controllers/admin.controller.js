@@ -17,6 +17,7 @@ const {
   COUPON_MODEL,
 } = require("../constants/modal");
 const { data } = require("../data-sample/data");
+const { PRODUCT, SORT } = require("../constants/variables");
 
 dotenv.config();
 const ITEM_PAGE = 8;
@@ -39,21 +40,31 @@ exports.getIndex = async (req, res, next) => {
 };
 
 exports.getProduct = async (req, res, next) => {
-  req.session.url = req.url;
   const page = 1;
   let search = req.query.search || "";
+  let sort = req.query.sort || "";
+  let following = req.query.following || "";
   let products = [];
+  let prodProperty = {};
 
   if (search) {
     products = await Product.find({
       prodName: { $regex: search, $options: "i" },
     })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: "desc" })
       .exec();
-
     search = "?search=" + search;
+  } else if (SORT.indexOf(sort) > -1 && PRODUCT.indexOf(following) > -1) {
+    prodProperty[following] = sort || "";
+    products = await Product.find({
+      prodName: { $regex: search, $options: "i" },
+    })
+      .sort(prodProperty)
+      .exec();
+    sort = "?sort=" + sort;
+    following = "&following=" + following;
   } else {
-    products = await Product.find().sort({ createdAt: -1 }).exec();
+    products = await Product.find().sort({ createdAt: "desc" }).exec();
   }
 
   const getPage = Math.floor(products.length / ITEM_PAGE);
@@ -76,16 +87,21 @@ exports.getProduct = async (req, res, next) => {
     prevPage,
     totalPage,
     search,
+    sort,
+    following,
     prodModel: PRODUCT_MODEL,
   });
 };
 
 exports.postProduct = async (req, res, next) => {
-  req.session.url = req.url;
   let page = req.body.page || 1;
   let search = req.query.search || "";
+  let sort = req.query.sort || "";
+  let following = req.query.following || "";
+  let prodProperty = {};
   let products = [],
     productSave;
+
   if (!req.body.page) {
     const prodType = await Category.findById(req.body.prodTypeId);
     const brand = await Brand.findById(req.body.brandId);
@@ -145,13 +161,20 @@ exports.postProduct = async (req, res, next) => {
     products = await Product.find({
       prodName: { $regex: search, $options: "i" },
     })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: "desc" })
       .exec();
-
     search = "?search=" + search;
+  } else if (SORT.indexOf(sort) > -1 && PRODUCT.indexOf(following) > -1) {
+    prodProperty[following] = sort || "";
+    products = await Product.find({
+      prodName: { $regex: search, $options: "i" },
+    })
+      .sort(prodProperty)
+      .exec();
+    sort = "?sort=" + sort;
+    following = "&following=" + following;
   } else {
-    products = await Product.find().sort({ createdAt: -1 }).exec();
-    //console.log(productSave);
+    products = await Product.find().sort({ createdAt: "desc" }).exec();
   }
 
   const getPage = Math.floor(products.length / ITEM_PAGE);
@@ -174,6 +197,8 @@ exports.postProduct = async (req, res, next) => {
     prevPage,
     totalPage,
     search,
+    sort,
+    following,
     prodModel: PRODUCT_MODEL,
   });
 };
