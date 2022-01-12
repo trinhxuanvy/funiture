@@ -20,6 +20,8 @@ router.get("/profile", shopController.profile);
 
 router.get("/orders", shopController.getOrder);
 
+router.get("/orders/:orderId", shopController.getOrdersDetail);
+
 router.post("/signup", shopController.postCustomer);
 
 router.post("/update/customer", shopController.updateCustomerProfile);
