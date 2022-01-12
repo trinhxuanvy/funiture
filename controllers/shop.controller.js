@@ -80,7 +80,15 @@ exports.categories = async (req, res, next) => {
   }
 
   //lấy brands đã chọn
-
+  let brands = '';
+  if (!req.query.brands) {
+    category.brands = '';
+  } else if (req.query.brands != '') {
+    brands = req.query.brands.split('_');
+    productsFilter = productsFilter.filter(product => 
+      brands.includes(product.brandName.toLowerCase().split(' ').join('-')));
+    category.brands =  req.query.brands;
+  }
   //Lấy sản phẩm được lọc
   
 
