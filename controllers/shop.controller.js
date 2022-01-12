@@ -47,7 +47,6 @@ exports.categories = async (req, res, next) => {
     allBrands: 0,
     user,
     cartTotal: 0,
-
     categories: 0,
     brands: 0,
   };
@@ -70,10 +69,15 @@ exports.categories = async (req, res, next) => {
   let productsFilter = allProducts;
 
   //lấy categories đã chọn
-  const categories = req.query.categories.split('_');
-  productsFilter = productsFilter.filter(product => 
-    categories.includes(product.prodTypeName.toLowerCase().split(' ').join('-')));
-
+  let categories = '';
+  if (!req.query.categories) {
+    category.categories = '';
+  } else if (req.query.categories != '') {
+    categories = req.query.categories.split('_');
+    productsFilter = productsFilter.filter(product => 
+      categories.includes(product.prodTypeName.toLowerCase().split(' ').join('-')));
+    category.categories =  req.query.categories;
+  }
 
   //lấy brands đã chọn
 
@@ -83,7 +87,6 @@ exports.categories = async (req, res, next) => {
   category.allProducts = productsFilter;
   category.allCategories = allCategories;
   category.allBrands = allBrands;
-  category.categories =  req.query.categories;
 
   category.products = productsFilter.slice(perPage * (page - 1), perPage * page);
   category.current = page;

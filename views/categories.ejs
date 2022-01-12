@@ -306,13 +306,18 @@
 
 
           <!-- Form -->
-          <form action="/categories" name="categories">
-            <input type="text" name="page" value="<%= current%>">
+          <form action="/categories" name="pagination">
+            <input type="text" name="page" value="<%= current%>"> 
+          </form>
+
+          <form action="/categories" name="search">
+            <input type="text" name="page" value="<%= current%>"> 
             <input type="text" name="categories" value="<%= categories%>">
           </form>
 
           <script>
-            const form = $('form[name="categories"]');
+            const formPagination = $('form[name="pagination"]');
+            const formSearch = $('form[name="search"]');
             const pageLink = $('.page-link');
             const currentInput = $('input[name="page"]');
             const categoriesInput = $('input[name="categories"]');
@@ -324,25 +329,32 @@
               event.preventDefault();
               current = $(this).data("page");
               $(currentInput).val(current);
-              form.submit();
+              if ($(categoriesInput).val() == '') {
+                formPagination.submit();
+              } else {
+                search(current);
+              }
             })
 
             searchBtn.click(function(event) {
-              let categories = '';
-              let checkedCategories = $('input[name="categories[]"]:checked');
-              
-              for (let i = 0; i < checkedCategories.length; i++) {
-                if (i == 0) {
-                  categories = categories + $(checkedCategories[i]).val();
-                } else {
-                  categories = categories + '_' + $(checkedCategories[i]).val();
-                }
-              }
-
-              $(categoriesInput).val(categories);
-              $(currentInput).val('1');
-              form.submit();
+              search('1');
             })
+
+            function search(current) {
+              let categories = '';
+                let checkedCategories = $('input[name="categories[]"]:checked');
+                for (let i = 0; i < checkedCategories.length; i++) {
+                  if (i == 0) {
+                    categories = categories + $(checkedCategories[i]).val();
+                  } else {
+                    categories = categories + '_' + $(checkedCategories[i]).val();
+                  }
+                }
+
+                $(categoriesInput).val(categories);
+                $(currentInput).val(current);
+                formSearch.submit();
+            }
           </script>     
     </body>
 
