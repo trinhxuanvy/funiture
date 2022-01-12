@@ -32,14 +32,23 @@
                             <div class="left_sidebar_area">
                                 <aside class="left_widgets p_filter_widgets">
                                     <div class="l_w_title">
-                                        <h3>Browse Categories</h3>
+                                        <h3>Categories</h3>
                                     </div>
                                     <div class="widgets_inner">
                                         <ul class="list">
                                             <% for(let i = 0; i < allCategories.length; i++) { %> 
                                             <li>
-                                                <a href="#"><%= allCategories[i].prodTypeName %> </a>
-                                                <span>( <%= allCategories[i].amount %> )</span>
+                                                <label for="<%= allCategories[i].prodTypeName.toLowerCase().split(' ').join('-') %>">
+                                                  <%= allCategories[i].prodTypeName %> 
+                                                </label>
+                                                <div class="form-check">
+                                                  <input class="form-check-input" 
+                                                  type="checkbox" 
+                                                  name="categories[]" 
+                                                  id="<%= allCategories[i].prodTypeName.toLowerCase().split(' ').join('-') %>" 
+                                                  value="<%= allCategories[i].prodTypeName.toLowerCase().split(' ').join('-') %>"
+                                                  <%= categories.split('_').includes( allCategories[i].prodTypeName.toLowerCase().split(' ').join('-')) ? 'checked' : '' %>>
+                                                </div>
                                             </li>
                                             <% } %>  
                                         </ul>
@@ -54,36 +63,21 @@
                                         <ul class="list">
                                             <% for(var i = 0; i < allBrands.length; i++) { %> 
                                             <li>
-                                                <a href="#"><%= allBrands[i].brandName %> </a>
+                                                <label for="<%= allBrands[i].brandName.toLowerCase().split(' ').join('-') %>">
+                                                  <%= allBrands[i].brandName %> 
+                                                </label>
+                                                <div class="form-check">
+                                                  <input class="form-check-input" 
+                                                  type="checkbox" 
+                                                  name="brands[]" 
+                                                  id="<%= allBrands[i].brandName.toLowerCase().split(' ').join('-') %>" 
+                                                  value="<%= allBrands[i].brandName.toLowerCase().split(' ').join('-') %>"
+                                                  <%= brands.split('_').includes( allBrands[i].brandName.toLowerCase().split(' ').join('-')) ? 'checked' : '' %>>
+                                                </div>
                                             </li>
                                             <% } %> 
                                     </div>
                                 </aside>
-
-                                <!-- <aside class="left_widgets p_filter_widgets">
-                                    <div class="l_w_title">
-                                        <h3>Color Filter</h3>
-                                    </div>
-                                    <div class="widgets_inner">
-                                        <ul class="list">
-                                            <li>
-                                                <a href="#">Black</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Black Leather</a>
-                                            </li>
-                                            <li class="active">
-                                                <a href="#">Black with red</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Gold</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Spacegrey</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </aside> -->
 
                                 <aside class="left_widgets p_filter_widgets price_rangs_aside">
                                     <div class="l_w_title">
@@ -106,6 +100,9 @@
                                         </div>
                                     </div>
                                 </aside>
+                                
+                                <button id="search" class="btn_3" style="margin: 0 50px;">Search</button>
+                                
                             </div>
                         </div>
                         <div class="col-lg-9">
@@ -113,26 +110,9 @@
                                 <div class="col-lg-12">
                                     <div class="product_top_bar d-flex justify-content-between align-items-center">
                                         <div class="single_product_menu">
-                                            <p><span>10000 </span> Prodict Found</p>
+                                            <p><span> <%= allProducts.length %>  </span> Prodict Found</p>
                                         </div>
-                                        <div class="single_product_menu d-flex">
-                                            <h5>short by : </h5>
-                                            <select>
-                                        <option data-display="Select">name</option>
-                                        <option value="1">price</option>
-                                        <option value="2">product</option>
-                                    </select>
-                                        </div>
-                                        <div class="single_product_menu d-flex">
-                                            <h5>show :</h5>
-                                            <div class="top_pageniation">
-                                                <ul>
-                                                    <li>1</li>
-                                                    <li>2</li>
-                                                    <li>3</li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                        
                                         <div class="single_product_menu d-flex">
                                             <div class="input-group">
                                                 <input type="text" class="form-control" placeholder="search" aria-describedby="inputGroupPrepend">
@@ -237,7 +217,6 @@
                                         </ul>
                                         </nav>
                                     <% } %>
-                                    
                                 </div>
                             </div>
                         </div>
@@ -310,24 +289,69 @@
 
 
           <!-- Form -->
-          <form action="/categories" name="categories">
-            <input type="text" name="page" value="<%= current%>">
+          <form action="/categories" name="pagination">
+            <input type="text" name="page" value="<%= current%>"> 
+          </form>
+
+          <form action="/categories" name="search">
+            <input type="text" name="page" value="<%= current%>"> 
+            <input type="text" name="categories" value="<%= categories%>">
+            <input type="text" name="brands" value="<%= categories%>">
           </form>
 
           <script>
-            const form = $('form[name="categories"]');
-            const linkPage = $('.page-link');
-            const inputCurrent = $('input[name="page"]');
-
-            let current = $(inputCurrent).val();
+            const formPagination = $('form[name="pagination"]');
+            const formSearch = $('form[name="search"]');
+            const pageLink = $('.page-link');
+            const currentInput = $('input[name="page"]');
+            const categoriesInput = $('input[name="categories"]');
+            const brandsInput = $('input[name="brands"]');
+            const searchBtn = $('#search');
+            
+            let current = $(currentInput).val();
         
-            linkPage.click(function(event) {
+            pageLink.click(function(event) {
               event.preventDefault();
               current = $(this).data("page");
-              $(inputCurrent).val(current);
-              form.submit();
-              
+              $(currentInput).val(current);
+              if ($(categoriesInput).val() == '') {
+                formPagination.submit();
+              } else {
+                search(current);
+              }
             })
+
+            searchBtn.click(function(event) {
+              search('1');
+            })
+
+            function search(current) {
+              let categories = '';
+              let brands = '';
+              let checkedCategories = $('input[name="categories[]"]:checked');
+              let checkedBrands = $('input[name="brands[]"]:checked');
+
+              for (let i = 0; i < checkedCategories.length; i++) {
+                if (i == 0) {
+                  categories = categories + $(checkedCategories[i]).val();
+                } else {
+                  categories = categories + '_' + $(checkedCategories[i]).val();
+                }
+              }
+
+              for (let i = 0; i < checkedBrands.length; i++) {
+                if (i == 0) {
+                  brands = brands + $(checkedBrands[i]).val();
+                } else {
+                  brands = brands + '_' + $(checkedBrands[i]).val();
+                }
+              }
+
+              $(categoriesInput).val(categories);
+              $(brandsInput).val(brands);
+              $(currentInput).val(current);
+              formSearch.submit();
+            }
           </script>     
     </body>
 
