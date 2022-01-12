@@ -47,8 +47,11 @@ exports.categories = async (req, res, next) => {
     allBrands: 0,
     user,
     cartTotal: 0,
+    bestSellers: 0,
     categories: 0,
     brands: 0,
+    fromPrice: 0,
+    toPrice: 0,
   };
 
   //Set số sản phẩm trên một trang, và lấy trang hiện tại
@@ -89,9 +92,15 @@ exports.categories = async (req, res, next) => {
       brands.includes(product.brandName.toLowerCase().split(' ').join('-')));
     category.brands =  req.query.brands;
   }
-  //Lấy sản phẩm được lọc
-  
 
+  //best seller
+  const bestSellers = await Product.find()
+    .sort({ hasSold: -1 })
+    .limit(10)
+    .exec();
+  category.bestSellers = bestSellers;
+
+  //Lấy sản phẩm được lọc
   category.allProducts = productsFilter;
   category.allCategories = allCategories;
   category.allBrands = allBrands;
