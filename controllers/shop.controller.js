@@ -274,6 +274,25 @@ exports.getProduct = async (req, res, next) => {
   return res.render("products", {product, bestSellers, user, cartTotal});
 };
 
+exports.getOrder = async (req, res, next) => {
+  const user = jwt.verify(
+    req.cookies?.cusToken,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+
+  const orders = await Order.find({cusId: user._id});
+  console.log(orders);
+  return res.render("orders", {orders: orders, user: user, cartTotal: user.cart.totalQuantity});
+};
+
+
 exports.postAccount = async (req, res, next) => {
   req.session.url = req.url;
 
@@ -695,15 +714,14 @@ exports.postOrder =async (req, res, next) => {
     receiverPhone: req.body.phone,
     receiverName: req.body.cusName,
     receiverMail: req.body.email,
-    orderDetails: user.cart.cartDetails,
     totalQuantity: user.cart.totalQuantity,
     subTotalPrice: user.cart.price,
+    orderDetails: user.cart.cartDetails,
     discountMoney: 0,
     cusId: user._id,
     totalPrice: user.cart.price + 20,
+    status: 'order'
   };
-  console.log(user);
-  console.log(newOrder);
 
   const coupon = await Coupon.findOne({code: req.body.code, status: true});
   if(coupon != null)
