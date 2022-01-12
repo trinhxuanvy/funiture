@@ -771,7 +771,7 @@ exports.postOrder =async (req, res, next) => {
           });
       
           res.cookie("cusToken", token)
-          res.redirect("/index");
+          res.redirect("/orders");
         }
         else
         {
@@ -827,3 +827,22 @@ exports.addCoupon = async (req, res, next) => {
   res.send({message: "Not found coupon", status: false});
   }
 }
+
+exports.getOrdersDetail = async (req, res, next) => {
+  const user = jwt.verify(
+    req.cookies?.cusToken,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+
+  const order = await Order.findOne({_id: req.params.orderId});
+  console.log(order);
+  return res.render("orderdetail", {order: order, user: user, cartTotal: user.cart.totalQuantity});
+
+};

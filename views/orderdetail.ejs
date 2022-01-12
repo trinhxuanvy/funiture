@@ -96,45 +96,33 @@
                       <table class="table" id="tableCart">
                         <thead>
                           <tr>
-                            <th scope="col" style="width: 10%;"></th>
-                            <th scope="col">Date</th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Price</th>
                             <th scope="col">Quantity</th>
-                            <th scope="col">Subtotal</th>
-                            <th scope="col">Shipping fee</th>
-                            <th scope="col">DiscountMoney</th>
                             <th scope="col">Total</th>
-                            <th scope="col">Status</th>
                           </tr>
                         </thead>
                         <tbody>
-                            <% orders.forEach(order => { %>
+                            <% order.orderDetails.forEach(orderDetails => { %>
                                 <tr class="line-card-detail">
                                     <td>
-                                      <a href="orders/<%= order._id %>" >Order Detail</a>
+                                        <div class="media">
+                                            <div class="d-flex">
+                                              <img style="width: 60px;" src="<%= orderDetails.productImg %>" alt="" />
+                                            </div>
+                                            <div class="media-body">
+                                              <p><%= orderDetails.productName %></p>
+                                            </div>
+                                          </div>
                                     </td>
                                     <td>
-                                      <h5 class="order-date"><%= (new
-                                        Date(order.createdAt)).toLocaleString("en-US", {
-                                        year: "numeric", month: "numeric", day: "numeric", hour: 'numeric', minute: 'numeric' })
-                                        %></h5>
+                                      <h5 class="money"><%= orderDetails.price %></h5>
                                     </td>
                                     <td>
-                                      <h5><%= order.totalQuantity %> </h5>
+                                      <h5><%= orderDetails.amount %></h5>
                                     </td>
                                     <td>
-                                      <h5 class="money"><%= order.subTotalPrice %></h5>
-                                    </td>
-                                    <td>
-                                      <h5 class="money">20</h5>
-                                    </td>
-                                    <td>
-                                      <h5 class="money"><%= order.discountMoney %></h5>
-                                    </td>
-                                    <td>
-                                      <h5 class="money"><%= order.totalPrice %></h5>
-                                    </td>
-                                    <td>
-                                      <h5><%= order.status %></h5>
+                                      <h5 class="money"><%= orderDetails.price*orderDetails.amount %></h5>
                                     </td>
                                   </tr>
                             <% }) %>
@@ -145,7 +133,6 @@
                       </div>
                     </div>
                   </div>
-
               </section>
 
             <!--::footer_part start::-->
