@@ -39,6 +39,7 @@ exports.categories = async (req, res, next) => {
 
   //Biến truyền qua view
   const category = {
+    allProducts: 0,
     products: 0,
     current: 0,
     pages: 0,
@@ -46,11 +47,15 @@ exports.categories = async (req, res, next) => {
     allBrands: 0,
     user,
     cartTotal: 0,
+
+    categories: 0,
+    brands: 0,
   };
 
   //Set số sản phẩm trên một trang, và lấy trang hiện tại
   let perPage = 9;
   let page;
+
   if (Number(req.query.page)) {
     page = page <= 0 ? 1 : req.query.page;
   } else {
@@ -61,13 +66,28 @@ exports.categories = async (req, res, next) => {
   const allBrands = await Brand.find();
   const allProducts = await Product.find();
 
+  //Product sau khi lọc
+  let productsFilter = allProducts;
+
+  //lấy categories đã chọn
+  const categories = req.query.categories.split('_');
+  productsFilter = productsFilter.filter(product => 
+    categories.includes(product.prodTypeName.toLowerCase().split(' ').join('-')));
+
+
+  //lấy brands đã chọn
+
+  //Lấy sản phẩm được lọc
+  
+
+  category.allProducts = productsFilter;
   category.allCategories = allCategories;
-
   category.allBrands = allBrands;
+  category.categories =  req.query.categories;
 
-  category.products = allProducts.slice(perPage * (page - 1), perPage * page);
+  category.products = productsFilter.slice(perPage * (page - 1), perPage * page);
   category.current = page;
-  category.pages = Math.ceil(allProducts.length / perPage);
+  category.pages = Math.ceil(productsFilter.length / perPage);
 
   category.user = user;
 

@@ -32,14 +32,23 @@
                             <div class="left_sidebar_area">
                                 <aside class="left_widgets p_filter_widgets">
                                     <div class="l_w_title">
-                                        <h3>Browse Categories</h3>
+                                        <h3>Categories</h3>
                                     </div>
                                     <div class="widgets_inner">
                                         <ul class="list">
                                             <% for(let i = 0; i < allCategories.length; i++) { %> 
                                             <li>
-                                                <a href="#"><%= allCategories[i].prodTypeName %> </a>
-                                                <span>( <%= allCategories[i].amount %> )</span>
+                                                <label for="<%= allCategories[i].prodTypeName.toLowerCase().split(' ').join('_') %>">
+                                                  <%= allCategories[i].prodTypeName %> 
+                                                </label>
+                                                <div class="form-check">
+                                                  <input class="form-check-input" 
+                                                  type="checkbox" 
+                                                  name="categories[]" 
+                                                  id="<%= allCategories[i].prodTypeName.toLowerCase().split(' ').join('_') %>" 
+                                                  value="<%= allCategories[i].prodTypeName.toLowerCase().split(' ').join('_') %>"
+                                                  <%= categories.split('_').includes( allCategories[i].prodTypeName.toLowerCase().split(' ').join('-')) ? 'checked' : '' %>>
+                                                </div>
                                             </li>
                                             <% } %>  
                                         </ul>
@@ -54,36 +63,20 @@
                                         <ul class="list">
                                             <% for(var i = 0; i < allBrands.length; i++) { %> 
                                             <li>
-                                                <a href="#"><%= allBrands[i].brandName %> </a>
+                                                <label for="<%= allBrands[i].brandName.toLowerCase().split(' ').join('_') %>">
+                                                  <%= allBrands[i].brandName %> 
+                                                </label>
+                                                <div class="form-check">
+                                                  <input class="form-check-input" 
+                                                  type="checkbox" 
+                                                  name="brands" 
+                                                  id="<%= allBrands[i].brandName.toLowerCase().split(' ').join('_') %>" 
+                                                  value="<%= allBrands[i].brandName.toLowerCase().split(' ').join('_') %>">
+                                                </div>
                                             </li>
                                             <% } %> 
                                     </div>
                                 </aside>
-
-                                <!-- <aside class="left_widgets p_filter_widgets">
-                                    <div class="l_w_title">
-                                        <h3>Color Filter</h3>
-                                    </div>
-                                    <div class="widgets_inner">
-                                        <ul class="list">
-                                            <li>
-                                                <a href="#">Black</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Black Leather</a>
-                                            </li>
-                                            <li class="active">
-                                                <a href="#">Black with red</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Gold</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Spacegrey</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </aside> -->
 
                                 <aside class="left_widgets p_filter_widgets price_rangs_aside">
                                     <div class="l_w_title">
@@ -106,6 +99,9 @@
                                         </div>
                                     </div>
                                 </aside>
+                                
+                                <button id="search" class="btn_3" style="margin: 0 50px;">Search</button>
+                                
                             </div>
                         </div>
                         <div class="col-lg-9">
@@ -113,9 +109,9 @@
                                 <div class="col-lg-12">
                                     <div class="product_top_bar d-flex justify-content-between align-items-center">
                                         <div class="single_product_menu">
-                                            <p><span>10000 </span> Prodict Found</p>
+                                            <p><span> <%= allProducts.length %>  </span> Prodict Found</p>
                                         </div>
-                                        <div class="single_product_menu d-flex">
+                                        <!-- <div class="single_product_menu d-flex">
                                             <h5>short by : </h5>
                                             <select>
                                         <option data-display="Select">name</option>
@@ -132,7 +128,7 @@
                                                     <li>3</li>
                                                 </ul>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="single_product_menu d-flex">
                                             <div class="input-group">
                                                 <input type="text" class="form-control" placeholder="search" aria-describedby="inputGroupPrepend">
@@ -312,21 +308,40 @@
           <!-- Form -->
           <form action="/categories" name="categories">
             <input type="text" name="page" value="<%= current%>">
+            <input type="text" name="categories" value="<%= categories%>">
           </form>
 
           <script>
             const form = $('form[name="categories"]');
-            const linkPage = $('.page-link');
-            const inputCurrent = $('input[name="page"]');
-
-            let current = $(inputCurrent).val();
+            const pageLink = $('.page-link');
+            const currentInput = $('input[name="page"]');
+            const categoriesInput = $('input[name="categories"]');
+            const searchBtn = $('#search');
+            
+            let current = $(currentInput).val();
         
-            linkPage.click(function(event) {
+            pageLink.click(function(event) {
               event.preventDefault();
               current = $(this).data("page");
-              $(inputCurrent).val(current);
+              $(currentInput).val(current);
               form.submit();
+            })
+
+            searchBtn.click(function(event) {
+              let categories = '';
+              let checkedCategories = $('input[name="categories[]"]:checked');
               
+              for (let i = 0; i < checkedCategories.length; i++) {
+                if (i == 0) {
+                  categories = categories + $(checkedCategories[i]).val();
+                } else {
+                  categories = categories + '_' + $(checkedCategories[i]).val();
+                }
+              }
+
+              $(categoriesInput).val(categories);
+              $(currentInput).val('1');
+              form.submit();
             })
           </script>     
     </body>
