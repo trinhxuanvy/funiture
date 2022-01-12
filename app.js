@@ -11,6 +11,7 @@ const shopRouter = require("./routes/shop.route");
 const adminRouter = require("./routes/admin.route");
 const authAdminRouter = require("./routes/auth-admin.route");
 const authUserRouter = require("./routes/auth-user.route");
+const errorAdminRouter = require("./routes/error.route");
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use(shopRouter);
 app.use(adminRouter);
 app.use(authAdminRouter);
 app.use(authUserRouter);
+app.use(errorAdminRouter);
 
 const port = process.env.PORT || 3000;
 

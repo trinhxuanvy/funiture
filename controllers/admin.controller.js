@@ -53,6 +53,7 @@ exports.getProduct = async (req, res, next) => {
     })
       .sort({ createdAt: "desc" })
       .exec();
+
     search = "?search=" + search;
   } else if (SORT.indexOf(sort) > -1 && PRODUCT.indexOf(following) > -1) {
     prodProperty[following] = sort || "";
@@ -61,6 +62,7 @@ exports.getProduct = async (req, res, next) => {
     })
       .sort(prodProperty)
       .exec();
+
     sort = "?sort=" + sort;
     following = "&following=" + following;
   } else {
@@ -163,6 +165,7 @@ exports.postProduct = async (req, res, next) => {
     })
       .sort({ createdAt: "desc" })
       .exec();
+
     search = "?search=" + search;
   } else if (SORT.indexOf(sort) > -1 && PRODUCT.indexOf(following) > -1) {
     prodProperty[following] = sort || "";
@@ -171,6 +174,7 @@ exports.postProduct = async (req, res, next) => {
     })
       .sort(prodProperty)
       .exec();
+
     sort = "?sort=" + sort;
     following = "&following=" + following;
   } else {
