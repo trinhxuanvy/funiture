@@ -50,8 +50,8 @@ exports.categories = async (req, res, next) => {
     bestSellers: 0,
     categories: 0,
     brands: 0,
-    fromPrice: 0,
-    toPrice: 0,
+    fromPrice: '',
+    toPrice: '',
   };
 
   //Set số sản phẩm trên một trang, và lấy trang hiện tại

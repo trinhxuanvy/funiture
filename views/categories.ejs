@@ -275,40 +275,21 @@
 
 
           <!-- Form -->
-          <form action="/categories" name="pagination" id="pagination">
-            <!-- <input type="text" name="page" value="<%= current%>">  -->
-          </form>
-
-          <form action="/categories" name="search">
-            <input type="text" name="page" value="<%= current%>"> 
-            <input type="text" name="categories" value="<%= categories%>">
-            <input type="text" name="brands" value="<%= brands%>">
-            <input type="text" name="fromPrice" value="<%= brands%>">
-            <input type="text" name="toPrice" value="<%= brands%>">
-          </form>
+          <form action="/categories" name="categories"></form>
 
           <script>
-            const formPagination = $('form[name="pagination"]');
+            const formCategories = $('form[name="categories"]');
             const formSearch = $('form[name="search"]');
             const pageLink = $('.page-link');
-
-            const currentInput = $('input[name="page"]');
-            const categoriesInput = $('input[name="categories"]');
-            const brandsInput = $('input[name="brands"]');
-            const fromPriceInput = $('input[name="fromPrice"]');
-            const toPriceInput = $('input[name="toPrice"]');
             const searchBtn = $('#search');
-
-            let current = $(currentInput).val();
         
             pageLink.click(function(event) {
               event.preventDefault();
               current = $(this).data("page"); 
 
-              //$(currentInput).val(current);
               if ('<%= categories%>' == '' && '<%= brands%>' == '' && '<%= fromPrice%>' == '' && '<%= toPrice%>' == '') {
-                beforeSubmit(formPagination, 'page', current);
-                formPagination.submit();
+                beforeSubmit(formCategories, 'page', current);
+                formCategories.submit();
               } else {
                 search(current);
               }
@@ -341,10 +322,10 @@
                 }
               }
 
-              $(categoriesInput).val(categories);
-              $(brandsInput).val(brands);
-              $(currentInput).val(current);
-              formSearch.submit();
+              beforeSubmit(formCategories, 'page', current);
+              beforeSubmit(formCategories, 'categories', categories);
+              beforeSubmit(formCategories, 'brands', brands);
+              formCategories.submit();
             }
 
             function beforeSubmit(form, name, value) {
@@ -352,7 +333,7 @@
                 input.type = 'hidden';
                 input.name = name;
                 input.value = value;
-                formPagination.append(input);
+                form.append(input);
             }
           </script>     
     </body>
