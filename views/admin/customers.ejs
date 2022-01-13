@@ -101,16 +101,12 @@
                       style="opacity: 0.5;" <% } %> id="<%= item._id %>">
                       <td align="center">
                         <div class="mt-2 mb-2">
-                          <a
-                            href="/admin/customers/<%= item._id %>/reset"
-                            class="btn btn-light"
-                            ><em class="ti-reload"></em
-                          ></a>
                           <button
                             value="<%= item._id %>"
                             class="btn btn-danger btn-delete-prod is-status"
+                            title="Block"
                           >
-                            <em class="ti-trash"></em>
+                            <em class="ti-lock"></em>
                           </button>
                         </div>
                       </td>
@@ -413,16 +409,7 @@
                         <button
                           type="submit"
                           id="btnSubmit"
-                          class="
-                            btn btn-orange
-                            m-auto
-                            mt-5
-                            d-block
-                            is-status
-                            d-flex
-                            justify-content-between
-                            align-items-center
-                          "
+                          class="btn btn-orange m-auto mt-5 d-block is-status d-flex justify-content-between align-items-center"
                         >
                           Save
                         </button>

@@ -137,8 +137,6 @@ router.get(
   adminController.getCustomerbyUsername
 );
 
-router.get("/admin/customers/:id/reset", adminController.resetPasswordCustomer);
-
 router.get(
   "/admin/admins",
   authAdminController.checkExpired,
