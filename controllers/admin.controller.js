@@ -1066,8 +1066,9 @@ exports.updateProfile = async (req, res, next) => {
       }
     }
   );
-  const aboutMe = req.body.aboutMe ? req.body.aboutMe : admin.aboutMe;
+  const aboutMe = req.body.aboutMe ? req.body.aboutMe.trim() : admin.aboutMe;
   let newAdmin = {};
+  let update;
 
   if (req.body?.password) {
     const newPassword = await bcrypt.hash(req.body?.password, 12);
@@ -1086,35 +1087,36 @@ exports.updateProfile = async (req, res, next) => {
     };
   }
 
-  await Admin.updateOne({ _id: admin._id }, newAdmin);
+  update = await Admin.updateOne({ _id: admin._id }, newAdmin);
+  if (update?.modifiedCount) {
+    const user = await Admin.findById({ _id: admin._id });
 
-  const user = await Admin.findById({ _id: admin._id });
+    const userToken = {
+      _id: user._id,
+      adminName: user.adminName,
+      phone: user.phone,
+      email: user.email,
+      address: user.address,
+      dateOfBirth: user.dateOfBirth,
+      avatarLink: user.avatarLink,
+      username: user.username,
+      password: user.password,
+      aboutMe: user.aboutMe,
+      roleLevel: user.roleLevel,
+      avatarLink: user.avatarLink,
+      roleLevel: user.roleLevel,
+      identityCard: user.identityCard,
+    };
 
-  const userToken = {
-    _id: user._id,
-    adminName: user.adminName,
-    phone: user.phone,
-    email: user.email,
-    address: user.address,
-    dateOfBirth: user.dateOfBirth,
-    avatarLink: user.avatarLink,
-    username: user.username,
-    password: user.password,
-    aboutMe: user.aboutMe,
-    roleLevel: user.roleLevel,
-    avatarLink: user.avatarLink,
-    roleLevel: user.roleLevel,
-    identityCard: user.identityCard,
-  };
+    const token = jwt.sign(userToken, process.env.KEY_JWT, {
+      algorithm: "HS256",
+      expiresIn: "1h",
+    });
 
-  const token = jwt.sign(userToken, process.env.KEY_JWT, {
-    algorithm: "HS256",
-    expiresIn: "1h",
-  });
+    res.cookie("token", token);
+    res.cookie("message", { message: "Update Success", type: "success" });
+  }
 
-  res.cookie("token", token);
-
-  res.cookie("message", { message: "Update Success", type: "success" });
   res.redirect("/admin/profile");
 };
 
@@ -1130,32 +1132,39 @@ exports.updateImageProfile = async (req, res, next) => {
   );
 
   const avatarLink = req.body?.avatarLink || admin.avatarLink;
-  await Admin.updateOne({ _id: admin._id }, { avatarLink: avatarLink });
-  const user = await Admin.findById({ _id: admin._id });
+  let update = await Admin.updateOne(
+    { _id: admin._id },
+    { avatarLink: avatarLink }
+  );
+  let user = [];
 
-  const userToken = {
-    _id: user._id,
-    adminName: user.adminName,
-    phone: user.phone,
-    email: user.email,
-    address: user.address,
-    dateOfBirth: user.dateOfBirth,
-    avatarLink: user.avatarLink,
-    username: user.username,
-    password: user.password,
-    aboutMe: user.aboutMe,
-    roleLevel: user.roleLevel,
-    avatarLink: user.avatarLink,
-    roleLevel: user.roleLevel,
-    identityCard: user.identityCard,
-  };
+  if (update?.modifiedCount) {
+    user = await Admin.findById({ _id: admin._id });
 
-  const token = jwt.sign(userToken, process.env.KEY_JWT, {
-    algorithm: "HS256",
-    expiresIn: "1h",
-  });
+    const userToken = {
+      _id: user._id,
+      adminName: user.adminName,
+      phone: user.phone,
+      email: user.email,
+      address: user.address,
+      dateOfBirth: user.dateOfBirth,
+      avatarLink: user.avatarLink,
+      username: user.username,
+      password: user.password,
+      aboutMe: user.aboutMe,
+      roleLevel: user.roleLevel,
+      avatarLink: user.avatarLink,
+      roleLevel: user.roleLevel,
+      identityCard: user.identityCard,
+    };
 
-  res.cookie("token", token);
+    const token = jwt.sign(userToken, process.env.KEY_JWT, {
+      algorithm: "HS256",
+      expiresIn: "1h",
+    });
+
+    res.cookie("token", token);
+  }
 
   if (user) {
     res.send({ userToken, success: true });
