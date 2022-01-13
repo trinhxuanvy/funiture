@@ -1043,10 +1043,11 @@ exports.deleteAdmin = (req, res, next) => {
         return data;
       }
     );
+    let update;
     if (isMe._id != adminId) {
       Admin.findById({ _id: adminId }, async (err, data) => {
         if (!err) {
-          const update = await Admin.updateOne(
+          update = await Admin.updateOne(
             { _id: adminId },
             { $set: { status: !data.status } }
           );
