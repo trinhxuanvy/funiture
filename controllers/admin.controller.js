@@ -846,27 +846,6 @@ exports.getCustomerbyUsername = async (req, res, next) => {
   } catch (error) {}
 };
 
-exports.resetPasswordCustomer = async (req, res, next) => {
-  // const token = req.cookies?.token || "";
-  // jwt.verify(token, process.env.KEY_JWT, async (err, data) => {
-  //   if (!err) {
-  //     await Admin.updateOne({ _id: data._id }, { password: data.identityCard });
-  //   }
-  // });
-
-  // res.clearCookie("token");
-  // res.redirect("/admin/login");
-
-  try {
-    const id = req.params.id;
-    Customer.findById({ _id: id }, async (err, data) => {
-      const newPassword = await bcrypt.hash("Cus@" + data.phone, 12);
-      await Customer.updateOne({ _id: id }, { password: newPassword });
-      res.redirect("/admin/customers");
-    });
-  } catch (error) {}
-};
-
 exports.getAdmin = async (req, res, next) => {
   let page = req.body.page || 1;
   let search = req.query.search || "";
