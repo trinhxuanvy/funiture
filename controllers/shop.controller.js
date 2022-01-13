@@ -369,7 +369,7 @@ exports.postCustomer = async (req, res, next) => {
       if (err) {
         return res.status(500).send({ msg: err.message });
       }
-
+      var fullUrl = req.protocol + '://' + req.get('host')
       // Send email (use credintials of SendGrid)
       var transporter = nodemailer.createTransport({
         service: "Gmail",
@@ -385,7 +385,7 @@ exports.postCustomer = async (req, res, next) => {
         html: `<h1>Email Confirmation</h1>
         <h2>Hello ${newCustomer.cusName}</h2>
         <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
-        <a href="http://localhost:3000/confirm/${token.token}"> Click here</a>
+        <a href="${fullUrl}/confirm/${token.token}"> Click here</a>
         </div>`
       };
       transporter.sendMail(mailOptions, function (err) {
@@ -480,7 +480,7 @@ exports.changepassword = async (req, res, next) => {
       }
     }
   );
-
+  
   var message = req.cookies?.message || "";
   res.clearCookie("message");
   var cartTotal = 0;
