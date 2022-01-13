@@ -275,32 +275,39 @@
 
 
           <!-- Form -->
-          <form action="/categories" name="pagination">
-            <input type="text" name="page" value="<%= current%>"> 
+          <form action="/categories" name="pagination" id="pagination">
+            <!-- <input type="text" name="page" value="<%= current%>">  -->
           </form>
 
           <form action="/categories" name="search">
             <input type="text" name="page" value="<%= current%>"> 
             <input type="text" name="categories" value="<%= categories%>">
-            <input type="text" name="brands" value="<%= categories%>">
+            <input type="text" name="brands" value="<%= brands%>">
+            <input type="text" name="fromPrice" value="<%= brands%>">
+            <input type="text" name="toPrice" value="<%= brands%>">
           </form>
 
           <script>
             const formPagination = $('form[name="pagination"]');
             const formSearch = $('form[name="search"]');
             const pageLink = $('.page-link');
+
             const currentInput = $('input[name="page"]');
             const categoriesInput = $('input[name="categories"]');
             const brandsInput = $('input[name="brands"]');
+            const fromPriceInput = $('input[name="fromPrice"]');
+            const toPriceInput = $('input[name="toPrice"]');
             const searchBtn = $('#search');
-            
+
             let current = $(currentInput).val();
         
             pageLink.click(function(event) {
               event.preventDefault();
-              current = $(this).data("page");
-              $(currentInput).val(current);
-              if ($(categoriesInput).val() == '') {
+              current = $(this).data("page"); 
+
+              //$(currentInput).val(current);
+              if ('<%= categories%>' == '' && '<%= brands%>' == '' && '<%= fromPrice%>' == '' && '<%= toPrice%>' == '') {
+                beforeSubmit(formPagination, 'page', current);
                 formPagination.submit();
               } else {
                 search(current);
@@ -314,8 +321,9 @@
             function search(current) {
               let categories = '';
               let brands = '';
-              let checkedCategories = $('input[name="categories[]"]:checked');
-              let checkedBrands = $('input[name="brands[]"]:checked');
+              
+              const checkedCategories = $('input[name="categories[]"]:checked');
+              const checkedBrands = $('input[name="brands[]"]:checked');
 
               for (let i = 0; i < checkedCategories.length; i++) {
                 if (i == 0) {
@@ -337,6 +345,14 @@
               $(brandsInput).val(brands);
               $(currentInput).val(current);
               formSearch.submit();
+            }
+
+            function beforeSubmit(form, name, value) {
+                var input = document.createElement("input");
+                input.type = 'hidden';
+                input.name = name;
+                input.value = value;
+                formPagination.append(input);
             }
           </script>     
     </body>
