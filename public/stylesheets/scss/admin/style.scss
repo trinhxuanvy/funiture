@@ -377,6 +377,33 @@
   }
 }
 
+#table-model {
+  td {
+    vertical-align: middle;
+    align-self: center;
+  }
+}
+
+.table-product-detail {
+  color: $c-flint;
+  tbody {
+    td {
+      vertical-align: middle;
+      align-self: center;
+    }
+  }
+  .media {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+    img {
+      width: 60px;
+      margin-right: 16px;
+    }
+  }
+}
+
 .product_image_area {
   position: fixed;
   width: 90%;

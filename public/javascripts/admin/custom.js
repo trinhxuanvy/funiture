@@ -200,6 +200,7 @@ $(document).ready(function () {
         const id = $(select[i].parentNode.parentNode.parentNode).attr("id");
         const url = new URL(window.location.href);
         const name = $(select[i]).attr("name");
+
         var postData = {};
         postData[name] = $(select[i]).val();
         statusUpdate({
@@ -724,6 +725,99 @@ $(document).ready(function () {
         },
       });
     });
+  });
+
+  // Xử lý button sort product
+  $(function () {
+    $("#btnSort").click(function (e) {
+      e.preventDefault();
+      const formSort = $("#formSort");
+      const hasClass = $(formSort[0]).hasClass("form-sort-active");
+
+      if (hasClass) {
+        $(formSort[0]).removeClass("form-sort-active");
+      } else {
+        $(formSort[0]).addClass("form-sort-active");
+      }
+    });
+  });
+
+  // Xử lý preview order detail
+  $(function () {
+    const btnPreview = $(".btn-preview-order");
+    const tablePreview = $(".table-product-detail tbody");
+    const previewModel = $("#product_image_area");
+
+    for (let i = 0; i < btnPreview.length; i++) {
+      $(btnPreview[i]).click(function (e) {
+        e.preventDefault();
+
+        const url = new URL(window.location.href);
+        statusLoading({
+          posLoading: this,
+          isCompleted: false,
+          isSuccess: false,
+        });
+
+        $.ajax({
+          method: "get",
+          contentType: "application/json",
+          url: url.origin + url.pathname + "/" + $(btnPreview[i]).val(),
+          dataType: "json",
+          success: function (response) {
+            statusLoading({
+              posLoading: btnPreview[i],
+              isCompleted: true,
+              isSuccess: true,
+            });
+
+            if (response.success) {
+              if (!response.status) {
+                $(previewModel[0]).css("display", "block");
+                response.data.forEach((item) => {
+                  $(tablePreview[0]).append(`
+                  <tr>
+                    <th>
+                      <div class="mt-3 mb-3">
+                        <div class="media">
+                          <img
+                            src="${item.productImg}"
+                            alt="${item.productName}"
+                          />
+                        ${item.productName}
+                        </div>
+                      </div>
+                    </th>
+                    <td>
+                      <div>${convertMoney(item.price)}</div>
+                    </td>
+                    <td>
+                      <div>${item.amount}</div>
+                    </td>
+                    <td><div class="money">${convertMoney(item.amount * item.price)}</div></td>
+                  </tr>
+                  `);
+                });
+              } else {
+                $(tablePreview[0]).html("");
+              }
+            }
+          },
+        });
+      });
+    }
+  });
+
+  // Xử lý money
+  $(function () {
+    const money = $(".money");
+
+    for (let i = 0; i < money.length; i++) {
+      money[i].innerHTML = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(money[i].innerHTML);
+    }
   });
 });
 

@@ -304,6 +304,23 @@
         color: #fff;
         font-weight: bolder; }
 
+#table-model td {
+  vertical-align: middle;
+  align-self: center; }
+
+.table-product-detail {
+  color: #66615b; }
+  .table-product-detail tbody td {
+    vertical-align: middle;
+    align-self: center; }
+  .table-product-detail .media {
+    display: flex;
+    align-items: center;
+    justify-content: start; }
+    .table-product-detail .media img {
+      width: 60px;
+      margin-right: 16px; }
+
 .product_image_area {
   position: fixed;
   width: 90%;

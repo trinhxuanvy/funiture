@@ -224,4 +224,22 @@ router.get(
   adminController.getCouponbyCode
 );
 
+router.get(
+  "/admin/orders",
+  authAdminController.checkExpired,
+  adminController.getOrder
+);
+
+router.get(
+  "/admin/orders/:id",
+  authAdminController.checkExpired,
+  adminController.getOrderById
+);
+
+router.post(
+  "/admin/orders/update/:id",
+  authAdminController.checkExpired,
+  adminController.updateOrder
+);
+
 module.exports = router;

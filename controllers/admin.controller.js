@@ -16,6 +16,7 @@ const {
   CATEGORY_MODEL,
   CUSTOMER_MODEL,
   COUPON_MODEL,
+  ORDER_MODEL,
 } = require("../constants/modal");
 //const { data } = require("../data-sample/data");
 const { PRODUCT, SORT } = require("../constants/variables");
@@ -1066,7 +1067,7 @@ exports.updateProfile = async (req, res, next) => {
       }
     }
   );
-  const aboutMe = req.body.aboutMe ? req.body.aboutMe.trim() : admin.aboutMe;
+  const aboutMe = req.body.aboutMe ? req.body.aboutMe : admin.aboutMe;
   let newAdmin = {};
   let update;
 
@@ -1410,6 +1411,92 @@ exports.getCouponbyCode = async (req, res, next) => {
       res.send(true);
     } else {
       res.send(false);
+    }
+  } catch (error) {}
+};
+
+exports.getOrder = async (req, res, next) => {
+  let page = req.body.page || 1;
+  let order = req.query.following1 || "";
+  let prepare = req.query.following2 || "";
+  let ship = req.query.following3 || "";
+  let paid = req.query.following4 || "";
+  let cancel = req.query.following5 || "";
+  let filterArray = [];
+  let orders = [];
+
+  if (order) {
+    filterArray.push(order);
+  }
+
+  if (prepare) {
+    filterArray.push(prepare);
+  }
+
+  if (ship) {
+    filterArray.push(ship);
+  }
+
+  if (paid) {
+    filterArray.push(paid);
+  }
+
+  if (cancel) {
+    filterArray.push(cancel);
+  }
+
+  if (filterArray.length) {
+    orders = await Order.find({ status: { $in: filterArray } })
+      .sort({ createdAt: -1 })
+      .exec();
+  } else {
+    orders = await Order.find().sort({ createdAt: -1 }).exec();
+  }
+
+  const getPage = Math.floor(orders.length / ITEM_PAGE);
+  const totalPage = orders.length % ITEM_PAGE != 0 ? getPage + 1 : getPage;
+  const nextPage = parseInt(page) + 1;
+  const prevPage = parseInt(page) - 1;
+  const numPage = orders.length ? page : 0;
+
+  orders = orders.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
+
+  res.render("admin/orders", {
+    pageName: "order",
+    orders,
+    orderModel: ORDER_MODEL,
+    page,
+    totalPage,
+    nextPage,
+    prevPage,
+    numPage,
+  });
+};
+
+exports.getOrderById = async (req, res, next) => {
+  const orderId = req.params.id;
+  const order = await Order.findById({ _id: orderId });
+
+  if (order) {
+    res.json({ data: order.orderDetails, success: true });
+  } else {
+    res.json({ success: false });
+  }
+};
+
+exports.updateOrder = async (req, res, next) => {
+  try {
+    const orderId = req.params.id || "";
+    let update = await Order.updateOne(
+      { _id: orderId },
+      { status: req.body.status }
+    );
+
+    if (update?.modifiedCount != 0) {
+      const orderNew = await Order.findById({ _id: orderId });
+      res.send({ orderNew, success: true });
+    } else {
+      res.send({ success: false });
     }
   } catch (error) {}
 };
