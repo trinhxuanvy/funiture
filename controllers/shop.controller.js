@@ -2,6 +2,7 @@ const Category = require("../models/category.model");
 const Product = require("../models/product.model");
 const Brand = require("../models/brand.model");
 const Customer = require("../models/customer.model");
+const Comment = require("../models/comment.model");
 const Coupon = require("../models/coupon.model");
 const Order = require("../models/order.model");
 const Token = require("../models/token.model");
@@ -305,9 +306,50 @@ exports.getProduct = async (req, res, next) => {
 
   const prodId = req.params.id;
   const product = await Product.findById({ _id: prodId });
+  const comments = await Comment.find({productId: prodId});
   const bestSellers = await Product.find({ status: true }).exec();
-  return res.render("products", {product, bestSellers, user, cartTotal});
+  return res.render("products", {product, comments, bestSellers, user, cartTotal});
 };
+
+exports.postComment = async (req, res, next) => {
+  const user = jwt.verify(
+    req.cookies?.cusToken,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+
+  var newComment;
+
+  if(user != null)
+  {
+    newComment = {
+      content: req.body.commentContent,
+      cusName: req.body.name,
+      productId: req.params.productId,
+      cusId: user._id
+    }
+  }
+  else
+  {
+    newComment = {
+      content: req.body.commentContent,
+      cusName: req.body.name,
+      productId: req.params.productId
+    }
+  }
+  console.log(newComment);
+  const comment = new Comment(newComment);
+  comment.save((err, data) => {
+    if (err) console.log(err);
+    res.redirect("/products/"+ req.params.productId);
+  });
+}
 
 exports.getOrder = async (req, res, next) => {
   const user = jwt.verify(
