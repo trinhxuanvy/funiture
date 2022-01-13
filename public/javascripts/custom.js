@@ -390,7 +390,7 @@
     return !data.responseJSON;
   });
 
-  // Xử lý valide signup
+  // Xử lý valide form submit
   $(function () {
     const btnSubmit = $("#btnSubmit");
     $(btnSubmit[0]).click(function (e) {
@@ -409,6 +409,18 @@
           },
           username: {
             valid_username: true,
+          },
+          province: {
+            required: true
+          },
+          district: {
+            required: true
+          },
+          commune: {
+            required: true
+          },
+          address: {
+            required: true
           },
           password: {
             required: true,
@@ -434,6 +446,18 @@
             maxlength: "Please enter max-length 10 numbers",
             valid_phone: "Please enter right phonenumber"
           },
+          province: {
+            required: "Please select province",
+          },
+          district: {
+            required: "Please select district",
+          },
+          commune: {
+            required: "Please select commune",
+          },
+          address: {
+            required: "Please select address",
+          },
           confirmPassword: {
             required: "Please enter confirm password",
             equalTo: "Password doesn't match",
@@ -451,6 +475,53 @@
           `<div class="form-status" style="margin-left: 8px;"><div class="spinner-border spinner-border-sm"></div></div>`
         );
         $("#formSubmit").submit();
+      }
+    });
+  });
+
+
+  // Xử lý valide profile form submit
+  $(function () {
+    const btnSubmit = $("#Submitbtn");
+    $(btnSubmit[0]).click(function (e) {
+      e.preventDefault();
+      // console.log("oke");
+      $("#formProfileSubmit").validate({
+        rules: {
+          name: {
+            required: true,
+          },
+          email: {
+            required: true,
+            email: true,
+          },
+          phone: {
+            valid_phone: true,
+            minlength: 10,
+            maxlength: 10,
+          }
+        },
+        messages: {
+          email: {
+            required: "Please enter email",
+          },
+          name: {
+            required: "Please enter name",
+          },
+          phone: {
+            required: "Please enter phone",
+            minlength: "Please enter min-length 10 numbers",
+            maxlength: "Please enter max-length 10 numbers",
+            valid_phone: "Please enter right phonenumber"
+          }
+        },
+      });
+      if ($("#formProfileSubmit").valid()) {
+        $(this).find("div").remove();
+        $(this).append(
+          `<div class="form-status" style="margin-left: 8px;"><div class="spinner-border spinner-border-sm"></div></div>`
+        );
+        $("#formProfileSubmit").submit();
       }
     });
   });
