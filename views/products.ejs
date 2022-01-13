@@ -241,69 +241,22 @@
             <div class="row">
               <div class="col-lg-6">
                 <div class="comment_list">
-                  <div class="review_item">
-                    <div class="media">
-                      <div class="d-flex">
-                        <img
-                          src="images/product/single-product/review-1.png"
-                          alt=""
-                        />
+                  <% comments.forEach(comment => { %>
+                    <div class="review_item">
+                      <div class="media">
+                        <div class="media-body">
+                          <h4><%= comment.cusName %> </h4>
+                          <h5><%= (new
+                            Date(comment.createdAt)).toLocaleString("en-US", {
+                            year: "numeric", month: "numeric", day: "numeric", hour: 'numeric', minute: 'numeric' })
+                            %></h5>
+                        </div>
                       </div>
-                      <div class="media-body">
-                        <h4>Blake Ruiz</h4>
-                        <h5>12th Feb, 2017 at 05:56 pm</h5>
-                        <a class="reply_btn" href="#">Reply</a>
-                      </div>
+                      <p>
+                        <%= comment.content %> 
+                      </p>
                     </div>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo
-                    </p>
-                  </div>
-                  <div class="review_item reply">
-                    <div class="media">
-                      <div class="d-flex">
-                        <img
-                          src="images/product/single-product/review-2.png"
-                          alt=""
-                        />
-                      </div>
-                      <div class="media-body">
-                        <h4>Blake Ruiz</h4>
-                        <h5>12th Feb, 2017 at 05:56 pm</h5>
-                        <a class="reply_btn" href="#">Reply</a>
-                      </div>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo
-                    </p>
-                  </div>
-                  <div class="review_item">
-                    <div class="media">
-                      <div class="d-flex">
-                        <img
-                          src="images/product/single-product/review-3.png"
-                          alt=""
-                        />
-                      </div>
-                      <div class="media-body">
-                        <h4>Blake Ruiz</h4>
-                        <h5>12th Feb, 2017 at 05:56 pm</h5>
-                        <a class="reply_btn" href="#">Reply</a>
-                      </div>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo
-                    </p>
-                  </div>
+                  <% }) %>
                 </div>
               </div>
               <div class="col-lg-6">
@@ -311,9 +264,9 @@
                   <h4>Post a comment</h4>
                   <form
                     class="row contact_form"
-                    action="contact_process.php"
+                    action="/products/comment/<%= product._id%> "
                     method="post"
-                    id="contactForm"
+                    id="commentForm"
                     novalidate="novalidate"
                   >
                     <div class="col-md-12">
@@ -323,29 +276,11 @@
                           class="form-control"
                           id="name"
                           name="name"
+                          <% if (user != null) { %>
+                          value="<%= user.cusName %> "
+                          disabled
+                          <% } %>
                           placeholder="Your Full name"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <input
-                          type="email"
-                          class="form-control"
-                          id="email"
-                          name="email"
-                          placeholder="Email Address"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="number"
-                          name="number"
-                          placeholder="Phone Number"
                         />
                       </div>
                     </div>
@@ -353,16 +288,16 @@
                       <div class="form-group">
                         <textarea
                           class="form-control"
-                          name="message"
-                          id="message"
+                          name="commentContent"
+                          id="commentContent"
                           rows="1"
                           placeholder="Message"
                         ></textarea>
                       </div>
                     </div>
                     <div class="col-md-12 text-right">
-                      <button type="submit" value="submit" class="btn_3">
-                        Submit Now
+                      <button type="submit" value="submit" class="btn_3" id="submitComment">
+                        Commnent
                       </button>
                     </div>
                   </form>
@@ -551,58 +486,6 @@
                     </li>
                   </ul>
                   <p>Outstanding</p>
-                  <form
-                    class="row contact_form"
-                    action="contact_process.php"
-                    method="post"
-                    novalidate="novalidate"
-                  >
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="name"
-                          placeholder="Your Full name"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <input
-                          type="email"
-                          class="form-control"
-                          name="email"
-                          placeholder="Email Address"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="number"
-                          placeholder="Phone Number"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <textarea
-                          class="form-control"
-                          name="message"
-                          rows="1"
-                          placeholder="Review"
-                        ></textarea>
-                      </div>
-                    </div>
-                    <div class="col-md-12 text-right">
-                      <button type="submit" value="submit" class="btn_3">
-                        Submit Now
-                      </button>
-                    </div>
-                  </form>
                 </div>
               </div>
             </div>

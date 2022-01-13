@@ -43,6 +43,8 @@ router.get("/order/add/coupon/:code", shopController.addCoupon);
 
 router.get("/products/:id", shopController.getProduct);
 
+router.post("/products/comment/:productId", shopController.postComment);
+
 router.get("/checkout",authUserController.checkExpired, shopController.checkout);
 
 router.post("/checkout",authUserController.checkExpired, shopController.postOrder);
