@@ -8,6 +8,8 @@ const Token = require("../models/token.model");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
+dotenv.config();
 const { PRODUCT_MODEL, CUSTOMER_MODEL, COUPON_MODEL } = require("../constants/modal");
 // const passport = require("passport");
 
@@ -374,8 +376,8 @@ exports.postCustomer = async (req, res, next) => {
       var transporter = nodemailer.createTransport({
         service: "Gmail",
         auth: {
-          user: "shareanh4@gmail.com",
-          pass: "tabietmi",
+          user: process.env.AUTH_EMAIL,
+          pass: process.env.AUTH_PASS,
         },
       });
       var mailOptions = {
