@@ -431,6 +431,15 @@
             minlength: 8,
             equalTo: "#password",
           },
+          newPassword: {
+            required: true,
+            minlength: 8,
+          },
+          reNewPassword: {
+            required: true,
+            minlength: 8,
+            equalTo: "#newPassword",
+          },
         },
         messages: {
           email: {
@@ -464,6 +473,15 @@
             minlength: "Please enter atleast 8 characters",
           },
           password: {
+            required: "Please enter password",
+            minlength: "Please enter atleast 8 characters",
+          },
+          reNewPassword: {
+            required: "Please enter confirm password",
+            equalTo: "Password doesn't match",
+            minlength: "Please enter atleast 8 characters",
+          },
+          newPassword: {
             required: "Please enter password",
             minlength: "Please enter atleast 8 characters",
           },

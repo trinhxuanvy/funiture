@@ -2,6 +2,7 @@ const Customer = require("../models/customer.model");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+const bcrypt = require("bcrypt");
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ exports.getLogin = async (req, res, next) => {
   const message = req.cookies?.message || "",
     username = "",
     password = "";
+  console.log(message);
   if (message) {
     res.clearCookie("message");
   }
@@ -46,7 +48,15 @@ exports.postLogin = async (req, res, next) => {
       var cartTotal = 0;
       var user = null;
       res.render("login", { message: info, username, password, user, cartTotal });
-    } else {
+    }
+    else if(!user.active)
+    {
+      var cartTotal = 0;
+      var user = null;
+      res.cookie("message", { message: "Please verify your email", type: "fail" });
+      res.redirect("/login");
+    } 
+    else {
           const userToken = {
             _id: user._id,
             cusName: user.cusName,
@@ -82,6 +92,45 @@ exports.postLogin = async (req, res, next) => {
   })(req, res, next);
 };
 
+exports.postChangePassword = async (req, res, next) => {
+  const user = jwt.verify(
+    req.cookies?.cusToken,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+  
+  const currentPassword =  req.body?.password
+  var checkPassword = bcrypt.compareSync(currentPassword, user.password);
+  console.log(checkPassword);
+  if(checkPassword)
+  {
+    const newPassword = await bcrypt.hash(req.body?.newPassword, 12);
+    Customer.updateOne({ _id: user._id }, {password: newPassword}, (error) =>
+    {
+      if(!error)
+      {
+        res.clearCookie("cusToken");
+        res.cookie("message", { message: "Change Password Successfully", type: "success" });
+        res.redirect("login");
+      }
+      else{
+        res.cookie("message", { message: "Update fail", type: "fail" });
+        res.redirect("changepassword");
+      }
+    });
+  }
+  else{
+    res.cookie("message", { message: "Your current password is wrong", type: "error" });
+    res.redirect("changepassword");
+  }
+}
+
 exports.checkExpired = (req, res, next) => {
   const token = req.cookies?.cusToken || "";
 
@@ -102,5 +151,10 @@ exports.checkExpired = (req, res, next) => {
 
 exports.getLogout = async (req, res, next) => {
   res.clearCookie("cusToken");
+  const message = {
+    message: "Logout successfully",
+    type: "success",
+  };
+  res.cookie("message", message);
   res.redirect("/login");
 };

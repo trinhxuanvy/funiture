@@ -58,6 +58,10 @@ const Customer = new Schema(
       type: Boolean,
       default: true,
     },
+    active: {
+      type: Boolean,
+      default: false,
+    },
     cart: {
       cartDetails: [
         {
