@@ -68,6 +68,24 @@ const COUPON_MODEL = {
   amount: "amount",
 };
 
+const ORDER_MODEL = {
+  orderNote: "orderNode",
+  shipping: "shipping",
+  subTotalPrice: "subTotalPrice",
+  totalQuantity: "totalQuantity",
+  totalPrice: "totalPrice",
+  province: "province",
+  district: "district",
+  commune: "commune",
+  address: "address",
+  receiverPhone: "receiverPhone",
+  receiverMail: "receiverMail",
+  receiverName: "receiverName",
+  couponCode: "couponCode",
+  discountMoney: "discountMoney",
+  createdAt: "createdAt",
+  status: "status"
+}
 
 module.exports = {
   PRODUCT_MODEL,
@@ -75,5 +93,6 @@ module.exports = {
   CUSTOMER_MODEL,
   BRAND_MODEL,
   CATEGORY_MODEL,
-  COUPON_MODEL
+  COUPON_MODEL,
+  ORDER_MODEL
 };

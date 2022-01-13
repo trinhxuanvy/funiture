@@ -1004,20 +1004,5 @@
       <%- include ("./share/modal.ejs") %>
     </div>
     <%- include ("./share/scripts.ejs") %>
-    <script>
-      $(function () {
-        $("#btnSort").click(function (e) {
-          e.preventDefault();
-          const formSort = $("#formSort");
-          const hasClass = $(formSort[0]).hasClass("form-sort-active");
-
-          if (hasClass) {
-            $(formSort[0]).removeClass("form-sort-active");
-          } else {
-            $(formSort[0]).addClass("form-sort-active");
-          }
-        });
-      });
-    </script>
   </body>
 </html>
