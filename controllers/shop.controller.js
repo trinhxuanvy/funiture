@@ -421,10 +421,10 @@ exports.verifyCustomer = async (req, res, next) => {
   if(tokenCus)
   {
     var checkVerify = await Customer.updateOne({_id: tokenCus._userId}, {active: true});
-    if(checkVerify)
+    if(checkVerify.modifiedCount)
     {
+      res.cookie("message", { message: "Verify your mail successfully", type: "success" });
       res.redirect("/login");
-      res.send({message: "Verify by email successfully"});
     }
 
   }
@@ -480,7 +480,7 @@ exports.changepassword = async (req, res, next) => {
       }
     }
   );
-  
+
   var message = req.cookies?.message || "";
   res.clearCookie("message");
   var cartTotal = 0;
