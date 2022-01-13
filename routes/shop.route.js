@@ -18,9 +18,13 @@ router.get("/cart/change/product/:productId/:productAmount", shopController.getA
 
 router.get("/profile", shopController.profile);
 
+router.get("/changepassword", shopController.changepassword);
+
 router.get("/orders", shopController.getOrder);
 
 router.get("/orders/:orderId", shopController.getOrdersDetail);
+
+router.get("/confirm/:token", shopController.verifyCustomer);
 
 router.post("/signup", shopController.postCustomer);
 

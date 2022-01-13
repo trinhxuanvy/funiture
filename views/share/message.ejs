@@ -14,5 +14,15 @@
     <h6><%= message?.message %></h6>
     <a class="close">&times;</a>
   </div>
-  <% } %>
+  <% } else if (message?.type == "fail"){%>
+    <div class="alert warning-alert animation">
+      <h6><%= message?.message %></h6>
+      <a class="close">&times;</a>
+    </div>
+  <% } else if (message?.type == "confirm"){%>
+    <div class="alert warning-alert animation">
+      <h6><%= message?.message %></h6>
+      <a class="close">&times;</a>
+    </div>
+      <% }%>
 </div>

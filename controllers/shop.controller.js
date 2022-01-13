@@ -4,8 +4,10 @@ const Brand = require("../models/brand.model");
 const Customer = require("../models/customer.model");
 const Coupon = require("../models/coupon.model");
 const Order = require("../models/order.model");
+const Token = require("../models/token.model");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 const { PRODUCT_MODEL, CUSTOMER_MODEL, COUPON_MODEL } = require("../constants/modal");
 // const passport = require("passport");
 
@@ -319,7 +321,6 @@ exports.getOrder = async (req, res, next) => {
   );
 
   const orders = await Order.find({cusId: user._id});
-  console.log(orders);
   return res.render("orders", {orders: orders, user: user, cartTotal: user.cart.totalQuantity});
 };
 
@@ -356,9 +357,78 @@ exports.postCustomer = async (req, res, next) => {
   const customer = new Customer(newCustomer);
   await customer.save((err, data) => {
     if (err) console.log(err);
+
+    //
+    // generate token and save
+    var token = new Token({
+      _userId: customer._id,
+      token: crypto.randomBytes(16).toString("hex"),
+    });
+
+    token.save(function (err) {
+      if (err) {
+        return res.status(500).send({ msg: err.message });
+      }
+
+      // Send email (use credintials of SendGrid)
+      var transporter = nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+          user: "shareanh4@gmail.com",
+          pass: "tabietmi",
+        },
+      });
+      var mailOptions = {
+        from: "shareanh4@gmail.com",
+        to: newCustomer.email,
+        subject: "Account Verification Link",
+        html: `<h1>Email Confirmation</h1>
+        <h2>Hello ${newCustomer.cusName}</h2>
+        <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
+        <a href="http://localhost:3000/confirm/${token.token}"> Click here</a>
+        </div>`
+      };
+      transporter.sendMail(mailOptions, function (err) {
+        if (err) {
+          console.log(err);
+          res.cookie("message", { message: "Technical Issue!, Please click on resend for verify your Email.", type: "error" });
+          res.redirect("/login");
+        }
+        res.cookie("message", { message: "A verification email has been sent to " +
+        newCustomer.email + ". It will be expire after one day. If you not get verification Email click on resend token.", type: "fail" });
+        res.redirect("/login");
+      });
+    });
+    //
   });
-  res.redirect("/login");
+//  res.redirect("/login");
 };
+
+exports.verifyCustomer = async (req, res, next) => {
+  const user = jwt.verify(
+    req.cookies?.cusToken,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+
+  var tokenCus = await Token.findOne({token: req.params.token});
+  if(tokenCus)
+  {
+    var checkVerify = await Customer.updateOne({_id: tokenCus._userId}, {active: true});
+    if(checkVerify)
+    {
+      res.redirect("/login");
+      res.send({message: "Verify by email successfully"});
+    }
+
+  }
+}
 
 exports.profile = async (req, res, next) => {
   const user = jwt.verify(
@@ -391,6 +461,40 @@ exports.profile = async (req, res, next) => {
 
   res.render("profile", {
     pageName: "profile",
+    user,
+    cusModel: CUSTOMER_MODEL,
+    cartTotal: cartTotal,
+    message: message,
+  });
+};
+
+exports.changepassword = async (req, res, next) => {
+  const user = jwt.verify(
+    req.cookies?.cusToken,
+    process.env.KEY_JWT,
+    function (err, data) {
+      if (err) {
+        return null;
+      } else {
+        return data;
+      }
+    }
+  );
+
+  var message = req.cookies?.message || "";
+  res.clearCookie("message");
+  var cartTotal = 0;
+  if(user != null)
+  {
+    cartTotal = user.cart.totalQuantity;
+  }
+  else
+  {
+    cartTotal = req.session.totalQuantity;
+  }
+
+  res.render("changepassword", {
+    pageName: "changepassword",
     user,
     cusModel: CUSTOMER_MODEL,
     cartTotal: cartTotal,
@@ -662,27 +766,16 @@ exports.updateCustomerProfile = async (req, res, next) => {
     }
   );
 
-  var newCustomer = {};
-
-  if (req.body?.password) {
-    const newPassword = await bcrypt.hash(req.body?.password, 12);
-    newCustomer = {
-      password: newPassword,
-    };
-  } else {
-    newCustomer = {
-      cusName: req.body.cusName,
-      email: req.body.email,
-      phone: req.body.phone,
-      dateOfBirth: req.body.dateOfBirth,
-      province: req.body.province,
-      district: req.body.district,
-      commune: req.body.commune,
-      address: req.body.address,
-    };
-  }
-
-  console.log(newCustomer);
+  var newCustomer = {
+    cusName: req.body.cusName,
+    email: req.body.email,
+    phone: req.body.phone,
+    dateOfBirth: req.body.dateOfBirth,
+    province: req.body.province,
+    district: req.body.district,
+    commune: req.body.commune,
+    address: req.body.address,
+  };
 
   Customer.updateOne({ _id: user._id }, newCustomer, (error) =>
   {
@@ -873,7 +966,6 @@ exports.getOrdersDetail = async (req, res, next) => {
   );
 
   const order = await Order.findOne({_id: req.params.orderId});
-  console.log(order);
   return res.render("orderdetail", {order: order, user: user, cartTotal: user.cart.totalQuantity});
 
 };
