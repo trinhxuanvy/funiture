@@ -557,6 +557,30 @@ $(document).ready(function () {
 
     $("#startDay").datepicker({ format: "mm-dd-yyyy", autoclose: true });
     $("#endDay").datepicker({ format: "mm-dd-yyyy", autoclose: true });
+    $("#startMonth").datepicker({
+      format: "mm-yyyy",
+      viewMode: "months",
+      minViewMode: "months",
+      autoclose: true,
+    });
+    $("#endMonth").datepicker({
+      format: "mm-yyyy",
+      viewMode: "months",
+      minViewMode: "months",
+      autoclose: true,
+    });
+    $("#startYear").datepicker({
+      format: "yyyy",
+      viewMode: "years",
+      minViewMode: "years",
+      autoclose: true,
+    });
+    $("#endYear").datepicker({
+      format: "yyyy",
+      viewMode: "years",
+      minViewMode: "years",
+      autoclose: true,
+    });
 
     // Xử lý các button day month year
     $("#btnGroupStatistic button").click(function (e) {
@@ -600,7 +624,8 @@ $(document).ready(function () {
       }
     });
 
-    $("#btnSubmitStatistic").click(function (e) {
+    // Statistic day
+    $("#btnSubmitStatisticDay").click(function (e) {
       e.preventDefault();
 
       // Validate form
@@ -647,6 +672,57 @@ $(document).ready(function () {
           },
         });
       }
+    });
+
+    // Statistic month
+    $("#btnSubmitStatisticMonth").click(function (e) {
+      e.preventDefault();
+      $("#formStatistic").css("display", "none"); // Ẩn form
+      $(".loading").css("visibility", "initial"); // Hiển thị loading
+      const url = new URL(window.location.href);
+      const inputStart = $("#formMonth input[name='startDate']").val();
+      const inputEnd = $("#formMonth input[name='endDate']").val();
+
+      // Xử lý ajax để get data
+      $.ajax({
+        type: "get",
+        url:
+          url.origin + url.pathname + "/month/" + inputStart + "/" + inputEnd,
+        dataType: "json",
+        contentType: "application/json",
+        success: function (response) {
+          if (response.success) {
+            $(".loading").css("visibility", "hidden");
+            getChart(response);
+            $(".show-range").html(response.start + " to " + response.end);
+          }
+        },
+      });
+    });
+
+    // Statistic year
+    $("#btnSubmitStatisticYear").click(function (e) {
+      e.preventDefault();
+      $("#formStatistic").css("display", "none"); // Ẩn form
+      $(".loading").css("visibility", "initial"); // Hiển thị loading
+      const url = new URL(window.location.href);
+      const inputStart = $("#formYear input[name='startDate']").val();
+      const inputEnd = $("#formYear input[name='endDate']").val();
+
+      // Xử lý ajax để get data
+      $.ajax({
+        type: "get",
+        url: url.origin + url.pathname + "/year/" + inputStart + "/" + inputEnd,
+        dataType: "json",
+        contentType: "application/json",
+        success: function (response) {
+          if (response.success) {
+            $(".loading").css("visibility", "hidden");
+            getChart(response);
+            $(".show-range").html(response.start + " to " + response.end);
+          }
+        },
+      });
     });
   });
 });
@@ -735,16 +811,13 @@ function getChart(data) {
     title: {
       text: titleX,
     },
-    axisX: {
-      valueFormatString: "DD-MM-YYYY",
-    },
     axisY: {
       title: titleY,
       titleFontSize: 24,
     },
     data: [
       {
-        type: "spline",
+        type: "column",
         yValueFormatString: "$#,###.##",
         dataPoints: dataPoints,
       },
@@ -754,7 +827,7 @@ function getChart(data) {
   if (data?.data?.length) {
     for (let i = 0; i < data?.data?.length; i++) {
       dataPoints.push({
-        x: new Date(data.data[i].date),
+        label: data.data[i].date,
         y: data.data[i].units,
       });
     }

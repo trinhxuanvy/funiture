@@ -4,6 +4,7 @@ const Product = require("../models/product.model");
 const Customer = require("../models/customer.model");
 const Brand = require("../models/brand.model");
 const Coupon = require("../models/coupon.model");
+const Order = require("../models/order.model");
 const firebase = require("../services/firebase");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
@@ -16,8 +17,13 @@ const {
   CUSTOMER_MODEL,
   COUPON_MODEL,
 } = require("../constants/modal");
-const { data } = require("../data-sample/data");
+//const { data } = require("../data-sample/data");
 const { PRODUCT, SORT } = require("../constants/variables");
+const {
+  statisticWithDaily,
+  statisticWithMonthly,
+  statisticWithYearly,
+} = require("../services/custom");
 
 dotenv.config();
 const ITEM_PAGE = 8;
@@ -1210,24 +1216,72 @@ exports.getStatisticSales = async (req, res, next) => {
   const type = req.params?.time;
   const start = req.params?.start;
   const end = req.params?.end;
+  let startTemp, endTemp;
+  let result = new Array();
+  let data = new Array();
+  let titleY = "USD";
+  let titleX = "";
 
   switch (type) {
     case "day":
-      break;
+      startTemp = new Date(start);
+      endTemp = new Date(end);
+      startTemp.setHours(0, 0, 0, 0); // Begin time trong ngày
+      endTemp.setHours(23, 59, 59, 999); // Final time trong ngày
 
+      data = await Order.find({
+        createdAt: { $gte: startTemp, $lt: endTemp },
+        status: "paid",
+      }).sort({ createdAt: "asc" });
+
+      endTemp.getHours(0, 0, 0, 0); // Reset time về 0 chỉ lấy ngày/tháng/năm
+
+      result = statisticWithDaily(data, startTemp, endTemp);
+      titleX = "Daily Sales Data";
+
+      break;
+    case "month":
+      const startMonth = start.slice(0, start.indexOf("-"));
+      const startYear = start.slice(start.indexOf("-") + 1, start.length);
+      const endMonth = end.slice(0, end.indexOf("-"));
+      const endYear = end.slice(end.indexOf("-") + 1, end.length);
+      startTemp = new Date(startYear, startMonth - 1, 1, 0, 0, 0, 0);
+      endTemp = new Date(endYear, endMonth, 1, 23, 59, 59, 999);
+      endTemp.setDate(endTemp.getDate() - 1);
+
+      data = await Order.find({
+        createdAt: { $gte: startTemp, $lt: endTemp },
+        status: "paid",
+      }).sort({ createdAt: "asc" });
+
+      result = statisticWithMonthly(data, startTemp, endTemp);
+      titleX = "Monthly Sales Data";
+
+      break;
+    case "year":
+      startTemp = new Date(start, 1, 1, 0, 0, 0, 0);
+      endTemp = new Date(end, 12, 31, 23, 59, 59, 999);
+
+      data = await Order.find({
+        createdAt: { $gte: startTemp, $lt: endTemp },
+        status: "paid",
+      }).sort({ createdAt: "asc" });
+
+      result = statisticWithYearly(data, startTemp, endTemp);
+      titleX = "Yearly Sales Data";
+
+      break;
     default:
       break;
   }
-  setTimeout(() => {
-    res.send({
-      data: data,
-      titleX: "Daily Sales Data",
-      titleY: "USD",
-      success: true,
-      start: start,
-      end: end,
-    });
-  }, 5000);
+  res.send({
+    data: result,
+    titleX: titleX,
+    titleY: titleY,
+    success: true,
+    start: start,
+    end: end,
+  });
 };
 
 exports.getCoupon = async (req, res, next) => {
