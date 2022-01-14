@@ -80,21 +80,34 @@
                                 </aside>
 
                                 <aside class="left_widgets p_filter_widgets price_rangs_aside">
-                                    <div class="l_w_title">
+                                    <div class="l_w_title mb-4">
                                         <h3>Price Filter</h3>
                                     </div>
                                     <div class="widgets_inner">
                                         <div class="range_item">
                                             <!-- <div id="slider-range"></div> -->
-                                            <input type="text" class="js-range-slider" value="" />
                                             <div class="d-flex">
                                                 <div class="price_text">
-                                                    <p>Price :</p>
+                                                    <p>Price :&nbsp;&nbsp;</p>
                                                 </div>
                                                 <div class="price_value d-flex justify-content-center">
-                                                    <input type="text" class="js-input-from" id="amount" readonly />
-                                                    <span>to</span>
-                                                    <input type="text" class="js-input-to" id="amount" readonly />
+                                                    <input type="text" name="input-from" value="<%= fromPrice %>"
+                                                    style="background-color: #fff6f8;
+                                                    color: #ff3368;
+                                                    max-width: 60px;
+                                                    font-weight: bold;"
+                                                    placeholder="min"
+                                                    class="rounded"/>
+
+                                                    <span>&nbsp;to&nbsp;</span>
+
+                                                    <input type="text" name="input-to" value="<%= toPrice %>"
+                                                    style="background-color: #fff6f8;
+                                                    color: #ff3368;
+                                                    max-width: 60px;
+                                                    font-weight: bold;"
+                                                    placeholder="max"
+                                                    class="rounded"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -302,9 +315,13 @@
             function search(current) {
               let categories = '';
               let brands = '';
+              let fromPrice = '';
+              let toPrice = '';
               
               const checkedCategories = $('input[name="categories[]"]:checked');
               const checkedBrands = $('input[name="brands[]"]:checked');
+              const fromPriceTbx = $('input[name="input-from"]');
+              const toPriceTbx = $('input[name="input-to"]');
 
               for (let i = 0; i < checkedCategories.length; i++) {
                 if (i == 0) {
@@ -322,9 +339,14 @@
                 }
               }
 
+              fromPrice = fromPriceTbx.val();
+              toPrice = toPriceTbx.val();
+
               beforeSubmit(formCategories, 'page', current);
               beforeSubmit(formCategories, 'categories', categories);
               beforeSubmit(formCategories, 'brands', brands);
+              beforeSubmit(formCategories, 'fromPrice', fromPrice);
+              beforeSubmit(formCategories, 'toPrice', toPrice);
               formCategories.submit();
             }
 
@@ -335,7 +357,13 @@
                 input.value = value;
                 form.append(input);
             }
-          </script>     
+          </script>   
+          
+          <style>
+            ::placeholder {
+              font-weight: normal;
+            }
+          </style>
     </body>
 
     </html>

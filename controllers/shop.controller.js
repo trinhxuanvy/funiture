@@ -48,8 +48,8 @@ exports.categories = async (req, res, next) => {
     user,
     cartTotal: 0,
     bestSellers: 0,
-    categories: 0,
-    brands: 0,
+    categories: '',
+    brands: '',
     fromPrice: '',
     toPrice: '',
   };
@@ -71,7 +71,7 @@ exports.categories = async (req, res, next) => {
   //Product sau khi lọc
   let productsFilter = allProducts;
 
-  //lấy categories đã chọn
+  //Categories đã chọn
   let categories = '';
   if (!req.query.categories) {
     category.categories = '';
@@ -82,7 +82,7 @@ exports.categories = async (req, res, next) => {
     category.categories =  req.query.categories;
   }
 
-  //lấy brands đã chọn
+  //Brands đã chọn
   let brands = '';
   if (!req.query.brands) {
     category.brands = '';
@@ -91,6 +91,27 @@ exports.categories = async (req, res, next) => {
     productsFilter = productsFilter.filter(product => 
       brands.includes(product.brandName.toLowerCase().split(' ').join('-')));
     category.brands =  req.query.brands;
+  }
+  //Khoảng giá đã chọn
+  let fromPrice = '';
+  let toPrice = '';
+
+  if(req.query.fromPrice == '' || isNaN(Number(req.query.fromPrice))) {
+    category.fromPrice = '';
+  } else {
+    fromPrice = Number(req.query.fromPrice);
+    productsFilter = productsFilter.filter(product => 
+      fromPrice <= Number(product.price));
+      category.fromPrice = fromPrice;
+  }
+
+  if(req.query.toPrice == '' || isNaN(Number(req.query.toPrice))) {
+    category.toPrice = '';
+  } else {
+    toPrice = Number(req.query.toPrice);
+    productsFilter = productsFilter.filter(product => 
+      toPrice >= Number(product.price));
+      category.toPrice = toPrice;
   }
 
   //best seller
