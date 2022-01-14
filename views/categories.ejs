@@ -81,7 +81,7 @@
 
                                 <aside class="left_widgets p_filter_widgets price_rangs_aside">
                                     <div class="l_w_title mb-4">
-                                        <h3>Price Filter</h3>
+                                        <h3>Price</h3>
                                     </div>
                                     <div class="widgets_inner">
                                         <div class="range_item">
@@ -97,7 +97,7 @@
                                                     max-width: 60px;
                                                     font-weight: bold;"
                                                     placeholder="min"
-                                                    class="rounded"/>
+                                                    class="rounded price"/>
 
                                                     <span>&nbsp;to&nbsp;</span>
 
@@ -107,34 +107,54 @@
                                                     max-width: 60px;
                                                     font-weight: bold;"
                                                     placeholder="max"
-                                                    class="rounded"/>
+                                                    class="rounded price"/>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </aside>
                                 
-                                <button id="search" class="btn_3" style="margin: 0 50px;">Search</button>
+                                <button id="filter" class="btn_3" style="margin: 0 50px;">Filter</button>
                                 
                             </div>
                         </div>
                         <div class="col-lg-9">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <div class="product_top_bar d-flex justify-content-between align-items-center">
-                                        <div class="single_product_menu">
-                                            <p><span> <%= allProducts.length %>  </span> Prodict Found</p>
+                                    <div class="product_top_bar d-flex justify-content-between align-items-center" style="margin-top: 10px;">
+                                      <div>
+                                        <button 
+                                          id="sort-button" 
+                                          type="button" 
+                                          class="btn" 
+                                          style="background-color: #ff3368; color: #fff6f8;">
+                                          Sort by Price <i class="fas fa-sort-amount-up"></i>
+                                        </button>
+                                      </div>
+                                  
+                                      <div class="single_product_menu" >
+                                          <p style="font-size: 18px;"><span> <%= allProducts.length %>  </span> Prodict Found</p>
+                                      </div>
+
+                                      <div class="single_product_menu d-flex">
+                                        <div class="input-group">
+                                            <input 
+                                              id="search-input"
+                                              type="text"
+                                              name="search" 
+                                              class="form-control rounded" 
+                                              placeholder="search" 
+                                              aria-describedby="inputGroupPrepend"
+                                              style="background-color: #fff6f8; color:rgb(204, 50, 91); font-weight: bold;">
+                                            <button 
+                                              id="search-button" 
+                                              type="button" 
+                                              class="btn" 
+                                              style="background-color: #ff3368; color: #fff6f8;">
+                                              <i class="fas fa-search"></i>
+                                            </button>
                                         </div>
-                                    
-                                        <div class="single_product_menu d-flex">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="search" aria-describedby="inputGroupPrepend">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="inputGroupPrepend"><i
-                                                    class="ti-search"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                      </div>
                                     </div>
                                 </div>
                             </div>
@@ -292,9 +312,8 @@
 
           <script>
             const formCategories = $('form[name="categories"]');
-            const formSearch = $('form[name="search"]');
             const pageLink = $('.page-link');
-            const searchBtn = $('#search');
+            const filterBtn = $('#filter');
         
             pageLink.click(function(event) {
               event.preventDefault();
@@ -308,15 +327,15 @@
                 beforeSubmit(formCategories, 'page', current);
                 formCategories.submit();
               } else {
-                search(current);
+                filter(current);
               }
             })
 
-            searchBtn.click(function(event) {
-              search('1');
+            filterBtn.click(function(event) {
+              filter('1');
             })
 
-            function search(current) {
+            function filter(current) {
               let categories = '';
               let brands = '';
               let fromPrice = '';
@@ -367,12 +386,23 @@
             ::placeholder {
               font-weight: normal;
             }
+            .price:focus, #search-input:focus {
+              border: 1px solid #ff3368;
+            }
             .page-link {
               color:#ff3368;
             }
             .page-item.active .page-link {
               background-color:#ec6287;
               border-color: #fc4f7d;
+            }
+            /* .ti-search:hover {
+              color: #ff3368;
+              cursor: pointer;
+            } */
+            #search-button:hover {
+              background-color: #ff0000 !important;
+              box-shadow: -1.717px 8.835px 29.76px 2.24px rgb(255 51 104 / 40%);
             }
           </style>
     </body>
