@@ -69,7 +69,7 @@
                   <div
                     class="col-6 d-flex justify-content-end align-items-start"
                   >
-                    <div class="sort-data position-relative mx-2">
+                    <div class="sort-data position-relative">
                       <button
                         type="button"
                         class="btn btn-secondary d-inline-block"
@@ -229,6 +229,64 @@
                                 Color
                               </label>
                             </div>
+                          </div>
+                          <button class="btn btn-orange d-block mx-auto mt-3">
+                            Apply
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                    <div class="sort-data position-relative mx-2">
+                      <button
+                        type="button"
+                        class="btn btn-success d-block"
+                        style="margin-left: auto"
+                        id="btnFilter"
+                      >
+                        <i class="fa fa-filter" aria-hidden="true"></i>
+                        Filter
+                      </button>
+                      <div id="formFilter" class="form-sort">
+                        <form action="/admin/products" method="get">
+                          <div class="form-sort-item">
+                            <div class="sort-item-label">Category</div>
+                            <% for( let index = 0; index < categories.length; index++ ) { %>
+                            <div class="form-check">
+                                <input
+                                  class="form-check-input"
+                                  value="<%= categories[index].prodTypeName %>"
+                                  type="checkbox"
+                                  id="categoryCheck<%= index + 1 %>"
+                                  name="category_<%= index + 1 %>"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="categoryCheck<%= index + 1 %>"
+                                >
+                                  <%= categories[index].prodTypeName %> 
+                                </label>
+                              </div>
+                            <% } %>         
+                          </div>
+                          <div class="form-sort-item">
+                            <div class="sort-item-label">Brand</div>
+                            <% for( let index = 0; index < brands.length; index++ ) { %>
+                            <div class="form-check">
+                                <input
+                                  class="form-check-input"
+                                  value="<%= brands[index].brandName %>"
+                                  type="checkbox"
+                                  id="brandCheck<%= index + 1 %>"
+                                  name="brand_<%= index + 1 %>"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="brandCheck<%= index + 1 %>"
+                                >
+                                  <%= brands[index].brandName %> 
+                                </label>
+                              </div>
+                            <% } %>         
                           </div>
                           <button class="btn btn-orange d-block mx-auto mt-3">
                             Apply
@@ -550,7 +608,7 @@
                       <ul class="pagination justify-content-end m-auto">
                         <li class="page-item">
                           <form
-                            action="/admin/products<%= search %><%= sort+following %>"
+                            action="/admin/products<%= urlStr %>"
                             method="post"
                           >
                             <% if (page <=1) { %>
@@ -581,7 +639,7 @@
                         </li>
                         <li class="page-item">
                           <form
-                            action="/admin/products<%= search %>"
+                            action="/admin/products<%= urlStr %>"
                             method="post"
                           >
                             <% if (page < 1) { %>
@@ -612,7 +670,7 @@
                         </li>
                         <li class="page-item">
                           <form
-                            action="/admin/products<%= search %><%= sort+following %>"
+                            action="/admin/products<%= urlStr %>"
                             method="post"
                           >
                             <% if (parseInt(page) + 1> totalPage) { %>
@@ -643,7 +701,7 @@
                         </li>
                         <li class="page-item">
                           <form
-                            action="/admin/products<%= search %><%= sort+following %>"
+                            action="/admin/products<%= urlStr %>"
                             method="post"
                           >
                             <% if (parseInt(page) + 2> totalPage) { %>
@@ -674,7 +732,7 @@
                         </li>
                         <li class="page-item">
                           <form
-                            action="/admin/products<%= search %><%= sort+following %>"
+                            action="/admin/products<%= urlStr %>"
                             method="post"
                           >
                             <% if (page>= totalPage) { %>
