@@ -53,6 +53,20 @@ exports.getProduct = async (req, res, next) => {
   let following = req.query.following || "";
   let products = [];
   let prodProperty = {};
+  let filterProperty = {};
+  let filterCategory = [];
+  let filterBrand = [];
+  let urlStr = req.url.slice(req.url.indexOf("?"), req.url.length) || "";
+
+  for (let item in req.query) {
+    if (item.indexOf("category") > -1) {
+      filterCategory.push(req.query[item]);
+      filterProperty["prodTypeName"] = { $in: filterCategory };
+    } else if (item.indexOf("brand") > -1) {
+      filterBrand.push(req.query[item]);
+      filterProperty["brandName"] = { $in: filterBrand };
+    }
+  }
 
   if (search) {
     products = await Product.find({
@@ -72,6 +86,10 @@ exports.getProduct = async (req, res, next) => {
 
     sort = "?sort=" + sort;
     following = "&following=" + following;
+  } else if (Object.keys(filterProperty).length) {
+    products = await Product.find(filterProperty)
+      .sort({ createdAt: "desc" })
+      .exec();
   } else {
     products = await Product.find().sort({ createdAt: "desc" }).exec();
   }
@@ -99,6 +117,7 @@ exports.getProduct = async (req, res, next) => {
     sort,
     following,
     prodModel: PRODUCT_MODEL,
+    urlStr
   });
 };
 
@@ -108,8 +127,21 @@ exports.postProduct = async (req, res, next) => {
   let sort = req.query.sort || "";
   let following = req.query.following || "";
   let prodProperty = {};
-  let products = [],
-    productSave;
+  let products = [];
+  let filterProperty = {};
+  let filterCategory = [];
+  let filterBrand = [];
+  let urlStr = req.url.slice(req.url.indexOf("?"), req.url.length) || "";
+
+  for (let item in req.query) {
+    if (item.indexOf("category") > -1) {
+      filterCategory.push(req.query[item]);
+      filterProperty["prodTypeName"] = { $in: filterCategory };
+    } else if (item.indexOf("brand") > -1) {
+      filterBrand.push(req.query[item]);
+      filterProperty["brandName"] = { $in: filterBrand };
+    }
+  }
 
   if (!req.body.page) {
     const prodType = await Category.findById(req.body.prodTypeId);
@@ -184,6 +216,10 @@ exports.postProduct = async (req, res, next) => {
 
     sort = "?sort=" + sort;
     following = "&following=" + following;
+  } else if (Object.keys(filterProperty).length) {
+    products = await Product.find(filterProperty)
+      .sort({ createdAt: "desc" })
+      .exec();
   } else {
     products = await Product.find().sort({ createdAt: "desc" }).exec();
   }
@@ -211,6 +247,7 @@ exports.postProduct = async (req, res, next) => {
     sort,
     following,
     prodModel: PRODUCT_MODEL,
+    urlStr
   });
 };
 

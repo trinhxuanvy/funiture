@@ -804,11 +804,23 @@ $(document).ready(function () {
     });
   });
 
-  // Xử lý button sort product
+  // Xử lý button sort/filter product
   $(function () {
     $("#btnSort").click(function (e) {
       e.preventDefault();
       const formSort = $("#formSort");
+      const hasClass = $(formSort[0]).hasClass("form-sort-active");
+
+      if (hasClass) {
+        $(formSort[0]).removeClass("form-sort-active");
+      } else {
+        $(formSort[0]).addClass("form-sort-active");
+      }
+    });
+
+    $("#btnFilter").click(function (e) {
+      e.preventDefault();
+      const formSort = $("#formFilter");
       const hasClass = $(formSort[0]).hasClass("form-sort-active");
 
       if (hasClass) {
