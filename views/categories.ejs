@@ -163,13 +163,13 @@
                                     
                                     <!-- hiển thị phân trang nếu có trang -->
                                     <% if(pages > 0) { %>
-                                        <nav class="mx-auto">
+                                        <nav class="d-flex justify-content-center">
                                         <ul class="pagination" style="margin-top: 1rem;">
                                         
                                             <!-- FIRST ITEM -->  
                                             <% if(current == 1) { %> 
                                         <!-- // Nếu thông số http://localhost:3333/categories/1/ là 1 thì First sẽ bị disabled -->
-                                                <li class="page-item disabled">
+                                                <li class="page-item disabled" >
                                                 <a class="page-link"  href="" data-page="1">First</a>
                                                 </li>
                                             <% } else { %>
@@ -299,6 +299,10 @@
             pageLink.click(function(event) {
               event.preventDefault();
               current = $(this).data("page"); 
+              
+              if (current == '<%= current%>') {
+                return;
+              }
 
               if ('<%= categories%>' == '' && '<%= brands%>' == '' && '<%= fromPrice%>' == '' && '<%= toPrice%>' == '') {
                 beforeSubmit(formCategories, 'page', current);
@@ -362,6 +366,13 @@
           <style>
             ::placeholder {
               font-weight: normal;
+            }
+            .page-link {
+              color:#ff3368;
+            }
+            .page-item.active .page-link {
+              background-color:#ec6287;
+              border-color: #fc4f7d;
             }
           </style>
     </body>
