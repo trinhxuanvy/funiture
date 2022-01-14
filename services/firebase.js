@@ -6,15 +6,17 @@ const {
   getDownloadURL,
   deleteObject
 } = require("firebase/storage");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDMO3WSxFOdzzGJEdPv2N-K2wGUWZkxv3I",
-  authDomain: "funiture-service.firebaseapp.com",
-  projectId: "funiture-service",
-  storageBucket: "funiture-service.appspot.com",
-  messagingSenderId: "909086405697",
-  appId: "1:909086405697:web:41f42eecf469ea95efc2c0",
-  measurementId: "G-RN6XQ3QJ0Z",
+  apiKey: process.env.API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  appId: process.env.APP_ID,
+  measurementId: process.env.MESSAGING_SENDER_ID,
 };
 
 initializeApp(firebaseConfig);
