@@ -86,7 +86,7 @@
                 >
                   <thead>
                     <tr>
-                      <th style="text-align: center; min-width: 150px">
+                      <th style="text-align: center; min-width: 200px">
                         <em class="ti-settings"></em>
                       </th>
                       <th style="min-width: 150px">Avatar</th>
@@ -106,16 +106,23 @@
                       style="opacity: 0.5;" <% } %> id="<%= item._id %>">
                       <td align="center">
                         <div class="mt-2 mb-2">
-                          <a
-                            href="/admin/admins/<%= item._id %>/reset"
-                            class="btn btn-light"
-                            ><em class="ti-reload"></em
-                          ></a>
                           <button
                             value="<%= item._id %>"
-                            class="btn btn-danger btn-delete-prod is-status"
-                            title="Block"
-                          >
+                            class="btn btn-danger btn-delete is-status"
+                            title="Delete" >
+                            <em class="ti-trash"></em>
+                          </button>
+                          <button
+                            value="<%= item._id %>"
+                            class="btn btn-light btn-reset is-status is-invalid"
+                            title="Reset">
+                            <em class="ti-reload"></em>
+                          </button>
+                          <button
+                            value="<%= item._id %>"
+                            class="btn btn-secondary btn-lock is-status"
+                            <% if (item.status) { %>
+                              title="Lock" <% } else { %> title="Unlock" <% } %> >
                             <em class="ti-lock"></em>
                           </button>
                         </div>
@@ -478,7 +485,7 @@
                             type="text"
                             class="form-control"
                             id="<%= adminModel.username %>"
-                            placeholder="Enter email"
+                            placeholder="Enter username"
                             name="<%= adminModel.username %>"
                             required
                           />
