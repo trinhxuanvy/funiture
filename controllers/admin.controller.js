@@ -1448,7 +1448,6 @@ exports.getOrder = async (req, res, next) => {
   const nextPage = parseInt(page) + 1;
   const prevPage = parseInt(page) - 1;
   const numPage = orders.length ? page : 0;
-
   orders = orders.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
 
   res.render("admin/orders", {
