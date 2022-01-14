@@ -214,7 +214,7 @@ exports.postProduct = async (req, res, next) => {
   });
 };
 
-exports.deleteProduct = (req, res, next) => {
+exports.lockProduct = (req, res, next) => {
   const prodId = req.params.id;
 
   Product.findById({ _id: prodId }, async (err, data) => {
@@ -523,7 +523,7 @@ exports.updateCategory = async (req, res, next) => {
   } catch (error) {}
 };
 
-exports.deleteCategory = (req, res, next) => {
+exports.lockCategory = (req, res, next) => {
   const prodTypeId = req.params.id;
 
   Category.findById({ _id: prodTypeId }, async (err, data) => {
@@ -659,7 +659,7 @@ exports.updateBrand = async (req, res, next) => {
   } catch (error) {}
 };
 
-exports.deleteBrand = (req, res, next) => {
+exports.lockBrand = (req, res, next) => {
   const brandId = req.params.id;
   Brand.findById({ _id: brandId }, async (err, data) => {
     if (!err) {
@@ -817,7 +817,7 @@ exports.updateCustomer = async (req, res, next) => {
   } catch (error) {}
 };
 
-exports.deleteCustomer = (req, res, next) => {
+exports.lockCustomer = (req, res, next) => {
   const cusId = req.params.id;
   Customer.findById({ _id: cusId }, async (err, data) => {
     const update = await Customer.updateOne(
@@ -1012,7 +1012,7 @@ exports.updateAdmin = async (req, res, next) => {
   } catch (error) {}
 };
 
-exports.deleteAdmin = (req, res, next) => {
+exports.lockAdmin = (req, res, next) => {
   try {
     const adminId = req.params.id;
     const isMe = jwt.verify(
@@ -1185,11 +1185,20 @@ exports.resetPasswordAdmin = async (req, res, next) => {
   // res.clearCookie("token");
   // res.redirect("/admin/login");
   const id = req.params.id;
-  const admin = await Admin.findById({ _id: id });
-  const newPassword = await bcrypt.hash("Admin@" + admin.identityCard, 12);
-
-  await Admin.updateOne({ _id: id }, { password: newPassword });
-  res.redirect("/admin/admins");
+  Admin.findById({ _id: id }, async (err, data) => {
+    if (!err) {
+      const newPassword = await bcrypt.hash("Admin@" + data.identityCard, 12);
+      const update = await Admin.updateOne(
+        { _id: id },
+        { password: newPassword }
+      );
+      if (update?.modifiedCount > 0) {
+        res.send({ success: true });
+      }
+    } else {
+      res.send({ success: false });
+    }
+  });
 };
 
 exports.getStatistic = async (req, res, next) => {
@@ -1385,7 +1394,7 @@ exports.updateCoupon = async (req, res, next) => {
   } catch (error) {}
 };
 
-exports.deleteConpon = (req, res, next) => {
+exports.lockConpon = (req, res, next) => {
   const couponId = req.params.id;
   Coupon.findById({ _id: couponId }, async (err, data) => {
     if (!err) {
@@ -1417,32 +1426,13 @@ exports.getCouponbyCode = async (req, res, next) => {
 
 exports.getOrder = async (req, res, next) => {
   let page = req.body.page || 1;
-  let order = req.query.following1 || "";
-  let prepare = req.query.following2 || "";
-  let ship = req.query.following3 || "";
-  let paid = req.query.following4 || "";
-  let cancel = req.query.following5 || "";
   let filterArray = [];
   let orders = [];
 
-  if (order) {
-    filterArray.push(order);
-  }
-
-  if (prepare) {
-    filterArray.push(prepare);
-  }
-
-  if (ship) {
-    filterArray.push(ship);
-  }
-
-  if (paid) {
-    filterArray.push(paid);
-  }
-
-  if (cancel) {
-    filterArray.push(cancel);
+  for (let item in req.query) {
+    if (req.query[item]) {
+      filterArray.push(req.query[item]);
+    }
   }
 
   if (filterArray.length) {
@@ -1499,4 +1489,74 @@ exports.updateOrder = async (req, res, next) => {
       res.send({ success: false });
     }
   } catch (error) {}
+};
+
+exports.deleteProduct = async (req, res, next) => {
+  const prodId = req.params.id;
+  Product.findOneAndDelete({ _id: prodId }, (err, data) => {
+    if (!err) {
+      for (let i = 0; i < data?.prodImage?.length; i++) {
+        firebase.deleteImage(data?.prodImage[i]?.imageLink);
+      }
+      res.send({ success: true });
+    } else {
+      res.send({ success: false });
+    }
+  });
+};
+
+exports.deleteCategory = async (req, res, next) => {
+  const prodTypeId = req.params.id;
+  Category.findByIdAndDelete({ _id: prodTypeId }, (err) => {
+    if (!err) {
+      res.send({ success: true });
+    } else {
+      res.send({ success: false });
+    }
+  });
+};
+
+exports.deleteBrand = async (req, res, next) => {
+  const brandId = req.params.id;
+  Brand.findByIdAndDelete({ _id: brandId }, (err) => {
+    if (!err) {
+      res.send({ success: true });
+    } else {
+      res.send({ success: false });
+    }
+  });
+};
+
+exports.deleteCustomer = async (req, res, next) => {
+  const cusId = req.params.id;
+  Customer.findByIdAndDelete({ _id: cusId }, (err) => {
+    if (!err) {
+      res.send({ success: true });
+    } else {
+      res.send({ success: false });
+    }
+  });
+};
+
+exports.deleteAdmin = async (req, res, next) => {
+  const adminId = req.params.id;
+  Admin.findByIdAndDelete({ _id: adminId }, (err, data) => {
+    if (!err) {
+      firebase.deleteImage(data.avatarLink);
+      res.send({ success: true });
+    } else {
+      res.send({ success: false });
+    }
+  });
+};
+
+exports.deleteCoupon = async (req, res, next) => {
+  const couponId = req.params.id;
+  Coupon.findByIdAndDelete({ _id: couponId }, (err) => {
+    if (!err) {
+      res.send({ success: true });
+    } else {
+      res.send({ success: false });
+    }
+  });
 };

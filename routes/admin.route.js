@@ -29,9 +29,9 @@ router.post(
 );
 
 router.get(
-  "/admin/categories/delete/:id",
+  "/admin/categories/lock/:id",
   authAdminController.checkExpired,
-  adminController.deleteCategory
+  adminController.lockCategory
 );
 
 router.get(
@@ -53,9 +53,9 @@ router.post(
 );
 
 router.get(
-  "/admin/brands/delete/:id",
+  "/admin/brands/lock/:id",
   authAdminController.checkExpired,
-  adminController.deleteBrand
+  adminController.lockBrand
 );
 
 router.get(
@@ -77,9 +77,9 @@ router.post(
 );
 
 router.get(
-  "/admin/products/delete/:id",
+  "/admin/products/lock/:id",
   authAdminController.checkExpired,
-  adminController.deleteProduct
+  adminController.lockProduct
 );
 
 router.get(
@@ -126,9 +126,9 @@ router.post(
 );
 
 router.get(
-  "/admin/customers/delete/:id",
+  "/admin/customers/lock/:id",
   authAdminController.checkExpired,
-  adminController.deleteCustomer
+  adminController.lockCustomer
 );
 
 router.get(
@@ -157,9 +157,9 @@ router.post(
 );
 
 router.get(
-  "/admin/admins/delete/:id",
+  "/admin/admins/lock/:id",
   authAdminController.checkExpired,
-  adminController.deleteAdmin
+  adminController.lockAdmin
 );
 
 router.get(
@@ -168,7 +168,11 @@ router.get(
   adminController.getAdminbyUsername
 );
 
-router.get("/admin/admins/:id/reset", adminController.resetPasswordAdmin);
+router.get(
+  "/admin/admins/reset/:id",
+  authAdminController.checkExpired,
+  adminController.resetPasswordAdmin
+);
 
 router.post(
   "/admin/profile",
@@ -213,9 +217,9 @@ router.post(
 );
 
 router.get(
-  "/admin/coupons/delete/:id",
+  "/admin/coupons/lock/:id",
   authAdminController.checkExpired,
-  adminController.deleteConpon
+  adminController.lockConpon
 );
 
 router.get(
@@ -240,6 +244,42 @@ router.post(
   "/admin/orders/update/:id",
   authAdminController.checkExpired,
   adminController.updateOrder
+);
+
+router.get(
+  "/admin/products/delete/:id",
+  authAdminController.checkExpired,
+  adminController.deleteProduct
+);
+
+router.get(
+  "/admin/admins/delete/:id",
+  authAdminController.checkExpired,
+  adminController.deleteAdmin
+);
+
+router.get(
+  "/admin/customers/delete/:id",
+  authAdminController.checkExpired,
+  adminController.deleteCustomer
+);
+
+router.get(
+  "/admin/categories/delete/:id",
+  authAdminController.checkExpired,
+  adminController.deleteCategory
+);
+
+router.get(
+  "/admin/coupons/delete/:id",
+  authAdminController.checkExpired,
+  adminController.deleteCoupon
+);
+
+router.get(
+  "/admin/brands/delete/:id",
+  authAdminController.checkExpired,
+  adminController.deleteBrand
 );
 
 module.exports = router;

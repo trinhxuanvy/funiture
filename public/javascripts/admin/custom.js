@@ -62,13 +62,13 @@ $(document).ready(function () {
     }
   });
 
-  // Xử lý chức năng xóa sản phẩm/admins/...
+  // Xử lý chức năng lock sản phẩm/admins/...
   $(function () {
-    const btnDeleteProd = $(".btn-delete-prod");
+    const btnLock = $(".btn-lock");
     const trProd = $(".tr-prod");
 
-    for (let i = 0; i < btnDeleteProd.length; i++) {
-      $(btnDeleteProd[i]).click(function (e) {
+    for (let i = 0; i < btnLock.length; i++) {
+      $(btnLock[i]).click(function (e) {
         e.preventDefault();
 
         const url = new URL(window.location.href);
@@ -84,24 +84,103 @@ $(document).ready(function () {
           url:
             url.origin +
             url.pathname +
-            "/delete/" +
-            $(btnDeleteProd[i]).val() +
+            "/lock/" +
+            $(btnLock[i]).val() +
             url.search,
           dataType: "json",
           success: function (response) {
             statusLoading({
-              posLoading: btnDeleteProd[i],
+              posLoading: btnLock[i],
               isCompleted: true,
-              isSuccess: true,
+              isSuccess: response.success,
             });
 
             if (response.success) {
               if (!response.status) {
                 $(trProd[i]).css("opacity", "0.5");
+                $(btnLock[i]).attr("title", "Unlock");
               } else {
                 $(trProd[i]).css("opacity", "1");
+                $(btnLock[i]).attr("title", "Lock");
               }
             }
+          },
+        });
+      });
+    }
+  });
+
+  // Xử lý chức năng xóa sản phẩm/admins/...
+  $(function () {
+    const btnDelete = $(".btn-delete");
+    const trProd = $(".tr-prod");
+
+    for (let i = 0; i < btnDelete.length; i++) {
+      $(btnDelete[i]).click(function (e) {
+        e.preventDefault();
+
+        const url = new URL(window.location.href);
+        statusLoading({
+          posLoading: this,
+          isCompleted: false,
+        });
+
+        $.ajax({
+          method: "get",
+          contentType: "application/json",
+          url:
+            url.origin +
+            url.pathname +
+            "/delete/" +
+            $(btnDelete[i]).val() +
+            url.search,
+          dataType: "json",
+          success: function (response) {
+            statusLoading({
+              posLoading: btnDelete[i],
+              isCompleted: true,
+              isSuccess: response.success,
+            });
+
+            if (response.success) {
+              $(trProd[i]).remove();
+            }
+          },
+        });
+      });
+    }
+  });
+
+  // Xử lý chức năng reset password admin
+  $(function () {
+    const btnReset = $(".btn-reset");
+
+    for (let i = 0; i < btnReset.length; i++) {
+      $(btnReset[i]).click(function (e) {
+        e.preventDefault();
+
+        const url = new URL(window.location.href);
+        statusLoading({
+          posLoading: this,
+          isCompleted: false,
+        });
+
+        $.ajax({
+          method: "get",
+          contentType: "application/json",
+          url:
+            url.origin +
+            url.pathname +
+            "/reset/" +
+            $(btnReset[i]).val() +
+            url.search,
+          dataType: "json",
+          success: function (response) {
+            statusLoading({
+              posLoading: btnReset[i],
+              isCompleted: true,
+              isSuccess: response.success,
+            });
           },
         });
       });
@@ -111,7 +190,6 @@ $(document).ready(function () {
   // Xử lý chức năng preview sản phẩm
   $(function () {
     const btnPreviewProd = $(".btn-preview-prod");
-    const trProd = $(".tr-prod");
     const previewModel = $("#product_image_area");
     const prodName = $(".product-name");
     const prodCategory = $(".product-category");
@@ -126,7 +204,6 @@ $(document).ready(function () {
         statusLoading({
           posLoading: this,
           isCompleted: false,
-          isSuccess: false,
         });
 
         $.ajax({
@@ -143,7 +220,7 @@ $(document).ready(function () {
             statusLoading({
               posLoading: btnPreviewProd[i],
               isCompleted: true,
-              isSuccess: true,
+              isSuccess: response.success,
             });
             if (response.success) {
               if (!response.status) {
@@ -774,6 +851,7 @@ $(document).ready(function () {
             if (response.success) {
               if (!response.status) {
                 $(previewModel[0]).css("display", "block");
+                $(tablePreview[0]).find("tr").remove();
                 response.data.forEach((item) => {
                   $(tablePreview[0]).append(`
                   <tr>
@@ -794,12 +872,14 @@ $(document).ready(function () {
                     <td>
                       <div>${item.amount}</div>
                     </td>
-                    <td><div class="money">${convertMoney(item.amount * item.price)}</div></td>
+                    <td><div class="money">${convertMoney(
+                      item.amount * item.price
+                    )}</div></td>
                   </tr>
                   `);
                 });
               } else {
-                $(tablePreview[0]).html("");
+                $(tablePreview[0]).find("tr").remove();
               }
             }
           },
@@ -855,6 +935,20 @@ function statusLoading({
   if (isCompleted) {
     $(posLoading).find("div").remove();
     $(posLoading).find("span").remove();
+
+    if (isSuccess) {
+      $(posLoading).addClass("btn-outline-success");
+
+      setTimeout(() => {
+        $(posLoading).removeClass("btn-outline-success");
+      }, 1000);
+    } else {
+      $(posLoading).addClass("btn-outline-danger");
+
+      setTimeout(() => {
+        $(posLoading).removeClass("btn-outline-danger");
+      }, 1000);
+    }
   } else {
     $(posLoading).append(`<span style="
     z-index: 1;

@@ -4,6 +4,7 @@ const {
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  deleteObject
 } = require("firebase/storage");
 
 const firebaseConfig = {
@@ -66,3 +67,12 @@ exports.uploadImage = (imageFile) => {
     );
   });
 };
+
+exports.deleteImage = (imageUrl) => {
+  let fileRef = ref(storage, imageUrl);
+  deleteObject(fileRef).then(() => {
+    console.log("success");
+  }).catch((err) => {
+    console.log("Fail");
+  })
+}

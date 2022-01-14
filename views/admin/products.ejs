@@ -281,9 +281,15 @@
                         <div class="mt-2 mb-2">
                           <button
                             value="<%= item._id %>"
-                            class="btn btn-danger btn-delete-prod is-status"
-                            title="Block"
-                          >
+                            class="btn btn-danger btn-delete is-status"
+                            title="Delete" >
+                            <em class="ti-trash"></em>
+                          </button>
+                          <button
+                            value="<%= item._id %>"
+                            class="btn btn-secondary btn-lock is-status"
+                            <% if (item.status) { %>
+                            title="Lock" <% } else { %> title="Unlock" <% } %> >
                             <em class="ti-lock"></em>
                           </button>
                           <button
