@@ -34,7 +34,7 @@ function getYears(startDate, endDate) {
   return dateArray;
 }
 
-function statisticWithDaily(data, startDate, endDate) {
+exports.statisticWithDaily = (data, startDate, endDate) => {
   let result = new Array(); // Kết quả cuối cùng obj: { date: Date, units: Int }
   let listData = new Array();
   let dateArray = getDates(startDate, endDate);
@@ -115,7 +115,7 @@ function statisticWithDaily(data, startDate, endDate) {
   return result;
 }
 
-function statisticWithMonthly(data, startDate, endDate) {
+exports.statisticWithMonthly = (data, startDate, endDate) => {
   let result = new Array(); // Kết quả cuối cùng obj: { date: Date, units: Int }
   let listData = new Array();
   let dateArray = getMonths(startDate, endDate);
@@ -180,7 +180,7 @@ function statisticWithMonthly(data, startDate, endDate) {
   return result;
 }
 
-function statisticWithYearly(data, startDate, endDate) {
+exports.statisticWithYearly = (data, startDate, endDate) => {
   let result = new Array(); // Kết quả cuối cùng obj: { date: Date, units: Int }
   let listData = new Array();
   let dateArray = getYears(startDate, endDate);
@@ -248,8 +248,15 @@ function statisticWithYearly(data, startDate, endDate) {
   return result;
 }
 
-module.exports = {
-  statisticWithDaily,
-  statisticWithMonthly,
-  statisticWithYearly,
+exports.uploadFile = async (req, res, next) => {
+  let upload = [];
+  if (req?.files) {
+    upload = await firebase.uploadImage(req?.files?.[0]);
+  }
+
+  if (upload.length) {
+    res.send({ url: upload, success: true });
+  } else {
+    res.send({ success: false });
+  }
 };

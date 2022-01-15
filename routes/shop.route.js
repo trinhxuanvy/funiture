@@ -45,8 +45,8 @@ router.get("/products/:id", shopController.getProduct);
 
 router.post("/products/comment/:productId", shopController.postComment);
 
-router.get("/checkout",authUserController.checkExpired, shopController.checkout);
+router.get("/checkout",authUserController.checkExistUser, shopController.checkout);
 
-router.post("/checkout",authUserController.checkExpired, shopController.postOrder);
+router.post("/checkout",authUserController.checkExistUser, shopController.postOrder);
 
 module.exports = router;

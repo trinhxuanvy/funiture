@@ -4,14 +4,6 @@
             <span>Admin</span>
         </div>
         <ul class="wrapper__sidebar__menu-list">
-            <li class="wrapper__sidebar__menu-item <% if (pageName == "statistic") { %>
-                wrapper__sidebar__menu-item--active
-            <% } %>">
-                <a href="/admin/statistic" class="wrapper__sidebar__menu-link">
-                    <i class="ti-stats-up"></i>
-                    <span>Statistic</span>
-                </a>
-            </li>
             <li class="wrapper__sidebar__menu-item <% if (pageName == "profile") { %>
                 wrapper__sidebar__menu-item--active
             <% } %>">
@@ -76,19 +68,15 @@
                     <span>Order</span>
                 </a>
             </li>
-            <!-- <li class="wrapper__sidebar__menu-item">
-                <a href="" class="wrapper__sidebar__menu-link">
-                    <i class="ti-map"></i>
-                    <span>Maps</span>
+            <li class="wrapper__sidebar__menu-item <% if (pageName == "statistic") { %>
+                wrapper__sidebar__menu-item--active
+            <% } %>">
+                <a href="/admin/statistic" class="wrapper__sidebar__menu-link">
+                    <i class="ti-stats-up"></i>
+                    <span>Statistic</span>
                 </a>
             </li>
-            <li class="wrapper__sidebar__menu-item">
-                <a href="" class="wrapper__sidebar__menu-link">
-                    <i class="ti-bell"></i>
-                    <span>Notifications</span>
-                </a>
-            </li> -->
-            <a href="/admin/logout" class="link-logout">LOGOUT</a>
+            <a href="/admin/logout" class="link-logout">LOG OUT</a>
         </ul>
     </div>
 </div>

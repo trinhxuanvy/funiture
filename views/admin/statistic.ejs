@@ -48,11 +48,107 @@
         </div>
         <div class="wrapper__main__content">
           <div class="container-fluid" style="padding: 32px">
-            <div class="wrapper__main__content__table">
+            <div class="wrapper__main__content__activity">
+              <div class="row">
+                <div class="col-xl-3">
+                  <div class="wrapper__main__content__activity__card bg-flamigo">
+                    <div class="wrapper__main__content__activity__card__logo">
+                      <i class="fa fa-globe c-flamigo" aria-hidden="true"></i>
+                    </div>
+                    <div class="wrapper__main__content__activity__card__note">30 days ago - today</div>
+                    <div
+                      class="wrapper__main__content__activity__card__content"
+                    >
+                      <div
+                        class="wrapper__main__content__activity__card__content__title"
+                      >
+                        Access
+                      </div>
+                      <div
+                        class="wrapper__main__content__activity__card__content__value"
+                      >
+                        <%= (totalAccess).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
+                        '.') %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="wrapper__main__content__activity__card bg-apple">
+                    <div class="wrapper__main__content__activity__card__logo">
+                      <i class="fas fa-money-bill-alt c-apple"></i>
+                    </div>
+                    <div class="wrapper__main__content__activity__card__note">Total profit</div>
+                    <div
+                      class="wrapper__main__content__activity__card__content"
+                    >
+                      <div
+                        class="wrapper__main__content__activity__card__content__title"
+                      >
+                        Profit
+                      </div>
+                      <div
+                        class="wrapper__main__content__activity__card__content__value money"
+                      >
+                        <%= totalProfit %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="wrapper__main__content__activity__card bg-guardsman-red">
+                    <div class="wrapper__main__content__activity__card__logo">
+                      <i class="fa fa-user c-guardsman-red" aria-hidden="true"></i>
+                    </div>
+                    <div class="wrapper__main__content__activity__card__note">Total subscribe</div>
+                    <div
+                      class="wrapper__main__content__activity__card__content"
+                    >
+                      <div
+                        class="wrapper__main__content__activity__card__content__title"
+                      >
+                        Subscribe
+                      </div>
+                      <div
+                        class="wrapper__main__content__activity__card__content__value"
+                      >
+                        <%= (totalCustomer).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
+                        '.') %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="wrapper__main__content__activity__card bg-cerulean">
+                    <div class="wrapper__main__content__activity__card__logo">
+                      <i class="fa fa-shopping-basket c-cerulean" aria-hidden="true"></i>
+                    </div>
+                    <div class="wrapper__main__content__activity__card__note">Total order</div>
+                    <div
+                      class="wrapper__main__content__activity__card__content"
+                    >
+                      <div
+                        class="wrapper__main__content__activity__card__content__title"
+                      >
+                        Order
+                      </div>
+                      <div
+                        class="wrapper__main__content__activity__card__content__value"
+                      >
+                        <%= (totalOrder).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
+                        '.') %>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="wrapper__main__content__table profit" style="margin-bottom: 32px;">
               <div class="wrapper__main__content__table__header">
                 <div class="row">
                   <div class="col-6">
-                    <p style="font-size: 24px">Statistic</p>
+                    <p style="font-size: 24px">Statistic Profit</p>
                   </div>
                   <div class="col-6">
                     <div class="d-flex justify-content-end">
@@ -241,12 +337,37 @@
                 <div class="loading">
                   <span class="loader"></span>
                 </div>
-                <div id="chartContainer"></div>
+                <div id="chartContainer" class="chart-container"></div>
               </div>
               <div class="wrapper__main__content__table__footer mt-4">
                 <span style="font-size: 12px; font-weight: bolder"
                   >Range: <span class="show-range"></span
                 ></span>
+              </div>
+            </div>
+
+            <div class="wrapper__main__content__table top-sale">
+              <div class="wrapper__main__content__table__header">
+                <div class="row">
+                  <div class="col-6">
+                    <p style="font-size: 24px">Top Sale Products</p>
+                  </div>
+                  <div class="col-6">
+                    <div class="d-flex justify-content-end">
+                      <div class="" >
+                        <button id="btnTopSaleStatistic" class="btn btn-orange" value="top10">
+                          TOP 10
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="chart">
+                <div class="loading">
+                  <span class="loader"></span>
+                </div>
+                <div id="chartTopSaleContainer" class="chart-container"></div>
               </div>
             </div>
           </div>
