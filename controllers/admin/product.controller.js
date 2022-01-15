@@ -20,8 +20,6 @@ exports.getProduct = async (req, res, next) => {
   if (req.url.indexOf("?") > -1) {
     urlStr = req.url.slice(req.url.indexOf("?"), req.url.length) || "";
   }
-
-  console.log(urlStr)
   
   for (let item in req.query) {
     if (item.indexOf("category") > -1) {

@@ -125,10 +125,11 @@
           border-radius: 50px;
           box-shadow: 0px 0px 16px rgba($c-flint, 0.3);
           @media screen and (max-width: 768px) {
-            position: fixed;
-            left: 50%;
-            top: 82px;
-            transform: translateX(-50%);
+            // position: fixed;
+            // left: 50%;
+            // top: 82px;
+            // transform: translateX(-50%);
+            display: none;
           }
           input {
             width: 250px;
@@ -153,9 +154,45 @@
       }
     }
     &__content {
-      @media screen and (max-width: 768px) {
-        margin-top: 48px;
+      .form-search {
+        display: none !important;
+        align-items: center;
+        border: 2px solid $c-white;
+        padding: 0 8px;
+        background-color: $c-white;
+        border-radius: 50px;
+        width: 305px;
+        box-shadow: 0px 0px 16px rgba($c-flint, 0.3);
+        margin: 0 auto 32px;
+        @media screen and (max-width: 768px) {
+          margin: 0 auto 32px;
+          display: flex !important;
+        }
+        input {
+          width: 250px;
+          border: none;
+          outline: none !important;
+          padding: 8px 16px;
+          border-radius: 50px;
+        }
+        button {
+          width: 30px;
+          height: 30px;
+          background-color: $c-flamingo;
+          color: $c-white;
+          border-radius: 50%;
+          line-height: 30px;
+          text-align: center;
+          font-size: 14px;
+          border: none;
+          outline: none;
+        }
+        display: block;
+        @media screen and (max-width: 768px) {
+          display: block;
+        }
       }
+
       &__card {
         @media screen and (max-width: 992px) {
           margin-bottom: 32px;
@@ -365,7 +402,6 @@
             &__title {
             }
             &__value {
-              
               font-size: 28px;
             }
           }
