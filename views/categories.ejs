@@ -114,7 +114,7 @@
                                     </div>
                                 </aside>
                                 
-                                <button id="filter" class="btn_3" style="margin: 0 50px;">Filter</button>
+                                <button id="filter-button" class="btn_3" style="margin: 0 50px;">Filter</button>
                                 
                             </div>
                         </div>
@@ -148,9 +148,9 @@
                                             <input 
                                               id="search-input"
                                               type="text"
-                                              name="search" 
                                               class="form-control rounded" 
-                                              placeholder="search" 
+                                              placeholder="Search" 
+                                              value = "<%= search %> "  
                                               aria-describedby="inputGroupPrepend"
                                               style="background-color: #fff6f8; color:rgb(204, 50, 91); font-weight: bold;">
                                             <button 
@@ -320,8 +320,9 @@
           <script>
             const formCategories = $('form[name="categories"]');
             const pageLink = $('.page-link');
-            const filterBtn = $('#filter');
+            const filterBtn = $('#filter-button');
             const sortBtn = $('#sort-button');
+            const searchBtn = $('#search-button');
         
             pageLink.click(function(event) {
               event.preventDefault();
@@ -348,11 +349,22 @@
             });
 
             sortBtn.click(function(event) {
+              let search = '';
               let sortPrice = '<%= sortPrice%>' == '' || '<%= sortPrice%>' == 'decrease' ? 'increase' : 'decrease';
-              filter('1', sortPrice);
+              const searchInput = $('#search-input');
+              search = searchInput.val().trim();
+              filter('1', sortPrice, search);
             });
 
-            function filter(current, sortPrice = '') {
+            searchBtn.click(function(event) {
+              let search =  $('#search-input').val().trim();
+              let sortPrice = '<%= sortPrice%>';
+              //if (search != '') {
+                filter('1', sortPrice, search);
+              //}
+            });
+
+            function filter(current, sortPrice = '', search = '') {
               let categories = '';
               let brands = '';
               let fromPrice = '';
@@ -390,7 +402,8 @@
               brands && beforeSubmit(formCategories, 'brands', brands);
               fromPrice && beforeSubmit(formCategories, 'fromPrice', fromPrice);
               toPrice && beforeSubmit(formCategories, 'toPrice', toPrice);
-              sortPrice && beforeSubmit(formCategories, 'sortPrice', sortPrice)
+              sortPrice && beforeSubmit(formCategories, 'sortPrice', sortPrice);
+              search && beforeSubmit(formCategories, 'search', search);
               formCategories.submit();
             }
 

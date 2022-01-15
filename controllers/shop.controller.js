@@ -53,6 +53,7 @@ exports.categories = async (req, res, next) => {
     fromPrice: '',
     toPrice: '',
     sortPrice: '',
+    search: '',
   };
 
   //Set số sản phẩm trên một trang, và lấy trang hiện tại
@@ -105,7 +106,7 @@ exports.categories = async (req, res, next) => {
     fromPrice = Number(req.query.fromPrice);
     productsFilter = productsFilter.filter(product => 
       fromPrice <= Number(product.price));
-      category.fromPrice = fromPrice;
+    category.fromPrice = fromPrice;
   }
 
   if(req.query.toPrice == '' || isNaN(Number(req.query.toPrice))) {
@@ -114,7 +115,7 @@ exports.categories = async (req, res, next) => {
     toPrice = Number(req.query.toPrice);
     productsFilter = productsFilter.filter(product => 
       toPrice >= Number(product.price));
-      category.toPrice = toPrice;
+    category.toPrice = toPrice;
   }
 
   //best seller
@@ -125,7 +126,7 @@ exports.categories = async (req, res, next) => {
   category.bestSellers = bestSellers;
 
   //sort by price
-  category.sortPrice = req.query.sortPrice;
+  category.sortPrice = req.query.sortPrice || '';
   if (category.sortPrice == 'increase') {
     productsFilter.sort(function(a, b) {
       return a.price - b.price;
@@ -134,6 +135,14 @@ exports.categories = async (req, res, next) => {
     productsFilter.sort(function(a, b) {
       return b.price - a.price;
     });
+  }
+
+  //search
+  let search = req.query.search || '';
+  if (search) {
+    productsFilter = productsFilter.filter(product => 
+      product.prodName.toLowerCase().includes(search.toLowerCase()))
+    category.search = search;
   }
 
   //Lấy sản phẩm được lọc
