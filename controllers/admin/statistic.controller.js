@@ -13,7 +13,9 @@ exports.getStatistic = async (req, res, next) => {
   let totalProfit = 0;
 
   orders.forEach(item => {
-    totalProfit += item.subTotalPrice;
+    if (item.isPaid) {
+      totalProfit += item.subTotalPrice;
+    }
   });
 
   res.render("admin/statistic", {
