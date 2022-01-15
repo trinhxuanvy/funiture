@@ -366,10 +366,10 @@
               toPrice = toPriceTbx.val();
 
               beforeSubmit(formCategories, 'page', current);
-              beforeSubmit(formCategories, 'categories', categories);
-              beforeSubmit(formCategories, 'brands', brands);
-              beforeSubmit(formCategories, 'fromPrice', fromPrice);
-              beforeSubmit(formCategories, 'toPrice', toPrice);
+              categories && beforeSubmit(formCategories, 'categories', categories);
+              brands && beforeSubmit(formCategories, 'brands', brands);
+              fromPrice && beforeSubmit(formCategories, 'fromPrice', fromPrice);
+              toPrice && beforeSubmit(formCategories, 'toPrice', toPrice);
               formCategories.submit();
             }
 
