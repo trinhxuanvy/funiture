@@ -52,6 +52,7 @@ exports.categories = async (req, res, next) => {
     brands: '',
     fromPrice: '',
     toPrice: '',
+    sortPrice: '',
   };
 
   //Set số sản phẩm trên một trang, và lấy trang hiện tại
@@ -76,10 +77,11 @@ exports.categories = async (req, res, next) => {
   if (!req.query.categories) {
     category.categories = '';
   } else if (req.query.categories != '') {
-    categories = req.query.categories.split('_');
+    categories =  req.query.categories || '';
+    categories = categories.split('_');
     productsFilter = productsFilter.filter(product => 
       categories.includes(product.prodTypeName.toLowerCase().split(' ').join('-')));
-    category.categories =  req.query.categories;
+    category.categories =  req.query.categories || '';
   }
 
   //Brands đã chọn
@@ -87,10 +89,11 @@ exports.categories = async (req, res, next) => {
   if (!req.query.brands) {
     category.brands = '';
   } else if (req.query.brands != '') {
+    brands =  req.query.brands || '';
     brands = req.query.brands.split('_');
     productsFilter = productsFilter.filter(product => 
       brands.includes(product.brandName.toLowerCase().split(' ').join('-')));
-    category.brands =  req.query.brands;
+    category.brands =  req.query.brands || '';
   }
   //Khoảng giá đã chọn
   let fromPrice = '';
@@ -120,6 +123,18 @@ exports.categories = async (req, res, next) => {
     .limit(10)
     .exec();
   category.bestSellers = bestSellers;
+
+  //sort by price
+  category.sortPrice = req.query.sortPrice;
+  if (category.sortPrice == 'increase') {
+    productsFilter.sort(function(a, b) {
+      return a.price - b.price;
+    });
+  } else if (category.sortPrice == 'decrease') {
+    productsFilter.sort(function(a, b) {
+      return b.price - a.price;
+    });
+  }
 
   //Lấy sản phẩm được lọc
   category.allProducts = productsFilter;

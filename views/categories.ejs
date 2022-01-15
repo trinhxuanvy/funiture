@@ -128,7 +128,14 @@
                                           type="button" 
                                           class="btn" 
                                           style="background-color: #ff3368; color: #fff6f8;">
-                                          Sort by Price <i class="fas fa-sort-amount-up"></i>
+                                          Sort by Price&nbsp;
+                                          <% if (sortPrice == 'increase') { %> 
+                                            <i class="fas fa-sort-amount-up"></i>
+                                          <% } else if (sortPrice == 'decrease') { %> 
+                                            <i class="fas fa-sort-amount-down"></i>
+                                          <% } else { %> 
+                                            <i class="fas fa-arrows-alt-v"></i>
+                                          <% } %>
                                         </button>
                                       </div>
                                   
@@ -314,6 +321,7 @@
             const formCategories = $('form[name="categories"]');
             const pageLink = $('.page-link');
             const filterBtn = $('#filter');
+            const sortBtn = $('#sort-button');
         
             pageLink.click(function(event) {
               event.preventDefault();
@@ -323,19 +331,28 @@
                 return;
               }
 
-              if ('<%= categories%>' == '' && '<%= brands%>' == '' && '<%= fromPrice%>' == '' && '<%= toPrice%>' == '') {
+              if ('<%= categories%>' == '' 
+                && '<%= brands%>' == '' 
+                && '<%= fromPrice%>' == '' 
+                && '<%= toPrice%>' == ''
+                && '<%= sortPrice%>' == '') {
                 beforeSubmit(formCategories, 'page', current);
                 formCategories.submit();
               } else {
-                filter(current);
+                filter(current, '<%= sortPrice%>');
               }
-            })
+            });
 
             filterBtn.click(function(event) {
               filter('1');
-            })
+            });
 
-            function filter(current) {
+            sortBtn.click(function(event) {
+              let sortPrice = '<%= sortPrice%>' == '' || '<%= sortPrice%>' == 'decrease' ? 'increase' : 'decrease';
+              filter('1', sortPrice);
+            });
+
+            function filter(current, sortPrice = '') {
               let categories = '';
               let brands = '';
               let fromPrice = '';
@@ -346,6 +363,7 @@
               const fromPriceTbx = $('input[name="input-from"]');
               const toPriceTbx = $('input[name="input-to"]');
 
+              //Get checked categories
               for (let i = 0; i < checkedCategories.length; i++) {
                 if (i == 0) {
                   categories = categories + $(checkedCategories[i]).val();
@@ -354,6 +372,7 @@
                 }
               }
 
+              //Get cheked brands
               for (let i = 0; i < checkedBrands.length; i++) {
                 if (i == 0) {
                   brands = brands + $(checkedBrands[i]).val();
@@ -362,6 +381,7 @@
                 }
               }
 
+              //Get price
               fromPrice = fromPriceTbx.val();
               toPrice = toPriceTbx.val();
 
@@ -370,6 +390,7 @@
               brands && beforeSubmit(formCategories, 'brands', brands);
               fromPrice && beforeSubmit(formCategories, 'fromPrice', fromPrice);
               toPrice && beforeSubmit(formCategories, 'toPrice', toPrice);
+              sortPrice && beforeSubmit(formCategories, 'sortPrice', sortPrice)
               formCategories.submit();
             }
 
@@ -400,7 +421,7 @@
               color: #ff3368;
               cursor: pointer;
             } */
-            #search-button:hover {
+            #search-button:hover, #sort-button:hover {
               background-color: #ff0000 !important;
               box-shadow: -1.717px 8.835px 29.76px 2.24px rgb(255 51 104 / 40%);
             }
