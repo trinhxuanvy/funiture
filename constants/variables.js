@@ -10,4 +10,6 @@ const PRODUCT = [
 
 const SORT = ["asc", "desc"];
 
-module.exports = { PRODUCT, SORT };
+const ITEM_PAGE = 8;
+
+module.exports = { PRODUCT, SORT, ITEM_PAGE };

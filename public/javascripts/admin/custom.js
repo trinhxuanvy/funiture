@@ -629,9 +629,9 @@ $(document).ready(function () {
     return new Date(value) > inputStart;
   });
 
-  // Xử lý phân tích load chart
+  // Xử lý phân tích load chart profit
   $(function () {
-    getChart({});
+    getChart({ posChart: "#chartContainer" });
 
     $("#startDay").datepicker({ format: "mm-dd-yyyy", autoclose: true });
     $("#endDay").datepicker({ format: "mm-dd-yyyy", autoclose: true });
@@ -729,7 +729,7 @@ $(document).ready(function () {
 
       if ($("#formDay").valid()) {
         $("#formStatistic").css("display", "none"); // Ẩn form
-        $(".loading").css("visibility", "initial"); // Hiển thị loading
+        $(".profit .loading").css("visibility", "initial"); // Hiển thị loading
         const url = new URL(window.location.href);
         const inputStart = $("#formDay input[name='startDate']").val();
         const inputEnd = $("#formDay input[name='endDate']").val();
@@ -744,7 +744,12 @@ $(document).ready(function () {
           success: function (response) {
             if (response.success) {
               $(".loading").css("visibility", "hidden");
-              getChart(response);
+              getChart({
+                data: response,
+                posChart: "#chartContainer",
+                type: "spline",
+                yValueFormatString: "$#.###,##",
+              });
               $(".show-range").html(response.start + " to " + response.end);
             }
           },
@@ -756,7 +761,7 @@ $(document).ready(function () {
     $("#btnSubmitStatisticMonth").click(function (e) {
       e.preventDefault();
       $("#formStatistic").css("display", "none"); // Ẩn form
-      $(".loading").css("visibility", "initial"); // Hiển thị loading
+      $(".profit .loading").css("visibility", "initial"); // Hiển thị loading
       const url = new URL(window.location.href);
       const inputStart = $("#formMonth input[name='startDate']").val();
       const inputEnd = $("#formMonth input[name='endDate']").val();
@@ -771,7 +776,12 @@ $(document).ready(function () {
         success: function (response) {
           if (response.success) {
             $(".loading").css("visibility", "hidden");
-            getChart(response);
+            getChart({
+              data: response,
+              posChart: "#chartContainer",
+              type: "spline",
+              yValueFormatString: "$#.###,##",
+            });
             $(".show-range").html(response.start + " to " + response.end);
           }
         },
@@ -782,7 +792,7 @@ $(document).ready(function () {
     $("#btnSubmitStatisticYear").click(function (e) {
       e.preventDefault();
       $("#formStatistic").css("display", "none"); // Ẩn form
-      $(".loading").css("visibility", "initial"); // Hiển thị loading
+      $(".profit .loading").css("visibility", "initial"); // Hiển thị loading
       const url = new URL(window.location.href);
       const inputStart = $("#formYear input[name='startDate']").val();
       const inputEnd = $("#formYear input[name='endDate']").val();
@@ -796,8 +806,55 @@ $(document).ready(function () {
         success: function (response) {
           if (response.success) {
             $(".loading").css("visibility", "hidden");
-            getChart(response);
+            getChart({
+              data: response,
+              posChart: "#chartContainer",
+              type: "spline",
+              yValueFormatString: "$#.###,##",
+            });
             $(".show-range").html(response.start + " to " + response.end);
+          }
+        },
+      });
+    });
+  });
+
+  // Xử lý phân tích load chart top sale
+  $(function () {
+    getChart({ posChart: "#chartTopSaleContainer" });
+
+    $("#btnTopSaleStatistic").click(function (e) {
+      e.preventDefault();
+      $(".top-sale .loading").css("visibility", "initial"); // Hiển thị loading
+      const url = new URL(window.location.href);
+      const topSaleVal = $(this).val();
+
+      // Xử lý ajax để get data
+      $.ajax({
+        type: "get",
+        url: url.origin + url.pathname + "/top/" + topSaleVal,
+        dataType: "json",
+        contentType: "application/json",
+        success: function (response) {
+          if (response.success) {
+            $(".loading").css("visibility", "hidden");
+            getChart({
+              data: response,
+              posChart: "#chartTopSaleContainer",
+              type: "column",
+              color: [
+                "#6dd5ed",
+                "#EB5E28",
+                "#ee9ca7",
+                "#FFE000",
+                "#799F0C",
+                "#ffe259",
+                "#00416A",
+                "#E100FF",
+                "#0B486B",
+                "#F00000",
+              ],
+            });
           }
         },
       });
@@ -992,8 +1049,14 @@ function convertMoney(money) {
   }).format(money);
 }
 
-function getChart(data) {
-  CanvasJS.addColorSet("primary", ["#EB5E28"]);
+function getChart({
+  data = [],
+  posChart = "",
+  type = "column",
+  color = ["#EB5E28"],
+  yValueFormatString = "#.###",
+}) {
+  CanvasJS.addColorSet("primary", color);
 
   var dataPoints = [];
   var titleX = data.titleX || "";
@@ -1017,8 +1080,8 @@ function getChart(data) {
     },
     data: [
       {
-        type: "column",
-        yValueFormatString: "$#,###.##",
+        type: type,
+        yValueFormatString: yValueFormatString, //"$#,###.##",
         dataPoints: dataPoints,
       },
     ],
@@ -1054,8 +1117,8 @@ function getChart(data) {
     });
   }
 
-  const chartContainer = $("#chartContainer");
+  const chartContainer = $(posChart);
   if (chartContainer.length) {
-    $("#chartContainer").CanvasJSChart(options);
+    $(posChart).CanvasJSChart(options);
   }
 }

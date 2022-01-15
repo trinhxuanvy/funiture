@@ -82,6 +82,11 @@ const Order = new Schema({
             default: "order"
         },
     },
+    isPaid: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
     orderDetails: [{
         productId: {
             type: Schema.Types.ObjectId,

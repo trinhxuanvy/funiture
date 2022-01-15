@@ -8,8 +8,7 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const shopRouter = require("./routes/shop.route");
-const adminRouter = require("./routes/admin.route");
-const authAdminRouter = require("./routes/auth-admin.route");
+const indexAdminRouter = require("./routes/admin/index.route");
 const authUserRouter = require("./routes/auth-user.route");
 const errorAdminRouter = require("./routes/error.route");
 
@@ -34,9 +33,8 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+indexAdminRouter.router(app);
 app.use(shopRouter);
-app.use(adminRouter);
-app.use(authAdminRouter);
 app.use(authUserRouter);
 app.use(errorAdminRouter);
 

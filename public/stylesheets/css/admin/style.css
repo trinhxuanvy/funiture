@@ -263,6 +263,40 @@
       font-weight: bolder; }
   .wrapper__main__content .form-sort-active {
     display: block; }
+  .wrapper__main__content__activity__card {
+    height: 130px;
+    min-width: 200px;
+    border-radius: 10px;
+    position: relative;
+    margin-bottom: 32px;
+    box-shadow: 0px 0px 16px rgba(102, 97, 91, 0.3); }
+    .wrapper__main__content__activity__card__logo {
+      position: absolute;
+      top: 12px;
+      left: 12px; }
+      .wrapper__main__content__activity__card__logo i {
+        background-color: #ffffff;
+        font-size: 32px;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        border-radius: 10px; }
+    .wrapper__main__content__activity__card__note {
+      color: #ffffff;
+      font-size: 12px;
+      position: absolute;
+      right: 12px;
+      top: 12px; }
+    .wrapper__main__content__activity__card__content {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      color: #ffffff;
+      text-align: right;
+      font-weight: bolder; }
+      .wrapper__main__content__activity__card__content__value {
+        font-size: 28px; }
 
 @media screen and (max-width: 768px) {
   .wrapper .show {
@@ -647,7 +681,7 @@ h6 {
   height: 300px;
   width: 100%;
   position: relative; }
-  .chart #chartContainer {
+  .chart .chart-container {
     height: 300px;
     width: 100%;
     position: relative; }
@@ -737,3 +771,27 @@ h6 {
 
 .error .contant_box_404 {
   margin-top: -50px; }
+
+.c-flamigo {
+  color: #eb5e28; }
+
+.c-apple {
+  color: #39ac31; }
+
+.c-guardsman-red {
+  color: #CC0000; }
+
+.c-cerulean {
+  color: #00ACED; }
+
+.bg-flamigo {
+  background-color: #eb5e28; }
+
+.bg-apple {
+  background-color: #39ac31; }
+
+.bg-guardsman-red {
+  background-color: #CC0000; }
+
+.bg-cerulean {
+  background-color: #00ACED; }

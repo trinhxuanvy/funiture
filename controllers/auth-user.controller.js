@@ -131,7 +131,7 @@ exports.postChangePassword = async (req, res, next) => {
   }
 }
 
-exports.checkExpired = (req, res, next) => {
+exports.checkExistUser = (req, res, next) => {
   const token = req.cookies?.cusToken || "";
 
   jwt.verify(token, process.env.KEY_JWT, (err, data) => {
