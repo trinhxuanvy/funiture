@@ -521,7 +521,7 @@ exports.postCustomer = async (req, res, next) => {
         },
       });
       var mailOptions = {
-        from: process.env.AUTH_EMAIL,
+        from: "Aranoz",
         to: newCustomer.email,
         subject: "Account Verification Link",
         html: `<h1>Email Confirmation</h1>
