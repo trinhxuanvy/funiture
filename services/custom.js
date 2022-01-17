@@ -114,7 +114,7 @@ exports.statisticWithDaily = (data, startDate, endDate) => {
   }
 
   return result;
-}
+};
 
 exports.statisticWithMonthly = (data, startDate, endDate) => {
   let result = new Array(); // Kết quả cuối cùng obj: { date: Date, units: Int }
@@ -179,7 +179,7 @@ exports.statisticWithMonthly = (data, startDate, endDate) => {
   }
 
   return result;
-}
+};
 
 exports.statisticWithYearly = (data, startDate, endDate) => {
   let result = new Array(); // Kết quả cuối cùng obj: { date: Date, units: Int }
@@ -247,7 +247,7 @@ exports.statisticWithYearly = (data, startDate, endDate) => {
 
   console.log(result);
   return result;
-}
+};
 
 exports.uploadFile = async (req, res, next) => {
   let upload = [];
@@ -260,4 +260,15 @@ exports.uploadFile = async (req, res, next) => {
   } else {
     res.send({ success: false });
   }
+};
+
+exports.randomStr = (length) => {
+  var result = "";
+  var characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 };

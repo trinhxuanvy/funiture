@@ -39,6 +39,8 @@ router.get("/cart", shopController.cart);
 
 router.get("/cart/add/product/:id", shopController.addCard);
 
+router.get("/cart/add/product/:id/:amount", shopController.addCardProductDetail);
+
 router.get("/order/add/coupon/:code", shopController.addCoupon);
 
 router.get("/products/:id", shopController.getProduct);
