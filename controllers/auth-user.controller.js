@@ -137,7 +137,7 @@ exports.checkExistUser = (req, res, next) => {
   jwt.verify(token, process.env.KEY_JWT, (err, data) => {
     if (err) {
       const message = {
-        message: "Your account has expired",
+        message: "Please Login",
         type: "warning",
       };
 
