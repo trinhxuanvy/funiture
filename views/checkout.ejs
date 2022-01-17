@@ -112,7 +112,7 @@
                     <li>
                       <a href="/products/<%= cartDetail.productId %>"><%= cartDetail.productName %> 
                         <span class="middle">x <%= cartDetail.amount %></span>
-                        <span class="last money"><%= cartDetail.amount*cartDetail.price %></span>
+                        <span class="last money"><%= cartDetail.price %></span>
                       </a>
                     </li>
                   <% }) %>

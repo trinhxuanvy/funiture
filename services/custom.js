@@ -1,3 +1,5 @@
+const firebase = require("./firebase");
+
 function getDates(startDate, endDate) {
   let dateArray = new Array();
   let currentDate = startDate;
@@ -30,7 +32,6 @@ function getYears(startDate, endDate) {
     currentDate.setFullYear(currentDate.getFullYear() + 1);
   }
 
-  console.log(dateArray.length);
   return dateArray;
 }
 
