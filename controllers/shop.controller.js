@@ -529,7 +529,7 @@ exports.postCustomer = async (req, res, next) => {
         <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
         <div>
         <a
-          style="display: block;
+          style="display: inline-block;
           width: 150px;
           color: #fff !important;
           margin: 0 auto;
