@@ -54,8 +54,13 @@ exports.categories = async (req, res, next) => {
     allBrands: 0,
     user,
     cartTotal: 0,
-    categories: 0,
-    brands: 0,
+    bestSellers: 0,
+    categories: '',
+    brands: '',
+    fromPrice: '',
+    toPrice: '',
+    sortPrice: '',
+    search: '',
   };
 
   //Set số sản phẩm trên một trang, và lấy trang hiện tại
@@ -75,30 +80,79 @@ exports.categories = async (req, res, next) => {
   //Product sau khi lọc
   let productsFilter = allProducts;
 
-  //lấy categories đã chọn
+  //Categories đã chọn
   let categories = '';
   if (!req.query.categories) {
     category.categories = '';
   } else if (req.query.categories != '') {
-    categories = req.query.categories.split('_');
+    categories =  req.query.categories || '';
+    categories = categories.split('_');
     productsFilter = productsFilter.filter(product => 
       categories.includes(product.prodTypeName.toLowerCase().split(' ').join('-')));
-    category.categories =  req.query.categories;
+    category.categories =  req.query.categories || '';
   }
 
-  //lấy brands đã chọn
+  //Brands đã chọn
   let brands = '';
   if (!req.query.brands) {
     category.brands = '';
   } else if (req.query.brands != '') {
+    brands =  req.query.brands || '';
     brands = req.query.brands.split('_');
     productsFilter = productsFilter.filter(product => 
       brands.includes(product.brandName.toLowerCase().split(' ').join('-')));
-    category.brands =  req.query.brands;
+    category.brands =  req.query.brands || '';
   }
-  //Lấy sản phẩm được lọc
-  
+  //Khoảng giá đã chọn
+  let fromPrice = '';
+  let toPrice = '';
 
+  if(req.query.fromPrice == '' || isNaN(Number(req.query.fromPrice))) {
+    category.fromPrice = '';
+  } else {
+    fromPrice = Number(req.query.fromPrice);
+    productsFilter = productsFilter.filter(product => 
+      fromPrice <= Number(product.price));
+    category.fromPrice = fromPrice;
+  }
+
+  if(req.query.toPrice == '' || isNaN(Number(req.query.toPrice))) {
+    category.toPrice = '';
+  } else {
+    toPrice = Number(req.query.toPrice);
+    productsFilter = productsFilter.filter(product => 
+      toPrice >= Number(product.price));
+    category.toPrice = toPrice;
+  }
+
+  //best seller
+  const bestSellers = await Product.find()
+    .sort({ hasSold: -1 })
+    .limit(10)
+    .exec();
+  category.bestSellers = bestSellers;
+
+  //sort by price
+  category.sortPrice = req.query.sortPrice || '';
+  if (category.sortPrice == 'increase') {
+    productsFilter.sort(function(a, b) {
+      return a.price - b.price;
+    });
+  } else if (category.sortPrice == 'decrease') {
+    productsFilter.sort(function(a, b) {
+      return b.price - a.price;
+    });
+  }
+
+  //search
+  let search = req.query.search || '';
+  if (search) {
+    productsFilter = productsFilter.filter(product => 
+      product.prodName.toLowerCase().includes(search.toLowerCase()))
+    category.search = search;
+  }
+
+  //Lấy sản phẩm được lọc
   category.allProducts = productsFilter;
   category.allCategories = allCategories;
   category.allBrands = allBrands;

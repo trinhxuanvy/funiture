@@ -80,48 +80,88 @@
                                 </aside>
 
                                 <aside class="left_widgets p_filter_widgets price_rangs_aside">
-                                    <div class="l_w_title">
-                                        <h3>Price Filter</h3>
+                                    <div class="l_w_title mb-4">
+                                        <h3>Price</h3>
                                     </div>
                                     <div class="widgets_inner">
                                         <div class="range_item">
                                             <!-- <div id="slider-range"></div> -->
-                                            <input type="text" class="js-range-slider" value="" />
                                             <div class="d-flex">
                                                 <div class="price_text">
-                                                    <p>Price :</p>
+                                                    <p>Price :&nbsp;&nbsp;</p>
                                                 </div>
                                                 <div class="price_value d-flex justify-content-center">
-                                                    <input type="text" class="js-input-from" id="amount" readonly />
-                                                    <span>to</span>
-                                                    <input type="text" class="js-input-to" id="amount" readonly />
+                                                    <input type="text" name="input-from" value="<%= fromPrice %>"
+                                                    style="background-color: #fff6f8;
+                                                    color: #ff3368;
+                                                    max-width: 60px;
+                                                    font-weight: bold;"
+                                                    placeholder="min"
+                                                    class="rounded price"/>
+
+                                                    <span>&nbsp;to&nbsp;</span>
+
+                                                    <input type="text" name="input-to" value="<%= toPrice %>"
+                                                    style="background-color: #fff6f8;
+                                                    color: #ff3368;
+                                                    max-width: 60px;
+                                                    font-weight: bold;"
+                                                    placeholder="max"
+                                                    class="rounded price"/>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </aside>
                                 
-                                <button id="search" class="btn_3" style="margin: 0 50px;">Search</button>
+                                <button id="filter-button" class="btn_3" style="margin: 0 50px;">Filter</button>
                                 
                             </div>
                         </div>
                         <div class="col-lg-9">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <div class="product_top_bar d-flex justify-content-between align-items-center">
-                                        <div class="single_product_menu">
-                                            <p><span> <%= allProducts.length %>  </span> Prodict Found</p>
+                                    <div class="product_top_bar d-flex justify-content-between align-items-center" style="margin-top: 10px;">
+                                      <div>
+                                        <button 
+                                          id="sort-button" 
+                                          type="button" 
+                                          class="btn" 
+                                          style="background-color: #ff3368; color: #fff6f8;">
+                                          Sort by Price&nbsp;
+                                          <% if (sortPrice == 'increase') { %> 
+                                            <i class="fas fa-sort-amount-up"></i>
+                                          <% } else if (sortPrice == 'decrease') { %> 
+                                            <i class="fas fa-sort-amount-down"></i>
+                                          <% } else { %> 
+                                            <i class="fas fa-arrows-alt-v"></i>
+                                          <% } %>
+                                        </button>
+                                      </div>
+                                  
+                                      <div class="single_product_menu" >
+                                          <p style="font-size: 18px;"><span> <%= allProducts.length %>  </span> Prodict Found</p>
+                                      </div>
+
+                                      <div class="single_product_menu d-flex">
+                                        <div class="input-group">
+                                            <input 
+                                              id="search-input"
+                                              type="text"
+                                              class="form-control rounded" 
+                                              placeholder="Search" 
+                                              value = "<%= search %> "  
+                                              aria-describedby="inputGroupPrepend"
+                                              style="background-color: #fff6f8; color:rgb(204, 50, 91); font-weight: bold;">
+                                            <button 
+                                              id="search-button" 
+                                              type="button" 
+                                              class="btn" 
+                                              style="background-color: #ff3368; color: #fff6f8;">
+                                              <i class="fas fa-search"></i>
+                                            </button>
                                         </div>
-                                        
-                                        <div class="single_product_menu d-flex">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="search" aria-describedby="inputGroupPrepend">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="inputGroupPrepend"><i
-                                                    class="ti-search"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                      </div>
                                     </div>
                                 </div>
                             </div>
@@ -150,13 +190,13 @@
                                     
                                     <!-- hiển thị phân trang nếu có trang -->
                                     <% if(pages > 0) { %>
-                                        <nav class="mx-auto">
+                                        <nav class="d-flex justify-content-center">
                                         <ul class="pagination" style="margin-top: 1rem;">
                                         
                                             <!-- FIRST ITEM -->  
                                             <% if(current == 1) { %> 
                                         <!-- // Nếu thông số http://localhost:3333/categories/1/ là 1 thì First sẽ bị disabled -->
-                                                <li class="page-item disabled">
+                                                <li class="page-item disabled" >
                                                 <a class="page-link"  href="" data-page="1">First</a>
                                                 </li>
                                             <% } else { %>
@@ -217,6 +257,7 @@
                                         </ul>
                                         </nav>
                                     <% } %>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -238,41 +279,26 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-lg-12">
                             <div class="best_product_slider owl-carousel">
+
+                              <% bestSellers.forEach(bestSeller => { %>
                                 <div class="single_product_item">
-                                    <img src="/images/product/product_1.png" alt="">
+                                    <a href="products/<%= bestSeller._id %> ">
+                                        <img src=<%=bestSeller.prodImage[0].imageLink %> alt="">
+                                    </a>
                                     <div class="single_product_text">
-                                        <h4>Quartz Belt Watch</h4>
-                                        <h3>$150.00</h3>
+                                        <a href="/products/<%= bestSeller._id %>" style="visibility: initial; opacity: 1">
+                                            <h4>
+                                                <%= bestSeller.prodName %>
+                                            </h4>
+                                            <h3 class="money">
+                                                <%= bestSeller.price %>
+                                            </h3>
+                                        </a>
+                                        <button value="<%= bestSeller._id %>" class="add_cart">+ add to cart</button>
                                     </div>
                                 </div>
-                                <div class="single_product_item">
-                                    <img src="/images/product/product_2.png" alt="">
-                                    <div class="single_product_text">
-                                        <h4>Quartz Belt Watch</h4>
-                                        <h3>$150.00</h3>
-                                    </div>
-                                </div>
-                                <div class="single_product_item">
-                                    <img src="/images/product/product_3.png" alt="">
-                                    <div class="single_product_text">
-                                        <h4>Quartz Belt Watch</h4>
-                                        <h3>$150.00</h3>
-                                    </div>
-                                </div>
-                                <div class="single_product_item">
-                                    <img src="/images/product/product_4.png" alt="">
-                                    <div class="single_product_text">
-                                        <h4>Quartz Belt Watch</h4>
-                                        <h3>$150.00</h3>
-                                    </div>
-                                </div>
-                                <div class="single_product_item">
-                                    <img src="/images/product/product_5.png" alt="">
-                                    <div class="single_product_text">
-                                        <h4>Quartz Belt Watch</h4>
-                                        <h3>$150.00</h3>
-                                    </div>
-                                </div>
+                              <% }) %>
+                                
                             </div>
                         </div>
                     </div>
@@ -289,48 +315,67 @@
 
 
           <!-- Form -->
-          <form action="/categories" name="pagination">
-            <input type="text" name="page" value="<%= current%>"> 
-          </form>
-
-          <form action="/categories" name="search">
-            <input type="text" name="page" value="<%= current%>"> 
-            <input type="text" name="categories" value="<%= categories%>">
-            <input type="text" name="brands" value="<%= categories%>">
-          </form>
+          <form action="/categories" name="categories"></form>
 
           <script>
-            const formPagination = $('form[name="pagination"]');
-            const formSearch = $('form[name="search"]');
+            const formCategories = $('form[name="categories"]');
             const pageLink = $('.page-link');
-            const currentInput = $('input[name="page"]');
-            const categoriesInput = $('input[name="categories"]');
-            const brandsInput = $('input[name="brands"]');
-            const searchBtn = $('#search');
-            
-            let current = $(currentInput).val();
+            const filterBtn = $('#filter-button');
+            const sortBtn = $('#sort-button');
+            const searchBtn = $('#search-button');
         
             pageLink.click(function(event) {
               event.preventDefault();
-              current = $(this).data("page");
-              $(currentInput).val(current);
-              if ($(categoriesInput).val() == '') {
-                formPagination.submit();
-              } else {
-                search(current);
+              current = $(this).data("page"); 
+              
+              if (current == '<%= current%>') {
+                return;
               }
-            })
+
+              if ('<%= categories%>' == '' 
+                && '<%= brands%>' == '' 
+                && '<%= fromPrice%>' == '' 
+                && '<%= toPrice%>' == ''
+                && '<%= sortPrice%>' == '') {
+                beforeSubmit(formCategories, 'page', current);
+                formCategories.submit();
+              } else {
+                filter(current, '<%= sortPrice%>');
+              }
+            });
+
+            filterBtn.click(function(event) {
+              filter('1');
+            });
+
+            sortBtn.click(function(event) {
+              let search = '';
+              let sortPrice = '<%= sortPrice%>' == '' || '<%= sortPrice%>' == 'decrease' ? 'increase' : 'decrease';
+              const searchInput = $('#search-input');
+              search = searchInput.val().trim();
+              filter('1', sortPrice, search);
+            });
 
             searchBtn.click(function(event) {
-              search('1');
-            })
+              let search =  $('#search-input').val().trim();
+              let sortPrice = '<%= sortPrice%>';
+              //if (search != '') {
+                filter('1', sortPrice, search);
+              //}
+            });
 
-            function search(current) {
+            function filter(current, sortPrice = '', search = '') {
               let categories = '';
               let brands = '';
-              let checkedCategories = $('input[name="categories[]"]:checked');
-              let checkedBrands = $('input[name="brands[]"]:checked');
+              let fromPrice = '';
+              let toPrice = '';
+              
+              const checkedCategories = $('input[name="categories[]"]:checked');
+              const checkedBrands = $('input[name="brands[]"]:checked');
+              const fromPriceTbx = $('input[name="input-from"]');
+              const toPriceTbx = $('input[name="input-to"]');
 
+              //Get checked categories
               for (let i = 0; i < checkedCategories.length; i++) {
                 if (i == 0) {
                   categories = categories + $(checkedCategories[i]).val();
@@ -339,6 +384,7 @@
                 }
               }
 
+              //Get cheked brands
               for (let i = 0; i < checkedBrands.length; i++) {
                 if (i == 0) {
                   brands = brands + $(checkedBrands[i]).val();
@@ -347,12 +393,52 @@
                 }
               }
 
-              $(categoriesInput).val(categories);
-              $(brandsInput).val(brands);
-              $(currentInput).val(current);
-              formSearch.submit();
+              //Get price
+              fromPrice = fromPriceTbx.val();
+              toPrice = toPriceTbx.val();
+
+              beforeSubmit(formCategories, 'page', current);
+              categories && beforeSubmit(formCategories, 'categories', categories);
+              brands && beforeSubmit(formCategories, 'brands', brands);
+              fromPrice && beforeSubmit(formCategories, 'fromPrice', fromPrice);
+              toPrice && beforeSubmit(formCategories, 'toPrice', toPrice);
+              sortPrice && beforeSubmit(formCategories, 'sortPrice', sortPrice);
+              search && beforeSubmit(formCategories, 'search', search);
+              formCategories.submit();
             }
-          </script>     
+
+            function beforeSubmit(form, name, value) {
+                var input = document.createElement("input");
+                input.type = 'hidden';
+                input.name = name;
+                input.value = value;
+                form.append(input);
+            }
+          </script>   
+          
+          <style>
+            ::placeholder {
+              font-weight: normal;
+            }
+            .price:focus, #search-input:focus {
+              border: 1px solid #ff3368;
+            }
+            .page-link {
+              color:#ff3368;
+            }
+            .page-item.active .page-link {
+              background-color:#ec6287;
+              border-color: #fc4f7d;
+            }
+            /* .ti-search:hover {
+              color: #ff3368;
+              cursor: pointer;
+            } */
+            #search-button:hover, #sort-button:hover {
+              background-color: #ff0000 !important;
+              box-shadow: -1.717px 8.835px 29.76px 2.24px rgb(255 51 104 / 40%);
+            }
+          </style>
     </body>
 
     </html>
