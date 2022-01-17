@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const { ADMIN_MODEL } = require("../../constants/modal");
-
+const bcrypt = require("bcrypt");
 dotenv.config();
 
 exports.getLogin = async (req, res, next) => {
