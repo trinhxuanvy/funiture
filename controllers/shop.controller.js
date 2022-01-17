@@ -515,8 +515,10 @@ exports.postCustomer = async (req, res, next) => {
       // Send email (use credintials of SendGrid)
       var transporter = nodemailer.createTransport({
         service: "Gmail",
-        user: process.env.AUTH_EMAIL,
-        pass: process.env.AUTH_PASS,
+        auth: {
+          user: process.env.AUTH_EMAIL,
+          pass: process.env.AUTH_PASS,
+        },
       });
       var mailOptions = {
         from: "Aranoz",
@@ -527,7 +529,7 @@ exports.postCustomer = async (req, res, next) => {
         <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
         <div>
         <a
-          style="display: inline-block;
+          style="display: block;
           width: 150px;
           color: #fff !important;
           margin: 0 auto;
