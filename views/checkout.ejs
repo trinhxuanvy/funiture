@@ -111,7 +111,7 @@
                   <% cartDetails.forEach(cartDetail => { %>
                     <li>
                       <a href="/products/<%= cartDetail.productId %>"><%= cartDetail.productName %> 
-                        <span class="middle">x <%= cartDetail.amount %></span>
+                        <span class="middle" style="margin-right: 4px;">x <%= cartDetail.amount %></span>
                         <span class="last money"><%= cartDetail.price %></span>
                       </a>
                     </li>
