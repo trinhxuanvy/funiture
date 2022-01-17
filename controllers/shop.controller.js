@@ -521,7 +521,7 @@ exports.postCustomer = async (req, res, next) => {
         },
       });
       var mailOptions = {
-        from: "shareanh4@gmail.com",
+        from: process.env.AUTH_EMAIL,
         to: newCustomer.email,
         subject: "Account Verification Link",
         html: `<h1>Email Confirmation</h1>
