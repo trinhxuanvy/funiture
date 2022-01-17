@@ -527,7 +527,7 @@ exports.postCustomer = async (req, res, next) => {
         html: `<h1>Email Confirmation</h1>
         <h2>Hello ${newCustomer.cusName}</h2>
         <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
-        <a href="${fullUrl}/confirm/${token.token}"> Click here</a>
+        <a style="display: block; color: #ffffff; width: 150px; background-color: 'red'; padding: 8px 0; margin: 0 auto;" href="${fullUrl}/confirm/${token.token}"> Click here</a>
         </div>`,
       };
       transporter.sendMail(mailOptions, function (err) {
