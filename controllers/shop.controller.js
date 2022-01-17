@@ -1141,6 +1141,8 @@ exports.postOrder = async (req, res, next) => {
           user.cart.price * (coupon.promotionValue / 100)
         );
         newOrder.totalPrice -= newOrder.discountMoney;
+        coupon.amount--;
+        await Coupon.updateOne({_id: coupon._id}, {amount: coupon.amount});
       }
     }
   }
