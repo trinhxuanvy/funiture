@@ -515,10 +515,8 @@ exports.postCustomer = async (req, res, next) => {
       // Send email (use credintials of SendGrid)
       var transporter = nodemailer.createTransport({
         service: "Gmail",
-        auth: {
-          user: process.env.AUTH_EMAIL,
-          pass: process.env.AUTH_PASS,
-        },
+        user: process.env.AUTH_EMAIL,
+        pass: process.env.AUTH_PASS,
       });
       var mailOptions = {
         from: "Aranoz",
@@ -527,7 +525,18 @@ exports.postCustomer = async (req, res, next) => {
         html: `<h1>Email Confirmation</h1>
         <h2>Hello ${newCustomer.cusName}</h2>
         <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
-        <a style="display: block; color: #ffffff; width: 150px; background-color: 'red'; padding: 8px 0; margin: 0 auto;" href="${fullUrl}/confirm/${token.token}"> Click here</a>
+        <div>
+        <a
+          style="display: inline-block;
+          width: 150px;
+          color: #fff !important;
+          margin: 0 auto;
+          padding: 8px 0;
+          background-color: #d46318;
+          text-decoration: none;
+          text-align: center;"
+          href="${fullUrl}/confirm/${token.token}"
+          > Click here</a>
         </div>`,
       };
       transporter.sendMail(mailOptions, function (err) {
@@ -541,10 +550,7 @@ exports.postCustomer = async (req, res, next) => {
           res.redirect("/login");
         }
         res.cookie("message", {
-          message:
-            "A verification email has been sent to " +
-            newCustomer.email +
-            ". It will be expire after one day. If you not get verification Email click on resend token.",
+          message: "A verification email has been sent to " + newCustomer.email,
           type: "fail",
         });
         res.redirect("/login");
@@ -779,19 +785,20 @@ exports.addCardProductDetail = async (req, res, next) => {
     var flag = false;
     for (let i = 0; i < user.cart.cartDetails.length; i++) {
       if (user.cart.cartDetails[i].productId == newCardDetail.productId) {
-        user.cart.cartDetails[i].amount+= newCardDetail.amount;
+        user.cart.cartDetails[i].amount += newCardDetail.amount;
         user.cart.cartDetails[i].price = product.price;
-        user.cart.price += user.cart.cartDetails[i].price*newCardDetail.amount;
+        user.cart.price +=
+          user.cart.cartDetails[i].price * newCardDetail.amount;
         flag = true;
         break;
       }
     }
-    user.cart.totalQuantity+=newCardDetail.amount;
+    user.cart.totalQuantity += newCardDetail.amount;
 
     if (!flag) {
       user.cart.cartDetails.push(newCardDetail);
-      console.log(user.cart.price, newCardDetail.price*newCardDetail.amount);
-      user.cart.price += newCardDetail.price*newCardDetail.amount;
+      console.log(user.cart.price, newCardDetail.price * newCardDetail.amount);
+      user.cart.price += newCardDetail.price * newCardDetail.amount;
     }
 
     var checkUpdate = await Customer.updateOne(
@@ -834,9 +841,9 @@ exports.addCardProductDetail = async (req, res, next) => {
       cartDetails = req.session.cartDetails;
       for (let i = 0; i < cartDetails.length; i++) {
         if (cartDetails[i].productId == newCardDetail.productId) {
-          cartDetails[i].amount+=newCardDetail.amount;
+          cartDetails[i].amount += newCardDetail.amount;
           cartDetails[i].price = product.price;
-          totalCarts += cartDetails[i].price*newCardDetail.amount;
+          totalCarts += cartDetails[i].price * newCardDetail.amount;
           flag = true;
           break;
         }
@@ -844,7 +851,7 @@ exports.addCardProductDetail = async (req, res, next) => {
     }
     if (!flag) {
       cartDetails.push(newCardDetail);
-      totalCarts += newCardDetail.price*newCardDetail.amount;
+      totalCarts += newCardDetail.price * newCardDetail.amount;
     }
 
     req.session.totalQuantity = totalQuantity + newCardDetail.amount;
