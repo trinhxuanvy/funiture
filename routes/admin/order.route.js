@@ -9,6 +9,13 @@ router.get(
   orderController.getOrder
 );
 
+router.post(
+  "/admin/orders",
+  authAdminController.checkExistUser,
+  orderController.postOrder
+);
+
+
 router.get(
   "/admin/orders/:id",
   authAdminController.checkExistUser,
