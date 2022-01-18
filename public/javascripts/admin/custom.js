@@ -502,7 +502,7 @@ $(document).ready(function () {
           username: {
             required: true,
             valid_username: true,
-            valid_name: true
+            valid_name: true,
           },
           password: {
             required: true,
@@ -558,7 +558,7 @@ $(document).ready(function () {
           username: {
             required: "Please enter username",
             valid_username: "Username already exists",
-            valid_name: "Username must not contain special characters"
+            valid_name: "Username must not contain special characters",
           },
           phone: {
             required: "Please enter phone",
@@ -634,6 +634,117 @@ $(document).ready(function () {
     });
   });
 
+  // Xử lý thêm sản phẩm/admins
+  $(function () {
+    $("#formSubmitProfile").validate({
+      rules: {
+        endDate: {
+          required: true,
+          valid_end_date: true,
+        },
+        amount: {
+          required: true,
+          min: 0,
+        },
+        promotionValue: {
+          required: true,
+          min: 0,
+        },
+        code: {
+          required: true,
+          valid_code: true,
+        },
+        price: {
+          required: true,
+          min: 0,
+        },
+        amount: {
+          required: true,
+          min: 0,
+        },
+        email: {
+          required: true,
+          email: true,
+        },
+        dateOfBirth: {
+          required: true,
+          date: true,
+        },
+        avatarLink: {
+          required: true,
+        },
+        phone: {
+          required: true,
+          valid_number: true,
+          minlength: 10,
+          maxlength: 10,
+        },
+        identityCard: {
+          required: true,
+          valid_number: true,
+        },
+        username: {
+          required: true,
+          valid_username: true,
+          valid_name: true,
+        },
+        password: {
+          required: true,
+          minlength: 8,
+          maxlength: 20,
+          valid_password: true,
+        },
+        confirmPassword: {
+          required: true,
+          equalTo: "#password",
+          minlength: 8,
+        },
+      },
+      messages: {
+        adminName: {
+          required: "Please enter admin name",
+        },
+        email: {
+          required: "Please enter email",
+        },
+        phone: {
+          required: "Please enter phone",
+          minlength: "Min length: 10 numbers",
+          maxlength: "Max length: 10 numbers",
+          valid_number: "Phone number just contains 0-9",
+        },
+        identityCard: {
+          required: "Please enter phone",
+          valid_number: "Identity Card just contains 0-9",
+        },
+        address: {
+          required: "Please enter address",
+        },
+        dateOfBirth: {
+          required: "Please enter date of birth",
+        },
+        avatarLink: {
+          required: "Please choose 1 image",
+        },
+        // profile
+        password: {
+          required: "Please enter password",
+          minlength: "Min length: 8",
+          maxlength: "Max length: 20",
+          valid_password: "Password must be least a A-Z, a-z, 0-9",
+        },
+        confirmPassword: {
+          required: "Please enter confirm password",
+          minlength: "Min length: 8",
+          equalTo: "Password doesn't match",
+        },
+      },
+      submitHandler: function (form) {
+        form.submit();
+      },
+    });
+  });
+
   $(function () {
     $("#formSubmitLogin").validate({
       rules: {
@@ -651,7 +762,7 @@ $(document).ready(function () {
       messages: {
         username: {
           required: "Please enter username",
-          valid_name: "Name must not contain special characters"
+          valid_name: "Name must not contain special characters",
         },
         // profile
         password: {
@@ -661,9 +772,9 @@ $(document).ready(function () {
           valid_password: "Password must be least a A-Z, a-z, 0-9",
         },
       },
-      submitHandler: function(form) {
+      submitHandler: function (form) {
         form.submit();
-      }
+      },
     });
   });
 
@@ -1175,7 +1286,7 @@ function getChart({
   }
 }
 
-function removeAscent (str) {
+function removeAscent(str) {
   if (str === null || str === undefined) return str;
   str = str.toLowerCase();
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
