@@ -605,22 +605,22 @@
         width: 250px;
         display: block;
         margin: 0 auto; }
-    .login form label {
+    .login form .form-item {
       display: block;
       position: relative;
       margin-bottom: 16px; }
-      .login form label i {
+      .login form .form-item i {
         position: absolute;
         left: 16px;
         top: 50%;
         transform: translateY(-50%); }
-      .login form label input {
+      .login form .form-item input {
         padding: 16px 8px 16px 40px;
         font-size: 14px;
         border: 1px solid #edeff2;
         border-radius: 5px;
         width: 300px; }
-        .login form label input:focus {
+        .login form .form-item input:focus {
           outline: none; }
     .login form button {
       border: none;

@@ -434,6 +434,13 @@ $(document).ready(function () {
     return startDate < endDate;
   });
 
+  // Thêm validate name
+  jQuery.validator.addMethod("valid_name", function (value) {
+    var finalVal = removeAscent(value);
+    var regex = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    return !regex.test(finalVal);
+  });
+
   // Thêm validate password
   jQuery.validator.addMethod("valid_password", function (value) {
     var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
@@ -495,12 +502,13 @@ $(document).ready(function () {
           username: {
             required: true,
             valid_username: true,
+            valid_name: true
           },
           password: {
             required: true,
             minlength: 8,
             maxlength: 20,
-            valid_password: true
+            //valid_password: true
           },
           confirmPassword: {
             required: true,
@@ -550,6 +558,7 @@ $(document).ready(function () {
           username: {
             required: "Please enter username",
             valid_username: "Username already exists",
+            valid_name: "Username must not contain special characters"
           },
           phone: {
             required: "Please enter phone",
@@ -587,7 +596,7 @@ $(document).ready(function () {
             required: "Please enter password",
             minlength: "Min length: 8",
             maxlength: "Max length: 20",
-            valid_password: "Password must be least A-Z, a-z, 0-9"
+            //valid_password: "Password must be least a A-Z, a-z, 0-9"
           },
           confirmPassword: {
             required: "Please enter confirm password",
@@ -621,6 +630,39 @@ $(document).ready(function () {
           `<div class="form-status" style="margin-left: 8px;"><div class="spinner-border spinner-border-sm"></div></div>`
         );
         $("#formSubmit").submit();
+      }
+    });
+  });
+
+  $(function () {
+    $("#formSubmitLogin").validate({
+      rules: {
+        username: {
+          required: true,
+          valid_name: true,
+        },
+        password: {
+          required: true,
+          minlength: 8,
+          maxlength: 20,
+          valid_password: true,
+        },
+      },
+      messages: {
+        username: {
+          required: "Please enter username",
+          valid_name: "Name must not contain special characters"
+        },
+        // profile
+        password: {
+          required: "Please enter password",
+          minlength: "Min length: 8",
+          maxlength: "Max length: 20",
+          valid_password: "Password must be least a A-Z, a-z, 0-9",
+        },
+      },
+      submitHandler: function(form) {
+        form.submit();
       }
     });
   });
@@ -1131,4 +1173,17 @@ function getChart({
   if (chartContainer.length) {
     $(posChart).CanvasJSChart(options);
   }
+}
+
+function removeAscent (str) {
+  if (str === null || str === undefined) return str;
+  str = str.toLowerCase();
+  str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+  str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+  str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+  str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+  str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+  str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+  str = str.replace(/đ/g, "d");
+  return str;
 }
