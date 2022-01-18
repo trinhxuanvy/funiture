@@ -351,7 +351,7 @@ exports.resetPasswordAdmin = async (req, res, next) => {
   const id = req.params.id;
   Admin.findById({ _id: id }, async (err, data) => {
     if (!err) {
-      const newPassword = await bcrypt.hash("Admin@" + data.identityCard, 12);
+      const newPassword = await bcrypt.hash("Admin" + "123", 12);
       const update = await Admin.updateOne(
         { _id: id },
         { password: newPassword }

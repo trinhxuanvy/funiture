@@ -434,6 +434,12 @@ $(document).ready(function () {
     return startDate < endDate;
   });
 
+  // Thêm validate password
+  jQuery.validator.addMethod("valid_password", function (value) {
+    var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+    return value.trim().match(regex);
+  });
+
   // Xử lý thêm sản phẩm/admins
   $(function () {
     const btnSubmit = $("#btnSubmit");
@@ -493,6 +499,8 @@ $(document).ready(function () {
           password: {
             required: true,
             minlength: 8,
+            maxlength: 20,
+            valid_password: true
           },
           confirmPassword: {
             required: true,
@@ -578,6 +586,8 @@ $(document).ready(function () {
           password: {
             required: "Please enter password",
             minlength: "Min length: 8",
+            maxlength: "Max length: 20",
+            valid_password: "Password must be least A-Z, a-z, 0-9"
           },
           confirmPassword: {
             required: "Please enter confirm password",
