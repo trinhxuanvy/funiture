@@ -107,3 +107,27 @@ exports.updateOrder = async (req, res, next) => {
     }
   } catch (error) {}
 };
+
+exports.postOrder = async (req, res, next) => {
+  let page = req.body.page || 1;
+  let search = req.query.search || "";
+  let orders = await Order.find().sort({ createdAt: -1 }).exec();
+
+  const getPage = Math.floor(orders.length / ITEM_PAGE);
+  const totalPage = orders.length % ITEM_PAGE != 0 ? getPage + 1 : getPage;
+  const nextPage = parseInt(page) + 1;
+  const prevPage = parseInt(page) - 1;
+  const numPage = orders.length ? page : 0;
+  orders = orders.slice((page - 1) * ITEM_PAGE, page * ITEM_PAGE);
+
+  res.render("admin/orders", {
+    pageName: "orders",
+    orders,
+    orderModel: ORDER_MODEL,
+    page,
+    totalPage,
+    nextPage,
+    prevPage,
+    numPage,
+  });
+}
