@@ -110,7 +110,6 @@ exports.postChangePassword = async (req, res, next) => {
 
   const currentPassword = req.body?.password;
   var checkPassword = bcrypt.compareSync(currentPassword, user.password);
-  console.log(checkPassword);
   if (checkPassword) {
     const newPassword = await bcrypt.hash(req.body?.newPassword, 12);
     Customer.updateOne(
@@ -190,7 +189,6 @@ exports.getResetPage = async (req, res, next) => {
   const message = req.cookies?.message || "",
     username = "",
     password = "";
-  console.log(message);
   if (message) {
     res.clearCookie("message");
   }
@@ -204,46 +202,51 @@ exports.getResetPage = async (req, res, next) => {
 };
 
 exports.resetPassword = async (req, res, next) => {
-  // Send email (use credintials of SendGrid)
-  var transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: process.env.AUTH_EMAIL,
-      pass: process.env.AUTH_PASS,
-    },
-  });
-  var newPassword = customService.randomStr(8);
-  var hashPassword = bcrypt.hashSync(newPassword, 12);
-  var user = await Customer.find({ username: req.body?.username });
-  if (user.length) {
-    var update = await Customer.updateOne(
-      { username: req.body?.username },
-      { password: hashPassword }
-    );
-    if (update.modifiedCount > 0) {
-      var mailOptions = {
-        from: "Aranoz",
-        to: user[0].email,
-        subject: "Your new password",
-        html: `<p>Password: </p><p style="font-weigth: bolder;">${newPassword}</p>`,
-      };
-      transporter.sendMail(mailOptions, function (err) {
-        if (err) {
-          res.cookie("message", { message: "Error", type: "error" });
-          res.redirect("/reset");
-        }
-        res.cookie("message", {
-          message: "A new password has been sent to " + user[0].email,
-          type: "warning",
+  try {
+    // Send email (use credintials of SendGrid)
+    var transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.AUTH_EMAIL,
+        pass: process.env.AUTH_PASS,
+      },
+    });
+    var newPassword = customService.randomStr(8);
+    var hashPassword = bcrypt.hashSync(newPassword, 12);
+    var user = await Customer.find({ username: req.body?.username });
+    if (user.length) {
+      var update = await Customer.updateOne(
+        { username: req.body?.username },
+        { password: hashPassword }
+      );
+      if (update.modifiedCount > 0) {
+        var mailOptions = {
+          from: "Aranoz",
+          to: user[0].email,
+          subject: "Your new password",
+          html: `<p>Password: </p><p style="font-weigth: bolder;">${newPassword}</p>`,
+        };
+        transporter.sendMail(mailOptions, function (err) {
+          if (err) {
+            res.cookie("message", { message: "Error", type: "error" });
+            res.redirect("/reset");
+          }
+          res.cookie("message", {
+            message: "A new password has been sent to " + user[0].email,
+            type: "warning",
+          });
+          res.redirect("/login");
         });
-        res.redirect("/login");
-      });
+      } else {
+        res.cookie("message", { message: "Error", type: "error" });
+        res.redirect("/reset");
+      }
     } else {
-      res.cookie("message", { message: "Error", type: "error" });
+      res.cookie("message", { message: "Not found account", type: "error" });
       res.redirect("/reset");
     }
-  } else {
-    res.cookie("message", { message: "Not found account", type: "error" });
+  } catch (error) {
+    res.cookie("message", { message: "Error", type: "error" });
     res.redirect("/reset");
   }
 };
