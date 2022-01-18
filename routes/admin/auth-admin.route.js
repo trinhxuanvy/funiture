@@ -30,6 +30,4 @@ router.post(
   authAdminController.resetPassword
 );
 
-router.get("/admin/reset/:token", authAdminController.getConfirm);
-
 module.exports = router;
