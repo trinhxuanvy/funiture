@@ -213,12 +213,17 @@ exports.resetPassword = async (req, res, next) => {
     },
   });
   var newPassword = customService.randomStr(8);
-  var hassPassword = bcrypt.hashSync(newPassword, 12);
-  Customer.findOneAndUpdate({ username: req.body?.username }, { password: hassPassword }, (err, user) => {
-    if (!err) {
+  var hashPassword = bcrypt.hashSync(newPassword, 12);
+  var user = await Customer.find({ username: req.body?.username });
+  if (user.length) {
+    var update = await Customer.updateOne(
+      { username: req.body?.username },
+      { password: hashPassword }
+    );
+    if (update.modifiedCount > 0) {
       var mailOptions = {
         from: "Aranoz",
-        to: user.email,
+        to: user[0].email,
         subject: "Your new password",
         html: `<p>Password: </p><p style="font-weigth: bolder;">${newPassword}</p>`,
       };
@@ -228,7 +233,7 @@ exports.resetPassword = async (req, res, next) => {
           res.redirect("/reset");
         }
         res.cookie("message", {
-          message: "A new password has been sent to " + user.email,
+          message: "A new password has been sent to " + user[0].email,
           type: "warning",
         });
         res.redirect("/login");
@@ -237,5 +242,8 @@ exports.resetPassword = async (req, res, next) => {
       res.cookie("message", { message: "Error", type: "error" });
       res.redirect("/reset");
     }
-  });
+  } else {
+    res.cookie("message", { message: "Not found account", type: "error" });
+    res.redirect("/reset");
+  }
 };
