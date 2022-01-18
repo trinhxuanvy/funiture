@@ -248,8 +248,8 @@ exports.resetPassword = async (req, res, next) => {
     var transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
-        user: process.env.AUTH_EMAIL || "trinhxuanvy1@gmail.com",
-        pass: process.env.AUTH_PASS || "0769699470",
+        user: process.env.AUTH_EMAIL,
+        pass: process.env.AUTH_PASS,
       },
     });
     var newPassword = customService.randomStr(8);
@@ -289,7 +289,6 @@ exports.resetPassword = async (req, res, next) => {
       res.redirect("/admin/reset");
     }
   } catch (error) {
-    console.log(error);
     res.cookie("message", { message: "Error", type: "error" });
     res.redirect("/admin/reset");
   }
