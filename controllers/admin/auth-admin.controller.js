@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const { ADMIN_MODEL } = require("../../constants/modal");
 const bcrypt = require("bcrypt");
+const customService = require("../../services/custom");
+const nodemailer = require("nodemailer");
 dotenv.config();
 
 exports.getLogin = async (req, res, next) => {
@@ -229,4 +231,87 @@ exports.updateImageProfile = async (req, res, next) => {
   } else {
     res.send({ success: false });
   }
+};
+
+exports.getResetPage = async (req, res, next) => {
+  const message = req.cookies?.message || "";
+  if (message) {
+    res.clearCookie("message");
+  }
+  res.render("admin/reset-password", {
+    message,
+  });
+};
+
+exports.resetPassword = async (req, res, next) => {
+  try {
+    var transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.AUTH_EMAIL || "trinhxuanvy1@gmail.com",
+        pass: process.env.AUTH_PASS || "0769699470",
+      },
+    });
+    var newPassword = customService.randomStr(8);
+    var hashPassword = bcrypt.hashSync(newPassword, 12);
+    var user = await Admin.find({ username: req.body?.username });
+    if (user.length) {
+      var update = await Admin.updateOne(
+        { username: req.body?.username },
+        {
+          password: hashPassword,
+        }
+      );
+      if (update.modifiedCount > 0) {
+        var mailOptions = {
+          from: "Aranoz",
+          to: user[0].email,
+          subject: "Your new password",
+          html: `<p>Password: </p><p style="font-weigth: bolder;">${newPassword}</p>`,
+        };
+        transporter.sendMail(mailOptions, function (err) {
+          if (err) {
+            res.cookie("message", { message: "Error", type: "error" });
+            res.redirect("/admin/reset");
+          }
+          res.cookie("message", {
+            message: "A new password has been sent to " + user[0].email,
+            type: "warning",
+          });
+          res.redirect("/admin/login");
+        });
+      } else {
+        res.cookie("message", { message: "Error", type: "error" });
+        res.redirect("/admin/reset");
+      }
+    } else {
+      res.cookie("message", { message: "Not found account", type: "error" });
+      res.redirect("/admin/reset");
+    }
+  } catch (error) {
+    console.log(error);
+    res.cookie("message", { message: "Error", type: "error" });
+    res.redirect("/admin/reset");
+  }
+};
+
+exports.getConfirm = async (req, res, next) => {
+  Admin.findOneAndUpdate(
+    { token: req.params?.token },
+    { active: true },
+    (err, data) => {
+      if (!err && data) {
+        res.cookie("message", {
+          message: "Xác nhận thành công",
+          type: "success",
+        });
+      } else {
+        res.cookie("message", {
+          message: "Xác nhận thất bại",
+          type: "error",
+        });
+      }
+      res.redirect("admin/login");
+    }
+  );
 };

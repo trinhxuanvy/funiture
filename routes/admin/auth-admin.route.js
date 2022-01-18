@@ -20,10 +20,16 @@ router.post(
   authAdminController.updateProfile
 );
 
-router.post(
-  "/admin/profile/update/:id",
-  authAdminController.checkExistUser,
-  authAdminController.updateImageProfile
+router.get(
+  "/admin/reset",
+  authAdminController.getResetPage
 );
+
+router.post(
+  "/admin/reset",
+  authAdminController.resetPassword
+);
+
+router.get("/admin/reset/:token", authAdminController.getConfirm);
 
 module.exports = router;
