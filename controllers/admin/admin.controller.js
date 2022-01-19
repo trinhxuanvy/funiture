@@ -60,7 +60,7 @@ exports.postAdmin = async (req, res, next) => {
       email: req.body.email,
       address: req.body.address,
       username: req.body.username,
-      password: "Admin@" + req.body.identityCard,
+      password: "Admin" + '123',
       dateOfBirth: req.body.dateOfBirth,
       avatarLink: urlAvatar,
       aboutMe: req.body.aboutMe,
@@ -175,14 +175,26 @@ exports.updateAdmin = async (req, res, next) => {
 
 exports.deleteAdmin = async (req, res, next) => {
   const adminId = req.params.id;
-  Admin.findByIdAndDelete({ _id: adminId }, (err, data) => {
-    if (!err) {
-      firebase.deleteImage(data.avatarLink);
-      res.send({ success: true });
-    } else {
-      res.send({ success: false });
+  const isMe = jwt.verify(
+    req.cookies?.token,
+    process.env.KEY_JWT,
+    (err, data) => {
+      if (err) return [];
+      return data;
     }
-  });
+  );
+  if (isMe?._id != adminId) {
+    Admin.findByIdAndDelete({ _id: adminId }, (err, data) => {
+      if (!err) {
+        firebase.deleteImage(data.avatarLink);
+        res.send({ success: true });
+      } else {
+        res.send({ success: false });
+      }
+    });
+  } else {
+    res.send({ success: false });
+  }
 };
 
 exports.lockAdmin = (req, res, next) => {
