@@ -224,12 +224,11 @@ exports.updateImageProfile = async (req, res, next) => {
     });
 
     res.cookie("token", token);
-  }
-
-  if (user) {
-    res.send({ userToken, success: true });
-  } else {
-    res.send({ success: false });
+    if (user) {
+      res.send({ userToken, success: true });
+    } else {
+      res.send({ success: false });
+    }
   }
 };
 
