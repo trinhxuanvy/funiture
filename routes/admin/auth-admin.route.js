@@ -20,6 +20,12 @@ router.post(
   authAdminController.updateProfile
 );
 
+router.post(
+  "/admin/profile/update/:id",
+  authAdminController.checkExistUser,
+  authAdminController.updateImageProfile
+);
+
 router.get(
   "/admin/reset",
   authAdminController.getResetPage
